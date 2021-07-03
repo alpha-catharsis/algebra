@@ -1,0 +1,49 @@
+package Algebra
+-- version =
+authors = "Alpha Catharsis"
+-- maintainers =
+-- license =
+-- brief =
+-- readme =
+-- homepage =
+-- sourceloc =
+-- bugtracker =
+
+-- packages to add to search path
+-- depends =
+
+-- modules to install
+modules = Data.Algebra.Set,
+          Data.Algebra.PointedSet,
+          Data.Algebra.UnarySystem,
+          Data.Algebra.Magma,
+          Data.Algebra.Semigroup
+
+
+-- main file (i.e. file to load at REPL)
+main = Main
+
+-- name of executable
+executable = "test"
+-- opts =
+sourcedir = "src"
+-- builddir =
+-- outputdir =
+
+-- script to run before building
+-- prebuild =
+
+-- script to run after building
+-- postbuild =
+
+-- script to run after building, before installing
+-- preinstall =
+
+-- script to run after installing
+-- postinstall =
+
+-- script to run before cleaning
+-- preclean =
+
+-- script to run after cleaning
+-- postclean =
