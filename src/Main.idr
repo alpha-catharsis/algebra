@@ -1,53 +1,35 @@
 module Main
 
 -- import Data.List
-import Data.Algebra.Set
-import Data.Algebra.PointedSet
-import Data.Algebra.UnarySystem
-import Data.Algebra.Magma
+import Alpha.Algebra.Op
+import Alpha.Algebra.Set
+import Alpha.Algebra.PointedSet
+import Alpha.Algebra.UnarySystem
+import Alpha.Algebra.Magma
 
 -- Tests
 
-testSet : Set
-testSet = MkSet Integer (\x => x < 5)
+testSet : Set Integer
+testSet = MkSet (> 5)
 
-testSet2 : Set
-testSet2 = MkSet Integer (\x => x > 4)
+testPointedSet : PointedSet Integer
+testPointedSet = MkPointedSet testSet 6
 
-testSet3 : Set
-testSet3 = MkSet Integer (const True)
-
-
-testPointedSet : PointedSet
-testPointedSet = MkPointedSet testSet 4
-
-testPointedSet2 : PointedSet
-testPointedSet2 = MkPointedSet testSet2 5
-
-testPointedSet3 : PointedSet
-testPointedSet3 = MkPointedSet testSet3 0
+testPointedSet2 : PointedSet Integer
+testPointedSet2 = MkPointedSet testSet 7
 
 testPointedMap : PointedMap Main.testPointedSet Main.testPointedSet2
-testPointedMap = MkPointedMap (\x => x + 1)
+testPointedMap = MkPointedMap (+1)
 
-
-testUnarySystem : UnarySystem
-testUnarySystem = MkUnarySystem testSet3 (+ 1)
-
-
-testMagma : Magma
-testMagma = MkMagma testSet3 (+)
-
-
+testUnarySystem : UnarySystem Integer
+testUnarySystem = MkUnarySystem universeSet (the (UnOp Integer) (+1))
 
 main : IO ()
 main = do
-  printLn (contains testSet 4)
+  printLn (contains testSet 5)
   printLn (contains testSet 6)
   printLn (basepoint testPointedSet)
-  printLn (pmap testPointedMap 0)
+  printLn (basepoint testPointedSet2)
   printLn (pmap testPointedMap 4)
-  printLn (unop testUnarySystem 6)
-  printLn (binop testMagma 3 4)
-
+  printLn (unop testUnarySystem 0)
   putStrLn "OK"

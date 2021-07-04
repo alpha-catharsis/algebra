@@ -1,4 +1,4 @@
-package Algebra
+package alpha-algebra
 -- version =
 authors = "Alpha Catharsis"
 -- maintainers =
@@ -13,12 +13,14 @@ authors = "Alpha Catharsis"
 -- depends =
 
 -- modules to install
-modules = Data.Algebra.Set,
-          Data.Algebra.PointedSet,
-          Data.Algebra.UnarySystem,
-          Data.Algebra.Magma,
-          Data.Algebra.Semigroup
-
+modules = Alpha.Algebra.Func,
+          Alpha.Algebra.Magma,
+          Alpha.Algebra.Op,
+          Alpha.Algebra.PointedSet,
+          Alpha.Algebra.Semigroup,
+          Alpha.Algebra.Set,
+          Alpha.Algebra.UnarySystem,
+          Alpha.Data.Tree
 
 -- main file (i.e. file to load at REPL)
 main = Main
