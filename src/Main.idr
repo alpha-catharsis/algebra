@@ -39,5 +39,23 @@ main = do
   printLn (4 `elem` s2)
   printLn (5 `elem` s2)
 
+  printLn ("******")
+  let s3 = A.product (fnSet (>3)) (fnSet (<5))
+  printLn ((3,3) `elem` s3)
+  printLn ((3,4) `elem` s3)
+  printLn ((3,5) `elem` s3)
+  printLn ((4,3) `elem` s3)
+  printLn ((4,4) `elem` s3)
+  printLn ((4,5) `elem` s3)
+  printLn ((5,3) `elem` s3)
+  printLn ((5,4) `elem` s3)
+  printLn ((5,5) `elem` s3)
+
+  printLn ("******")
+  let s4 = coproduct (singleton 3) (singleton 4)
+  printLn ((Left 3) `elem` s4)
+  printLn ((Left 4) `elem` s4)
+  printLn ((Right 3) `elem` s4)
+  printLn ((Right 4) `elem` s4)
 
   putStrLn "OK"

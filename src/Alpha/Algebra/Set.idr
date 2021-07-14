@@ -80,3 +80,13 @@ decAnd ldec rdec = case ldec of
 public export
 intersection : Set lfpt a -> Set rfpt b -> Set (\x => (lfpt x, rfpt x)) a
 intersection (MkSet lf) (MkSet rf) = MkSet (\x => decAnd (lf x) (rf x))
+
+public export
+product : Set lfpt a -> Set rfpt b -> Set (\x => (lfpt (Builtin.fst x), rfpt (Builtin.snd x))) (a, b)
+product (MkSet lf) (MkSet rf) = MkSet (\x => decAnd (lf (fst x)) (rf (snd x)))
+
+public export
+coproduct : Set lfpt a -> Set rfpt b -> Set (\ex => either lfpt rfpt ex) (Either a b)
+coproduct (MkSet lf) (MkSet rf) = MkSet (\ex => case ex of
+                                                  Left lx => lf lx
+                                                  Right rx => rf rx)
