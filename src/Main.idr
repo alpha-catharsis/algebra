@@ -40,7 +40,7 @@ main = do
   printLn (5 `elem` s2)
 
   printLn ("******")
-  let s3 = A.product (fnSet (>3)) (fnSet (<5))
+  let s3 = A.product (fnSet (>3)) (singleton 5)
   printLn ((3,3) `elem` s3)
   printLn ((3,4) `elem` s3)
   printLn ((3,5) `elem` s3)
