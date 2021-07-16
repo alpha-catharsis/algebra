@@ -30,5 +30,6 @@ public export
   uninhabited (MkElem _ _ contra) = contra Refl
 
 public export
-elemHoled : DecEq a => {y : a} -> {x : a} -> {auto contra : Not (x = y)} -> Elem y (holed x)
+elemHoled : DecEq a => {y : a} -> {x : a} -> {auto contra : Not (x = y)} ->
+            Elem y (holed x)
 elemHoled = MkElem _ _ contra
