@@ -20,16 +20,16 @@ import Alpha.Algebra.Set.Set
 -- Proposition set
 ------------------
 
-public export
+export
 propSet : (f : a -> Bool) -> Set (\x => f x = True) a
 propSet f = MkSet (\x => decEq (f x) True)
 
-public export
+export
 elemPropSet : {x : a} -> {f : a -> Bool} -> {auto prf : f x = True} ->
               Elem x (propSet f)
 elemPropSet = MkElem _ _ prf
 
-public export
+export
 notElemPropSet : {x : a} -> {f : a -> Bool} ->
                  {auto contra : (f x = True) -> Void} ->
                  Elem x (propSet f) -> Void
