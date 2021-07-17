@@ -19,3 +19,5 @@ import public Alpha.Algebra.Set.HoledSet
 import public Alpha.Algebra.Set.PropSet
 import public Alpha.Algebra.Set.ListSet
 import public Alpha.Algebra.Set.VectSet
+import public Alpha.Algebra.Set.Inclusion
+import public Alpha.Algebra.Set.Equality
