@@ -7,8 +7,8 @@ import Alpha.Algebra.Set
 
 main : IO ()
 main = do
-  printLn (6 `elem` empty)
-  printLn (6 `elem` universe)
+  printLn (6 `elem` emptySet)
+  printLn (6 `elem` universeSet)
   printLn (6 `elem` (singleton 5))
   printLn (6 `elem` (singleton 6))
   printLn (6 `elem` (holed 6))
@@ -18,8 +18,8 @@ main = do
 
   printLn ("******")
 
-  printLn (6 `elem` (complement universe))
-  printLn (6 `elem` (complement empty))
+  printLn (6 `elem` (complement universeSet))
+  printLn (6 `elem` (complement emptySet))
   printLn (6 `elem` (complement (singleton 6)))
   printLn (6 `elem` (complement (singleton 5)))
   printLn (6 `elem` (complement (holed 5)))
@@ -40,7 +40,7 @@ main = do
   printLn (5 `elem` s2)
 
   printLn ("******")
-  let s3 = product (propSet (>3)) (singleton 5)
+  let s3 = ProductOps.product (propSet (>3)) (singleton 5)
   printLn ((3,3) `elem` s3)
   printLn ((3,4) `elem` s3)
   printLn ((3,5) `elem` s3)

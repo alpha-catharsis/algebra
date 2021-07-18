@@ -22,8 +22,8 @@ import Alpha.Decidable
 ------------
 
 export
-holed : DecEq a => (x : a) -> Set (\y => Not (x = y)) a
-holed x = MkSet (\y => decNot (decEq x y))
+holed : DecEq a => (x : a) -> Set a
+holed x = MkSet (\y => Not (x = y)) (\y => decNot (decEq x y))
 
 export
 {x : a} -> DecEq a => Uninhabited (Elem x (holed x)) where

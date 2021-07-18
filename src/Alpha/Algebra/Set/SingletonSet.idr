@@ -21,8 +21,8 @@ import Alpha.Algebra.Set.Set
 ----------------
 
 export
-singleton : DecEq a => (x : a) -> Set (\y => x = y) a
-singleton x = MkSet (\y => decEq x y)
+singleton : DecEq a => (x : a) -> Set a
+singleton x = MkSet (\y => x = y) (\y => decEq x y)
 
 export
 elemSingleton : DecEq a => {x : a} -> Elem x (singleton x)

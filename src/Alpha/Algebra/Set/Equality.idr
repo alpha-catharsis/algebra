@@ -15,24 +15,23 @@ import Alpha.Algebra.Set.Set
 ---------------------
 
 public export
-data Equal : Set lfpt a -> Set rfpt a -> Type where
-  MkEqual : (ls : Set lfpt a) -> (rs : Set rfpt a) ->
+data EqualSet : Set a -> Set a -> Type where
+  MkEqualSet : (ls : Set a) -> (rs : Set a) ->
             (prf : {x : a} -> Elem x ls -> Elem x rs) ->
-            (rprf : {x : a} -> Elem x rs -> Elem x ls) -> Equal ls rs
+            (rprf : {x : a} -> Elem x rs -> Elem x ls) -> EqualSet ls rs
 
 export
-equalityReflexive : (s : Set fpt a) -> Equality.Equal s s
-equalityReflexive s = MkEqual s s id id
+equalityReflexive : (s : Set a) -> EqualSet s s
+equalityReflexive s = MkEqualSet s s id id
 
 export
-equalityTransitive : (ls : Set lftp a) -> (ms : Set mfpt a) ->
-                     (rs : Set rfpt a) -> Equality.Equal ls ms ->
-                     Equality.Equal ms rs -> Equality.Equal ls rs
-equalityTransitive ls ms rs (MkEqual ls ms lprf lrprf)
-                   (MkEqual ms rs rprf rrprf) =
-  MkEqual ls rs (rprf . lprf) (lrprf . rrprf)
+equalityTransitive : (ls : Set a) -> (ms : Set a) -> (rs : Set a) ->
+                     EqualSet ls ms -> EqualSet ms rs -> EqualSet ls rs
+equalityTransitive ls ms rs (MkEqualSet ls ms lprf lrprf)
+                   (MkEqualSet ms rs rprf rrprf) =
+  MkEqualSet ls rs (rprf . lprf) (lrprf . rrprf)
 
 export
-equalitySymmetric : (ls : Set lftp a) -> (rs : Set rfpt a) ->
-                    Equality.Equal ls rs -> Equality.Equal rs ls
-equalitySymmetric ls rs (MkEqual ls rs prf rprf) = MkEqual rs ls rprf prf
+equalitySymmetric : (ls : Set a) -> (rs : Set a) ->
+                    EqualSet ls rs -> EqualSet rs ls
+equalitySymmetric ls rs (MkEqualSet ls rs prf rprf) = MkEqualSet rs ls rprf prf

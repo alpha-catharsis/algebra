@@ -21,8 +21,8 @@ import Alpha.Algebra.Set.Set
 ------------------
 
 export
-propSet : (f : a -> Bool) -> Set (\x => f x = True) a
-propSet f = MkSet (\x => decEq (f x) True)
+propSet : (f : a -> Bool) -> Set a
+propSet f = MkSet (\x => f x = True) (\x => decEq (f x) True)
 
 export
 elemPropSet : {x : a} -> {f : a -> Bool} -> {auto prf : f x = True} ->

@@ -16,17 +16,18 @@ import Alpha.Algebra.Set.BasicOps
 ------------
 
 export
-empty : Set (\x => const Void (the a x)) a
-empty = MkSet (const (No id))
+emptySet : Set a
+emptySet = MkSet (const Void) (const (No id))
 
 export
-Uninhabited (Elem x EmptySet.empty) where
+Uninhabited (Elem x EmptySet.emptySet) where
   uninhabited (MkElem _ _ _) impossible
 
 export
-Uninhabited (Elem x (intersection EmptySet.empty rs)) where
+Uninhabited (Elem x (intersection EmptySet.emptySet rs)) where
   uninhabited (MkElem _ _ (_, _)) impossible
 
 export
-Uninhabited (Elem x (intersection ls EmptySet.empty)) where
+Uninhabited (Elem x (intersection ls EmptySet.emptySet)) where
   uninhabited (MkElem _ _ (_, _)) impossible
+

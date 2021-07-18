@@ -11,6 +11,12 @@ module Alpha.Algebra.Relation
 import Data.Bool
 import Decidable.Decidable
 
+-------------------
+-- Internal imports
+-------------------
+
+import Alpha.Algebra.Set
+
 ---------------------
 -- Relation data type
 ---------------------

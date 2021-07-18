@@ -17,23 +17,23 @@ import Alpha.Decidable
 ---------------
 
 export
-universe : Set (\x => const () (the a x)) a
-universe = MkSet (const (Yes ()))
+universeSet : Set  a
+universeSet = MkSet (const ()) (const (Yes ()))
 
 export
-elemUniverse : {x : a} -> Elem x UniverseSet.universe
+elemUniverse : {x : a} -> Elem x UniverseSet.universeSet
 elemUniverse = MkElem _ _ ()
 
 export
-Uninhabited (Elem x (complement UniverseSet.universe)) where
+Uninhabited (Elem x (complement UniverseSet.universeSet)) where
   uninhabited (MkElem _ _ contra) = contra ()
 
 export
-elemUnionUniverseLeft : {x : a} -> {rs : Set rfpt a} ->
-                        Elem x (union UniverseSet.universe rs)
+elemUnionUniverseLeft : {x : a} -> {rs : Set a} ->
+                        Elem x (union UniverseSet.universeSet rs)
 elemUnionUniverseLeft = MkElem _ _ (Left ())
 
 export
-elemUnionUniverseRight : {x : a} -> {ls : Set rfpt a} ->
-                         Elem x (union ls UniverseSet.universe)
+elemUnionUniverseRight : {x : a} -> {ls : Set a} ->
+                         Elem x (union ls UniverseSet.universeSet)
 elemUnionUniverseRight = MkElem _ _ (Right ())
