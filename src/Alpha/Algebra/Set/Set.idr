@@ -17,10 +17,10 @@ import Decidable.Decidable
 
 public export
 data Set : Type -> Type where
-  MkSet : (fpt : a -> Type) -> ((x : a) -> Dec (fpt x)) -> Set a
+  MkSet : (0 fpt : a -> Type) -> ((x : a) -> Dec (fpt x)) -> Set a
 
 public export
-setFpt : Set a -> (a -> Type)
+0 setFpt : Set a -> (a -> Type)
 setFpt (MkSet fpt _) = fpt
 
 public export
@@ -34,6 +34,10 @@ setDec (MkSet _ f) = f
 public export
 data Elem : (x : a) -> (s : Set a) -> Type where
   MkElem : (x : a) -> (s : Set a) -> (prf : setFpt s x) -> Elem x s
+
+public export
+elemVal : {x : a} -> {s : Set a} -> Elem x s -> a
+elemVal (MkElem x _ _) = x
 
 export
 notElem : (x : a) -> (s : Set a) -> (setFpt s x -> Void) -> Elem x s -> Void

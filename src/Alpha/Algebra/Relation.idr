@@ -16,40 +16,62 @@ import Decidable.Decidable
 -------------------
 
 import Alpha.Algebra.Set
+import Alpha.Decidable
 
 ---------------------
 -- Relation data type
 ---------------------
 
 public export
-data Rel : (a -> b -> Type) -> Type -> Type -> Type where
-  MkRel : {0 fpt : a -> b -> Type} -> ((x : a) -> (y : b) -> Dec (fpt x y)) ->
-          Rel fpt a b
+data Rel : Set a -> Set b -> Type where
+  MkRel : {0 ls : Set a} -> {0 rs : Set b} ->
+          (0 fpt : (a, b) -> Type) ->
+          ({0 p : (a, b)} -> (e : Elem p (product ls rs)) ->
+           Dec (fpt p)) ->
+          Rel ls rs
 
-export
-relDec : Rel fpt a b -> ((x : a) -> (y : b) -> Dec (fpt x y))
-relDec (MkRel f) = f
+public export
+0 relFpt : {0 ls : Set a} -> {0 rs : Set b} -> Rel ls rs -> ((a, b) -> Type)
+relFpt (MkRel fpt _) = fpt
+
+public export
+relDec : {0 ls : Set a} -> {0 rs : Set b} -> (r : Rel ls rs) ->
+         ({0 p : (a, b)} -> (e : Elem p (product ls rs)) ->
+          Dec (relFpt r p))
+relDec (MkRel _ f) = f
 
 --------------------
 -- Related data type
 --------------------
 
 public export
-data Related : a -> b -> Rel fpt a b -> Type where
-  MkRelated : (x : a) -> (y : b) -> (r : Rel fpt a b) -> (prf : fpt x y) ->
-              Related x y r
+data Related : {0 ls : Set a} -> {0 rs : Set b} -> Rel ls rs -> (a, b) ->
+               Type where
+  MkRelated : {0 ls : Set a} -> {0 rs : Set b} -> (r : Rel ls rs) ->
+              {p : (a, b)} -> Elem p (product ls rs) ->
+              relFpt r p -> Related r p
 
 export
-notRelated : (x : a) -> (y : b) -> (r : Rel fpt a b) -> (fpt x y -> Void) ->
-             Related x y r -> Void
-notRelated x y r contra (MkRelated x y r prf) = contra prf
+notRelated : {0 ls : Set a} -> {0 rs : Set b} -> (r : Rel ls rs) ->
+             {p : (a, b)} -> Elem p (product ls rs) ->
+             (relFpt r p -> Void) -> Related r p -> Void
+notRelated r e contra (MkRelated _ _ prf) = contra prf
 
 export
-areRelated : (x : a) -> (y : b) -> (r : Rel fpt a b) -> Dec (Related x y r)
-areRelated x y (MkRel f) = case f x y of
-  Yes prf => Yes (MkRelated x y (MkRel f) prf)
-  No contra => No (notRelated x y (MkRel f) contra)
+areRelated : {ls : Set a} -> {rs : Set b} -> (r : Rel ls rs) ->
+               (x : a) -> (y : b) ->
+               {auto leprf : Elem x ls} -> {auto reprf : Elem y rs} ->
+               Dec (Related r (x, y))
+areRelated r x y = let ep = elemProduct leprf reprf in case relDec r ep of
+  Yes prf => Yes (MkRelated r ep prf)
+  No contra => No (notRelated r ep contra)
 
 export
-related : (x : a) -> (y : b) -> (r : Rel fpt a b) -> Bool
-related x y r@(MkRel _) = isYes (areRelated x y r)
+related : {ls : Set a} -> {rs : Set b} -> (r : Rel ls rs) ->
+          (x : a) -> (y : b) ->
+          {auto leprf : Elem x ls} -> {auto reprf : Elem y rs} ->
+          Bool
+related r x y = isYes (areRelated r x y {leprf} {reprf})
+
+
+
