@@ -15,10 +15,12 @@ import Alpha.Algebra.Set.ProductOps
 -- Pointed interface
 --------------------
 
+public export
 interface Set t a => Pointed t a where
   basepoint : t -> a
   basepointPrf : (s : t) -> SetElemPrf (basepoint s) s
 
+export
 (Pointed t a, Pointed u b) => Pointed (Product t u a b) (a,b) where
   basepoint (MkProduct ls rs) = (basepoint ls, basepoint rs)
   basepointPrf (MkProduct ls rs) = MkElemProduct (basepoint ls, basepoint rs)

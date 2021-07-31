@@ -14,6 +14,7 @@ import Decidable.Equality
 -- Internal imports
 -------------------
 
+import Alpha.Algebra.Set.Pointed
 import Alpha.Algebra.Set.Set
 
 ----------------
@@ -41,8 +42,10 @@ export
     Yes prf => Yes (MkElemSingletonSet y s prf)
     No contra => No (notElemSingletonSet y s contra)
 
-
-
+export
+{x : a} -> DecEq a => Pointed (SingletonSet x) a where
+  basepoint _ = x
+  basepointPrf s = MkElemSingletonSet x s Refl
 
 
 -- export

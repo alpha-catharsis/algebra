@@ -8,6 +8,7 @@ module Alpha.Algebra.Set.UniverseSet
 -- Internal imports
 -------------------
 
+import Alpha.Algebra.Set.Inclusion
 import Alpha.Algebra.Set.Set
 -- import Alpha.Algebra.Set.BasicOps
 -- import Alpha.Decidable
@@ -17,18 +18,21 @@ import Alpha.Algebra.Set.Set
 ---------------
 
 public export
-data UniverseSet : Type -> Type where
-  MkUniverseSet : (a : Type) -> UniverseSet a
+data UniverseSet : Type where
+  MkUniverseSet : UniverseSet
 
 public export
-data ElemUniverseSet : (x : a) -> (s : t) -> Type where
-  MkElemUniverseSet : ElemUniverseSet x s
+data ElemUniverseSet : (x : a) -> (s : UniverseSet) -> Type where
+  MkElemUniverseSet : ElemUniverseSet x MkUniverseSet
 
 export
-Set (UniverseSet a) a where
+Set UniverseSet a where
   SetElemPrf = ElemUniverseSet
-  isElem _ _ = Yes (MkElemUniverseSet)
+  isElem x MkUniverseSet = Yes MkElemUniverseSet
 
+export
+subsetUniverseSet : (Set t a) => (ls : t) -> Subset ls MkUniverseSet
+subsetUniverseSet ls = MkSubset ls MkUniverseSet (\_ => MkElemUniverseSet)
 
 -- export
 -- Uninhabited (Elem x (complement UniverseSet.universeSet)) where

@@ -7,8 +7,8 @@ import Alpha.Algebra.Set
 
 main : IO ()
 main = do
-  printLn (6 `elem` (MkEmptySet Integer))
-  printLn (6 `elem` (MkUniverseSet Integer))
+  printLn (6 `elem` MkEmptySet)
+  printLn (6 `elem` MkUniverseSet)
   printLn (6 `elem` (MkSingletonSet 5))
   printLn (6 `elem` (MkSingletonSet 6))
   -- printLn (6 `elem` (holed 6))
@@ -18,8 +18,8 @@ main = do
 
   -- printLn ("******")
 
-  printLn (6 `elem` (MkComplement (MkUniverseSet Integer)))
-  printLn (6 `elem` (MkComplement (MkEmptySet Integer)))
+  printLn (6 `elem` (MkComplement (MkUniverseSet) {a=Integer}))
+  printLn (6 `elem` (MkComplement (MkEmptySet) {a=Integer}))
   printLn (6 `elem` (MkComplement (MkSingletonSet 6)))
   printLn (6 `elem` (MkComplement (MkSingletonSet 5)))
   -- printLn (6 `elem` (complement (holed 5)))

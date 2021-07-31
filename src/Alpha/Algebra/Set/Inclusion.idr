@@ -9,28 +9,23 @@ module Alpha.Algebra.Set.Inclusion
 -------------------
 
 import Alpha.Algebra.Set.Set
-import Alpha.Algebra.Set.Sets
-import Alpha.Algebra.Set.ProductOps
 import Alpha.Algebra.Relation
-import Alpha.Algebra.Set.UniverseSet
 
 ---------------------
 -- Subset data type
 ---------------------
 
--- public export
--- data Subset : Type -> Type -> Type where
---   MkSubset : (Set t a, Set u a) => (ls : t) -> (rs : u) ->
---              (prf : {x : a} -> SetElemPrf x ls -> SetElemPrf x rs) ->
---              Subset t u
-
-data Inclusion = MkInclusion
-
-data Subset : (_ : Inclusion) -> (_ : UniverseSet t) -> (_ : UniverseSet u) ->
-              (ls : t) -> (rs : u) -> Type where
+public export
+data Subset : (Set t a, Set u a) => (ls : t) -> (rs : u) -> Type where
   MkSubset : (Set t a, Set u a) => (ls : t) -> (rs : u) ->
              (prf : {x : a} -> SetElemPrf x ls -> SetElemPrf x rs) ->
-             Subset MkInclusion (MkUniverseSet t) (MkUniverseSet u) ls rs
+             Subset ls rs
+
+export
+notSubset : (Set t a, Set u a) => (ls : t) -> (rs : u) ->
+            (x : a) -> SetElemPrf x ls -> (SetElemPrf x rs -> Void) ->
+            Subset ls rs -> Void
+notSubset ls rs x prf contra (MkSubset ls rs f) = contra (f {x} prf)
 
 -- Relation Inclusion (UniverseSet (UniverseSet a)) (UniverseSet (UniverseSet a))
 --          (UniverseSet a) (UniverseSet a) where
