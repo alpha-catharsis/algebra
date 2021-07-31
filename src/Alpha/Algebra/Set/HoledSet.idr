@@ -21,15 +21,25 @@ import Alpha.Decidable
 -- Holed set
 ------------
 
-export
-holed : DecEq a => (x : a) -> Set a
-holed x = MkSet (\y => Not (x = y)) (\y => decNot (decEq x y))
+public export
+data HoledSet : (x : a) -> Type where
+  MkHoledSet : (x : a) -> HoledSet x
+
+public export
+data ElemHoledSet : (x : a) -> (s : t) -> Type where
+  MkElemHoledSet : (y : a) -> (s : HoledSet x) -> (y = x -> Void) ->
+                   ElemHoledSet y s
+
+public export
+notElemHoledSet : {x : a} -> (y : a) -> (s : HoledSet x) ->
+                  y = x -> ElemHoledSet y s -> Void
+notElemHoledSet y s prf (MkElemHoledSet _ _ contra) = contra prf
 
 export
-{x : a} -> DecEq a => Uninhabited (Elem x (holed x)) where
-  uninhabited (MkElem _ _ contra) = contra Refl
+{x : a} -> DecEq a => Set (HoledSet x) a where
+  SetElemPrf = ElemHoledSet
+  isElem y s = case decEq y x of
+    No contra => Yes (MkElemHoledSet y s contra)
+    Yes prf => No (notElemHoledSet y s prf)
 
-export
-elemHoled : DecEq a => {y : a} -> {x : a} -> {auto contra : Not (x = y)} ->
-            Elem y (holed x)
-elemHoled = MkElem _ _ contra
+

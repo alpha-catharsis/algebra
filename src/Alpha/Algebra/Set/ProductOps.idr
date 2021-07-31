@@ -18,43 +18,95 @@ import Alpha.Decidable
 --------------
 
 public export
-product : Set a -> Set b -> Set (a, b)
-product ls rs = MkSet (\x => (setFpt ls (fst x), setFpt rs (snd x)))
-                (\x => decAnd (setDec ls (fst x)) (setDec rs (snd x)))
+data Product : (t : Type) -> (u : Type) -> (a : Type) -> (b : Type) ->
+               (Set t a, Set u b) => Type where
+  MkProduct : (Set t a, Set u b) => t -> u -> Product t u a b
+
+public export
+productLeftSet : (Set t a, Set u b) => Product t u a b -> t
+productLeftSet (MkProduct lis _) = lis
+
+public export
+productRightSet : (Set t a, Set u b) => Product t u a b -> u
+productRightSet (MkProduct _ ris) = ris
+
+public export
+data ElemProduct : (Set t a, Set u b) => (a, b) -> Product t u a b ->
+                   Type where
+  MkElemProduct : (Set t a, Set u b) => (p : (a, b)) -> (lis : t) ->
+                  (ris : u) ->
+                  (SetElemPrf (fst p) lis, SetElemPrf (snd p) ris) ->
+                  ElemProduct p (MkProduct lis ris)
 
 export
-elemProduct : {ls : Set a} -> {rs : Set b} -> Elem x ls ->
-              Elem y rs -> Elem (x, y) (product ls rs)
-elemProduct (MkElem _ _ lprf) (MkElem _ _ rprf) = MkElem _ _ (lprf, rprf)
+notElemProductLeft : (Set t a, Set u b) => (x : a) -> (y : b) -> (lis : t) ->
+                     (ris : u) -> (SetElemPrf x lis -> Void) ->
+                     ElemProduct (x, y) (MkProduct lis ris) -> Void
+notElemProductLeft _ _ _ _ lcontra (MkElemProduct _ _ _ (lprf, _)) =
+  lcontra lprf
 
 export
-notElemProductLeft : {x : a} -> {y : b} -> {ls : Set a} -> {rs : Set b} ->
-                     (Elem x ls -> Void) -> Elem (x, y) (product ls rs) -> Void
-notElemProductLeft lcontra = \(MkElem _ _ pprf) => lcontra (MkElem _ _ (fst pprf))
+notElemProductRight : (Set t a, Set u b) => (x : a) -> (y : b) -> (lis : t) ->
+                      (ris : u) -> (SetElemPrf y ris -> Void) ->
+                      ElemProduct (x, y) (MkProduct lis ris) -> Void
+notElemProductRight _ _ _ _ rcontra (MkElemProduct _ _ _ (_, rprf)) =
+  rcontra rprf
 
-export
-notElemProductRight : {x : a} -> {y : b} -> {ls : Set a} -> {rs : Set b} ->
-                      (Elem y rs -> Void) -> Elem (x, y) (product ls rs) ->
-                      Void
-notElemProductRight rcontra = \(MkElem _ _ pprf) => rcontra (MkElem _ _ (snd pprf))
+public export
+(Set t a, Set u b) => Set (Product t u a b) (a, b) where
+  SetElemPrf = ElemProduct
+  isElem (x, y) (MkProduct lis ris) = case isElem x lis of
+    No lcontra => No (notElemProductLeft _ _ _ _ lcontra)
+    Yes lprf => case isElem y ris of
+      No rcontra => No (notElemProductRight _ _ _ _ rcontra)
+      Yes rprf => Yes (MkElemProduct _ _ _ (lprf, rprf))
 
 ----------------
 -- Set coproduct
 ----------------
 
 public export
-coproduct : Set a -> Set b -> Set (Either a b)
-coproduct ls rs = MkSet (\ex => either (setFpt ls) (setFpt rs) ex)
-                  (\ex => case ex of
-                            Left lx => setDec ls lx
-                            Right rx => setDec rs rx)
+data Coproduct : (t : Type) -> (u : Type) -> (a : Type) -> (b : Type) ->
+                 (Set t a, Set u b) => Type where
+  MkCoproduct : (Set t a, Set u b) => t -> u -> Coproduct t u a b
+
+public export
+coproductLeftSet : (Set t a, Set u b) => Coproduct t u a b -> t
+coproductLeftSet (MkCoproduct lis _) = lis
+
+public export
+coproductRightSet : (Set t a, Set u b) => Coproduct t u a b -> u
+coproductRightSet (MkCoproduct _ ris) = ris
+
+public export
+data ElemCoproduct : (Set t a, Set u b) => Either a b -> Coproduct t u a b ->
+                     Type where
+  MkElemCoproduct : (Set t a, Set u b) => (e : Either a b) -> (lis : t) ->
+                    (ris : u) -> (case e of
+                                    Left x => SetElemPrf x lis
+                                    Right y => SetElemPrf y ris) ->
+                                    ElemCoproduct e (MkCoproduct lis ris)
 
 export
-elemCoproductLeft : {x : a} -> {y : b} -> {ls : Set a} -> {rs : Set b} ->
-                    Elem x ls -> Elem (Left x) (coproduct ls rs)
-elemCoproductLeft (MkElem _ _ lprf) = MkElem _ _ lprf
+notElemCoproductLeft : (Set t a, Set u b) => (x : a) -> (lis : t) ->
+                       {ris : u}  -> (SetElemPrf x lis -> Void) ->
+                       ElemCoproduct (Left x) (MkCoproduct lis ris) -> Void
+notElemCoproductLeft  _ _ lcontra (MkElemCoproduct _ _ _ lprf) =
+    lcontra lprf
 
 export
-elemCoproductRight : {x : a} -> {y : b} -> {ls : Set a} -> {rs : Set b} ->
-                     Elem y rs -> Elem (Right y) (coproduct ls rs)
-elemCoproductRight (MkElem _ _ rprf) = MkElem _ _ rprf
+notElemCoproductRight : (Set t a, Set u b) => (y : b) -> (ris : u) ->
+                        {lis : t}  -> (SetElemPrf y ris -> Void) ->
+                        ElemCoproduct (Right y) (MkCoproduct lis ris) -> Void
+notElemCoproductRight  _ _ rcontra (MkElemCoproduct _ _ _ rprf) =
+  rcontra rprf
+
+public export
+(Set t a, Set u b) => Set (Coproduct t u a b) (Either a b) where
+  SetElemPrf = ElemCoproduct
+  isElem (Left x) (MkCoproduct lis _) = case isElem x lis of
+    No lcontra => No (notElemCoproductLeft x lis lcontra)
+    Yes lprf => Yes (MkElemCoproduct (Left x) lis _ lprf)
+  isElem (Right y) (MkCoproduct _ ris) = case isElem y ris of
+    No rcontra => No (notElemCoproductRight y ris rcontra)
+    Yes rprf => Yes (MkElemCoproduct (Right y) _ ris rprf)

@@ -9,25 +9,36 @@ module Alpha.Algebra.Set.EmptySet
 -------------------
 
 import Alpha.Algebra.Set.Set
-import Alpha.Algebra.Set.BasicOps
+-- import Alpha.Algebra.Set.BasicOps
 
 ------------
 -- Empty set
 ------------
 
-export
-emptySet : Set a
-emptySet = MkSet (const Void) (const (No id))
+public export
+data EmptySet : Type -> Type where
+ MkEmptySet : (a : Type) -> EmptySet a
+
+public export
+data ElemEmptySet : (x : a) -> (s : t) -> Type where
 
 export
-Uninhabited (Elem x EmptySet.emptySet) where
-  uninhabited (MkElem _ _ _) impossible
+Uninhabited (ElemEmptySet a t) where
+  uninhabited _ impossible
 
 export
-Uninhabited (Elem x (intersection EmptySet.emptySet rs)) where
-  uninhabited (MkElem _ _ (_, _)) impossible
+Set (EmptySet a) a where
+  SetElemPrf = ElemEmptySet
+  isElem _ _ = No uninhabited
 
-export
-Uninhabited (Elem x (intersection ls EmptySet.emptySet)) where
-  uninhabited (MkElem _ _ (_, _)) impossible
+-- export
+-- Uninhabited (Elem x EmptySet.emptySet) where
+--   uninhabited (MkElem _ _ _) impossible
 
+-- export
+-- Uninhabited (Elem x (intersection EmptySet.emptySet rs)) where
+--   uninhabited (MkElem _ _ (_, _)) impossible
+
+-- export
+-- Uninhabited (Elem x (intersection ls EmptySet.emptySet)) where
+--   uninhabited (MkElem _ _ (_, _)) impossible

@@ -17,63 +17,39 @@ import Alpha.Decidable
 -----------------
 
 public export
-difference : Set a -> Set a -> Set a
-difference ls rs = intersection ls (complement rs)
+Difference : (t : Type) -> (u : Type) -> (a : Type) ->
+             (Set t a, Set u a) => Type
+Difference t u a = Intersection t (Complement u a) a
 
-export
-elemDifference : {x : a} -> {ls : Set a} -> {rs : Set a} ->
-                 Elem x ls -> (Elem x rs -> Void) ->
-                 Elem x (difference ls rs)
-elemDifference lprf rcontra = elemIntersection lprf (elemComplement rcontra)
+public export
+difference : (Set t a, Set u a) => t -> u -> Difference t u a
+difference ls rs = MkIntersection ls (MkComplement rs)
 
-export
-notElemDifferenceLeft : {x : a} -> {ls : Set a} -> {rs : Set a} ->
-                        (Elem x ls -> Void) -> Elem x (difference ls rs) ->
-                        Void
-notElemDifferenceLeft lcontra = \(MkElem _ _ (lprf, _)) =>
-                                  lcontra (MkElem _ _ lprf)
+public export
+differenceLeftSet : (Set t a, Set u a) => Difference t u a -> t
+differenceLeftSet = intersectionLeftSet
 
-export
-notElemDifferenceRight : {x : a} -> {ls : Set a} -> {rs : Set a} ->
-                         Elem x rs -> Elem x (difference ls rs) -> Void
-notElemDifferenceRight rprf = notElemIntersectionRight (notElemComplement rprf)
+public export
+differenceRightSet : (Set t a, Set u a) => Difference t u a -> u
+differenceRightSet = complementSet . intersectionRightSet
 
 ---------------------------
 -- Set symmetric difference
 ---------------------------
 
 public export
-symDifference : Set a -> Set a -> Set a
-symDifference ls rs = union (difference ls rs) (difference rs ls)
+SymDifference : (t : Type) -> (u : Type) -> (a : Type) ->
+                (Set t a, Set u a) => Type
+SymDifference t u a = Union (Difference t u a) (Difference u t a) a
 
-export
-elemSymDifferenceLeft : {x : a} -> {ls : Set a} -> {rs : Set a} ->
-                        Elem x ls -> (Elem x rs -> Void) ->
-                        Elem x (symDifference ls rs)
-elemSymDifferenceLeft lprf rcontra = let (MkElem _ _ prf) =
-                                         elemDifference lprf rcontra
-                                     in MkElem _ _ (Left prf)
+public export
+symDifference : (Set t a, Set u a) => t -> u -> SymDifference t u a
+symDifference ls rs = MkUnion (difference ls rs) (difference rs ls)
 
-export
-elemSymDifferenceRight : {x : a} -> {ls : Set a} -> {rs : Set a} ->
-                         (Elem x ls -> Void) -> Elem x rs ->
-                         Elem x (symDifference ls rs)
-elemSymDifferenceRight lcontra rprf = let (MkElem _ _ prf) =
-                                        elemDifference rprf lcontra
-                                      in MkElem _ _ (Right prf)
+public export
+symDifferenceLeftSet : (Set t a, Set u a) => SymDifference t u a -> t
+symDifferenceLeftSet = differenceLeftSet . unionLeftSet
 
-export
-notElemSymDifferenceBoth : {x : a} -> {ls : Set a} -> {rs : Set a} ->
-                           Elem x ls -> Elem x rs ->
-                           Elem x (symDifference ls rs) -> Void
-notElemSymDifferenceBoth lprf rprf = notElemUnion (notElemDifferenceRight rprf)
-                                     (notElemDifferenceRight lprf)
-
-export
-notElemSymDifferenceBothNot : {x : a} -> {ls : Set a} ->
-                              {rs : Set a} -> (Elem x ls -> Void) ->
-                              (Elem x rs -> Void) ->
-                              Elem x (symDifference ls rs) -> Void
-notElemSymDifferenceBothNot lprf rprf = notElemUnion
-                                        (notElemDifferenceLeft lprf)
-                                        (notElemDifferenceLeft rprf)
+public export
+symDifferenceRightSet : (Set t a, Set u a) => SymDifference t u a -> u
+symDifferenceRightSet = differenceLeftSet . unionRightSet
