@@ -33,10 +33,8 @@ Set EmptySet a where
   isElem _ _ = No uninhabited
 
 export
-notSubsetEmptySet : (Set t a) => (ls : t) -> (x : a) -> SetElemPrf x ls ->
-                    Subset ls MkEmptySet -> Void
-notSubsetEmptySet ls x prf = notSubset ls MkEmptySet x prf uninhabited
-
+subsetEmptySet : (Set u a) => (rs : u) -> Subset MkEmptySet rs
+subsetEmptySet rs = MkSubset MkEmptySet rs (\prf => absurd (uninhabited prf))
 
 -- export
 -- Uninhabited (Elem x EmptySet.emptySet) where
