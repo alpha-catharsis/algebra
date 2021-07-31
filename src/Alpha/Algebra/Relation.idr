@@ -17,7 +17,6 @@ import Decidable.Decidable
 
 import Alpha.Algebra.Set.Set
 import Alpha.Algebra.Set.ProductOps
--- import Alpha.Decidable
 
 ---------------------
 -- Relation interface

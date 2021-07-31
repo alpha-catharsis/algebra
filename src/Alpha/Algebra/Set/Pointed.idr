@@ -21,7 +21,7 @@ interface Set t a => Pointed t a where
   basepointPrf : (s : t) -> SetElemPrf (basepoint s) s
 
 export
-(Pointed t a, Pointed u b) => Pointed (Product t u a b) (a,b) where
+(Pointed t a, Pointed u b) => Pointed (Product t u) (a,b) where
   basepoint (MkProduct ls rs) = (basepoint ls, basepoint rs)
   basepointPrf (MkProduct ls rs) = MkElemProduct (basepoint ls, basepoint rs)
                                    ls rs (basepointPrf ls, basepointPrf rs)

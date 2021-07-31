@@ -18,21 +18,19 @@ import Alpha.Decidable
 --------------
 
 public export
-data Product : (t : Type) -> (u : Type) -> (a : Type) -> (b : Type) ->
-               (Set t a, Set u b) => Type where
-  MkProduct : (Set t a, Set u b) => t -> u -> Product t u a b
+data Product : (t : Type) -> (u : Type) -> (Set t a, Set u b) => Type where
+  MkProduct : (Set t a, Set u b) => t -> u -> Product t u
 
 public export
-productLeftSet : (Set t a, Set u b) => Product t u a b -> t
+productLeftSet : (Set t a, Set u b) => Product t u  -> t
 productLeftSet (MkProduct lis _) = lis
 
 public export
-productRightSet : (Set t a, Set u b) => Product t u a b -> u
+productRightSet : (Set t a, Set u b) => Product t u -> u
 productRightSet (MkProduct _ ris) = ris
 
 public export
-data ElemProduct : (Set t a, Set u b) => (a, b) -> Product t u a b ->
-                   Type where
+data ElemProduct : (Set t a, Set u b) => (a, b) -> Product t u -> Type where
   MkElemProduct : (Set t a, Set u b) => (p : (a, b)) -> (lis : t) ->
                   (ris : u) ->
                   (SetElemPrf (fst p) lis, SetElemPrf (snd p) ris) ->
@@ -52,8 +50,8 @@ notElemProductRight : (Set t a, Set u b) => (x : a) -> (y : b) -> (lis : t) ->
 notElemProductRight _ _ _ _ rcontra (MkElemProduct _ _ _ (_, rprf)) =
   rcontra rprf
 
-public export
-(Set t a, Set u b) => Set (Product t u a b) (a, b) where
+export
+(Set t a, Set u b) => Set (Product t u) (a, b) where
   SetElemPrf = ElemProduct
   isElem (x, y) (MkProduct lis ris) = case isElem x lis of
     No lcontra => No (notElemProductLeft _ _ _ _ lcontra)
@@ -66,20 +64,19 @@ public export
 ----------------
 
 public export
-data Coproduct : (t : Type) -> (u : Type) -> (a : Type) -> (b : Type) ->
-                 (Set t a, Set u b) => Type where
-  MkCoproduct : (Set t a, Set u b) => t -> u -> Coproduct t u a b
+data Coproduct : (t : Type) -> (u : Type) -> (Set t a, Set u b) => Type where
+  MkCoproduct : (Set t a, Set u b) => t -> u -> Coproduct t u
 
 public export
-coproductLeftSet : (Set t a, Set u b) => Coproduct t u a b -> t
+coproductLeftSet : (Set t a, Set u b) => Coproduct t u -> t
 coproductLeftSet (MkCoproduct lis _) = lis
 
 public export
-coproductRightSet : (Set t a, Set u b) => Coproduct t u a b -> u
+coproductRightSet : (Set t a, Set u b) => Coproduct t u -> u
 coproductRightSet (MkCoproduct _ ris) = ris
 
 public export
-data ElemCoproduct : (Set t a, Set u b) => Either a b -> Coproduct t u a b ->
+data ElemCoproduct : (Set t a, Set u b) => Either a b -> Coproduct t u ->
                      Type where
   MkElemCoproduct : (Set t a, Set u b) => (e : Either a b) -> (lis : t) ->
                     (ris : u) -> (case e of
@@ -101,8 +98,8 @@ notElemCoproductRight : (Set t a, Set u b) => (y : b) -> (ris : u) ->
 notElemCoproductRight  _ _ rcontra (MkElemCoproduct _ _ _ rprf) =
   rcontra rprf
 
-public export
-(Set t a, Set u b) => Set (Coproduct t u a b) (Either a b) where
+export
+(Set t a, Set u b) => Set (Coproduct t u) (Either a b) where
   SetElemPrf = ElemCoproduct
   isElem (Left x) (MkCoproduct lis _) = case isElem x lis of
     No lcontra => No (notElemCoproductLeft x lis lcontra)

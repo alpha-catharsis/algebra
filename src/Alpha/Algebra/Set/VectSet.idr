@@ -23,6 +23,7 @@ import Alpha.Algebra.Set.Set
 -- Vect set
 -----------
 
+export
 DecEq a => Set (Vect k a) a where
   SetElemPrf = VE.Elem
   isElem = VE.isElem

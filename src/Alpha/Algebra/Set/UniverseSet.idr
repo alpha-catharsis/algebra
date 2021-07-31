@@ -10,8 +10,6 @@ module Alpha.Algebra.Set.UniverseSet
 
 import Alpha.Algebra.Set.Inclusion
 import Alpha.Algebra.Set.Set
--- import Alpha.Algebra.Set.BasicOps
--- import Alpha.Decidable
 
 ---------------
 -- Universe set

@@ -10,7 +10,6 @@ module Alpha.Algebra.Set.EmptySet
 
 import Alpha.Algebra.Set.Inclusion
 import Alpha.Algebra.Set.Set
--- import Alpha.Algebra.Set.BasicOps
 
 ------------
 -- Empty set
@@ -27,7 +26,7 @@ export
 Uninhabited (ElemEmptySet x s) where
   uninhabited _ impossible
 
-export
+public export
 Set EmptySet a where
   SetElemPrf = ElemEmptySet
   isElem _ _ = No uninhabited

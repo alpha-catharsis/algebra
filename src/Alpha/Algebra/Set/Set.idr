@@ -8,7 +8,6 @@ module Alpha.Algebra.Set.Set
 -- External imports
 -------------------
 
-import Data.Bool
 import Decidable.Decidable
 
 ----------------
