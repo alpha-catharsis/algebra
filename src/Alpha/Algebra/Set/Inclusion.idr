@@ -8,12 +8,19 @@ module Alpha.Algebra.Set.Inclusion
 -- Internal imports
 -------------------
 
-import Alpha.Algebra.Set.Set
 import Alpha.Algebra.Relation
+import Alpha.Algebra.Set.Set
 
 ---------------------
--- Subset data type
+-- Inclusion relation
 ---------------------
+
+public export
+data Inclusion = MkInclusion
+
+-------------------
+-- Subset data type
+-------------------
 
 public export
 data Subset : (Set t a, Set u a) => (ls : t) -> (rs : u) -> Type where
@@ -27,10 +34,43 @@ notSubset : (Set t a, Set u a) => (ls : t) -> (rs : u) ->
             Subset ls rs -> Void
 notSubset ls rs x prf contra (MkSubset ls rs f) = contra (f {x} prf)
 
--- Relation Inclusion (UniverseSet (UniverseSet a)) (UniverseSet (UniverseSet a))
---          (UniverseSet a) (UniverseSet a) where
+export
+isSubset : (Set t a, Set u a, Relation Inclusion t u) =>
+           (ls : t) -> (rs : u) -> Dec (RelationPrf MkInclusion ls rs)
+isSubset ls rs = areRelated MkInclusion ls rs
+
+export
+subset : (Set t a, Set u a, Relation Inclusion t u) =>
+         (ls : t) -> (rs : u) -> Bool
+subset ls rs = related MkInclusion ls rs
+
+--------------------------------
+-- Inclusion relation properties
+--------------------------------
+
+-- (Set t a, Relation Inclusion t t) => RelationRefl Inclusion t where
+--   reflRelation r s = (\_ => MkSubset s s id)
+
+-- export
+-- (Set t a) => Includable t UniverseSet a where
+--   isSubset ls MkUniverseSet = Yes (MkSubset ls MkUniverseSet
+--                                    (\_ => MkElemUniverseSet))
+
+-- export
+-- (Set u a) => Includable EmptySet u a where
+--   isSubset MkEmptySet rs = Yes (MkSubset MkEmptySet rs
+--                                 (\prf => absurd (uninhabited prf)))
+
+-- subset : (Includable t u a) => t -> u -> Bool
+-- subset ls rs = isYes (isSubset {a} ls rs)
+
+-- (Includable t u a) => Relation Inclusion UniverseSet UniverseSet t u where
 --   RelationPrf = Subset
---   areRelated _ _ _ ls rs = MkSubset ls rs (\_,prf => prf)
+--   areRelated _ _ _ ls rs _ _ = isSubset ls rs
+
+-- (Includable t u a) => RelationRefl Inclusion UniverseSet UniverseSet where
+
+
 
 -- export
 -- inclusionReflexive : (s : Set a) -> Subset s s

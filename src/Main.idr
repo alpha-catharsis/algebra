@@ -5,11 +5,12 @@ import Decidable.Equality
 
 import Alpha.Algebra.Set
 import Alpha.Algebra.Set.Set as A
+import Alpha.Algebra.Relation
 
 main : IO ()
 main = do
-  printLn (6 `elem` MkEmptySet)
-  printLn (6 `elem` MkUniverseSet)
+  printLn (6 `elem` (MkEmptySet Integer))
+  printLn (6 `elem` (MkUniverseSet Integer))
   printLn (6 `elem` (MkSingletonSet 5))
   printLn (6 `elem` (MkSingletonSet 6))
   printLn (6 `elem` (MkHoledSet 6))
@@ -20,8 +21,8 @@ main = do
 
   printLn ("******")
 
-  printLn (6 `elem` (MkComplement MkUniverseSet {a=Integer}))
-  printLn (6 `elem` (MkComplement MkEmptySet {a=Integer}))
+  printLn (6 `elem` (MkComplement (MkUniverseSet Integer)))
+  printLn (6 `elem` (MkComplement (MkEmptySet Integer)))
   printLn (6 `elem` (MkComplement (MkSingletonSet 6)))
   printLn (6 `elem` (MkComplement (MkSingletonSet 5)))
   printLn (6 `elem` (MkComplement (MkHoledSet 5)))
@@ -70,5 +71,9 @@ main = do
   let s6 = MkSingletonSet 5
   printLn (basepoint s6 {a=Integer})
   printLn ((basepoint s6) `elem` s6)
+
+  -- printLn ("******")
+  -- printLn (subset (MkEmptySet Integer) (MkSingletonSet 5))
+  -- printLn (subset (MkSingletonSet 5) (MkUniverseSet Integer))
 
   putStrLn "OK"

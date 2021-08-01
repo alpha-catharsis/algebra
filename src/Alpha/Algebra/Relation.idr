@@ -16,34 +16,24 @@ import Decidable.Decidable
 -------------------
 
 import Alpha.Algebra.Set.Set
-import Alpha.Algebra.Set.ProductOps
 
 ---------------------
 -- Relation interface
 ---------------------
 
 public export
-interface (Set t a, Set u b) => Relation q t u a b where
-  RelationPrf : (r : q) -> (ls : t) -> (rs : u) ->
-                (x : a) -> (y : b) -> Type
-  areRelated : (r : q) -> (ls : t) -> (rs : u) ->
-               (x : a) -> (y : b) ->
-               SetElemPrf x ls -> SetElemPrf y rs ->
-               Dec (RelationPrf r ls rs x y)
+interface Relation q a b | q where
+    RelationPrf : (r : q) -> (x : a) -> (y : b) -> Type
+    areRelated : (r : q) -> (x : a) -> (y : b) -> Dec (RelationPrf r x y)
 
-related : Relation q t u a b => (r : q) -> (ls : t) -> (rs : u) ->
-          (x : a) -> (y : b) ->
-          {auto lprf : SetElemPrf x ls} -> {auto rprf : SetElemPrf y rs} ->
-          Bool
-related r ls rs x y = isYes (areRelated r ls rs x y lprf rprf)
-
+export
+related : Relation q a b => (r : q) -> (x : a) -> (y : b) -> Bool
+related r x y = isYes (areRelated r x y)
 
 ----------------------
 -- Relation properties
 ----------------------
 
 public export
-interface Relation q t t a a => RelationRefl q t a where
-  reflRelation : (r : q) -> (s : t) -> (x : a) -> (y : a) ->
-                 RelationPrf r s s x y ->
-                 RelationPrf r s s y x
+interface Relation q a a => RelationRefl q a where
+  reflRelation : (r : q) -> (x : a) -> RelationPrf r x x

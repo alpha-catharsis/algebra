@@ -8,6 +8,7 @@ module Alpha.Algebra.Set.EmptySet
 -- Internal imports
 -------------------
 
+import Alpha.Algebra.Relation
 import Alpha.Algebra.Set.Inclusion
 import Alpha.Algebra.Set.Set
 
@@ -16,24 +17,28 @@ import Alpha.Algebra.Set.Set
 ------------
 
 public export
-data EmptySet : Type where
- MkEmptySet : EmptySet
+data EmptySet : Type -> Type where
+ MkEmptySet : (a : Type) -> EmptySet a
 
 public export
-data ElemEmptySet : (x : a) -> (s : EmptySet) -> Type where
+data ElemEmptySet : (x : a) -> (s : EmptySet a) -> Type where
 
 export
 Uninhabited (ElemEmptySet x s) where
   uninhabited _ impossible
 
 public export
-Set EmptySet a where
+Set (EmptySet a) a where
   SetElemPrf = ElemEmptySet
   isElem _ _ = No uninhabited
 
-export
-subsetEmptySet : (Set u a) => (rs : u) -> Subset MkEmptySet rs
-subsetEmptySet rs = MkSubset MkEmptySet rs (\prf => absurd (uninhabited prf))
+-- export
+-- (Set u a) => Relation Inclusion (EmptySet a) u where
+--   RelationPrf = \_ => Subset
+--   areRelated _ (MkEmptySet a) rs = Yes (MkSubset (MkEmptySet a) rs
+--                                         (\prf => absurd (uninhabited prf)))
+
+
 
 -- export
 -- Uninhabited (Elem x EmptySet.emptySet) where
