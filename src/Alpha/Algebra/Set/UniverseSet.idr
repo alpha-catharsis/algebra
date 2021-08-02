@@ -29,11 +29,10 @@ Set (UniverseSet a) a where
   SetElemPrf = ElemUniverseSet
   isElem x (MkUniverseSet a) = Yes MkElemUniverseSet
 
--- export
--- (Set t a) => Relation Inclusion t (UniverseSet a) where
---   RelationPrf = \_ => Subset
---   areRelated _ ls (MkUniverseSet a) = Yes (MkSubset ls (MkUniverseSet a)
---                                            (\_ => MkElemUniverseSet))
+export
+(Set t a) => Relation t (UniverseSet a) Subset where
+  areRelated ls (MkUniverseSet a) =  Yes (MkSubset ls (MkUniverseSet a)
+                                          (\_ => MkElemUniverseSet))
 
 
 

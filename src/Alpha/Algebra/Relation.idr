@@ -22,18 +22,21 @@ import Alpha.Algebra.Set.Set
 ---------------------
 
 public export
-interface Relation q a b | q where
-    RelationPrf : (r : q) -> (x : a) -> (y : b) -> Type
-    areRelated : (r : q) -> (x : a) -> (y : b) -> Dec (RelationPrf r x y)
+interface Relation a b (r : (x : a) -> (y : b) -> Type) | r where
+  areRelated : (x : a) -> (y : b) -> Dec (r x y)
 
 export
-related : Relation q a b => (r : q) -> (x : a) -> (y : b) -> Bool
-related r x y = isYes (areRelated r x y)
+related : (r : (_ : a) -> (_ : b) -> Type) -> Relation a b r => a -> b -> Bool
+related r x y = isYes (areRelated {r} x y)
 
 ----------------------
 -- Relation properties
 ----------------------
 
 public export
-interface Relation q a a => RelationRefl q a where
-  reflRelation : (r : q) -> (x : a) -> RelationPrf r x x
+interface Relation a a r => RelationRefl a r where
+  reflRelation : {x : a} -> r x x
+
+public export
+interface (Relation a a r) => RelationTrans a r where
+  transRelation : {x : a} -> {y : a} -> {z : a} -> r x y -> r y z -> r x z

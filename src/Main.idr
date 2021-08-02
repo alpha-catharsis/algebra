@@ -72,8 +72,8 @@ main = do
   printLn (basepoint s6 {a=Integer})
   printLn ((basepoint s6) `elem` s6)
 
-  -- printLn ("******")
-  -- printLn (subset (MkEmptySet Integer) (MkSingletonSet 5))
-  -- printLn (subset (MkSingletonSet 5) (MkUniverseSet Integer))
+  printLn ("******")
+  printLn (subset (MkEmptySet Integer) (MkSingletonSet 5))
+  printLn (subset (MkSingletonSet 5) (MkUniverseSet Integer))
 
   putStrLn "OK"

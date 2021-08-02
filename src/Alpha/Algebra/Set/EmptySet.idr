@@ -32,11 +32,12 @@ Set (EmptySet a) a where
   SetElemPrf = ElemEmptySet
   isElem _ _ = No uninhabited
 
--- export
--- (Set u a) => Relation Inclusion (EmptySet a) u where
---   RelationPrf = \_ => Subset
---   areRelated _ (MkEmptySet a) rs = Yes (MkSubset (MkEmptySet a) rs
---                                         (\prf => absurd (uninhabited prf)))
+export
+(Set u a) => Relation (EmptySet a) u Subset where
+  areRelated (MkEmptySet a) rs =  Yes (MkSubset (MkEmptySet a) rs
+                                       (\prf => absurd (uninhabited prf)))
+
+
 
 
 

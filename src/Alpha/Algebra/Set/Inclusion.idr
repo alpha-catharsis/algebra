@@ -11,13 +11,6 @@ module Alpha.Algebra.Set.Inclusion
 import Alpha.Algebra.Relation
 import Alpha.Algebra.Set.Set
 
----------------------
--- Inclusion relation
----------------------
-
-public export
-data Inclusion = MkInclusion
-
 -------------------
 -- Subset data type
 -------------------
@@ -35,14 +28,23 @@ notSubset : (Set t a, Set u a) => (ls : t) -> (rs : u) ->
 notSubset ls rs x prf contra (MkSubset ls rs f) = contra (f {x} prf)
 
 export
-isSubset : (Set t a, Set u a, Relation Inclusion t u) =>
-           (ls : t) -> (rs : u) -> Dec (RelationPrf MkInclusion ls rs)
-isSubset ls rs = areRelated MkInclusion ls rs
+isSubset : (Set t a, Set u a) => (Relation t u Subset) =>
+           (ls : t) -> (rs : u) -> Dec (Subset ls rs)
+isSubset ls rs = areRelated ls rs
 
 export
-subset : (Set t a, Set u a, Relation Inclusion t u) =>
+subset : (Set t a, Set u a) => (Relation t u Subset) =>
          (ls : t) -> (rs : u) -> Bool
-subset ls rs = related MkInclusion ls rs
+subset ls rs = related Subset ls rs
+
+export
+(Set t a) => (Relation t t Subset) => RelationRefl t Subset where
+  reflRelation = MkSubset _ _ id
+
+export
+(Set t a) => (Relation t t Subset) => RelationTrans t Subset where
+  transRelation (MkSubset x y lprf) (MkSubset y z rprf) =
+    MkSubset x z (rprf . lprf)
 
 --------------------------------
 -- Inclusion relation properties
