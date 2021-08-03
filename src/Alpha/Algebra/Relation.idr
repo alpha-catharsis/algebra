@@ -38,5 +38,9 @@ interface Relation a a r => RelationRefl a r where
   reflRelation : {x : a} -> r x x
 
 public export
+interface Relation a a r => RelationSymm a r where
+  symmRelation : {x : a} -> {y : a} -> r x y -> r y x
+
+public export
 interface (Relation a a r) => RelationTrans a r where
   transRelation : {x : a} -> {y : a} -> {z : a} -> r x y -> r y z -> r x z

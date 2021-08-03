@@ -9,8 +9,8 @@ module Alpha.Algebra.Set.UniverseSet
 -------------------
 
 import Alpha.Algebra.Relation
-import Alpha.Algebra.Set.Inclusion
 import Alpha.Algebra.Set.Set
+import Alpha.Algebra.Set.Subset
 
 ---------------
 -- Universe set

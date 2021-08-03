@@ -4,6 +4,7 @@ import Data.List.Elem
 import Decidable.Equality
 
 import Alpha.Algebra.Set
+import Alpha.Algebra.Set.EmptySet
 import Alpha.Algebra.Set.Set as A
 import Alpha.Algebra.Relation
 
@@ -75,5 +76,6 @@ main = do
   printLn ("******")
   printLn (subset (MkEmptySet Integer) (MkSingletonSet 5))
   printLn (subset (MkSingletonSet 5) (MkUniverseSet Integer))
+  -- printLn (subset (MkEmptySet Integer) (MkUniverseSet Integer))
 
   putStrLn "OK"

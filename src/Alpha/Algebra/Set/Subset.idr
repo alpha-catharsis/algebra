@@ -2,7 +2,7 @@
 -- Module declaration
 ---------------------
 
-module Alpha.Algebra.Set.Inclusion
+module Alpha.Algebra.Set.Subset
 
 -------------------
 -- Internal imports
@@ -28,6 +28,11 @@ notSubset : (Set t a, Set u a) => (ls : t) -> (rs : u) ->
 notSubset ls rs x prf contra (MkSubset ls rs f) = contra (f {x} prf)
 
 export
+elemSubset : (Set t a, Set u a) => {ls : t} -> {rs : u} -> {x : a} ->
+             Subset ls rs -> SetElemPrf x ls -> SetElemPrf x rs
+elemSubset (MkSubset ls rs f) prf = f prf
+
+export
 isSubset : (Set t a, Set u a) => (Relation t u Subset) =>
            (ls : t) -> (rs : u) -> Dec (Subset ls rs)
 isSubset ls rs = areRelated ls rs
@@ -46,43 +51,7 @@ export
   transRelation (MkSubset x y lprf) (MkSubset y z rprf) =
     MkSubset x z (rprf . lprf)
 
---------------------------------
--- Inclusion relation properties
---------------------------------
 
--- (Set t a, Relation Inclusion t t) => RelationRefl Inclusion t where
---   reflRelation r s = (\_ => MkSubset s s id)
-
--- export
--- (Set t a) => Includable t UniverseSet a where
---   isSubset ls MkUniverseSet = Yes (MkSubset ls MkUniverseSet
---                                    (\_ => MkElemUniverseSet))
-
--- export
--- (Set u a) => Includable EmptySet u a where
---   isSubset MkEmptySet rs = Yes (MkSubset MkEmptySet rs
---                                 (\prf => absurd (uninhabited prf)))
-
--- subset : (Includable t u a) => t -> u -> Bool
--- subset ls rs = isYes (isSubset {a} ls rs)
-
--- (Includable t u a) => Relation Inclusion UniverseSet UniverseSet t u where
---   RelationPrf = Subset
---   areRelated _ _ _ ls rs _ _ = isSubset ls rs
-
--- (Includable t u a) => RelationRefl Inclusion UniverseSet UniverseSet where
-
-
-
--- export
--- inclusionReflexive : (s : Set a) -> Subset s s
--- inclusionReflexive s = MkSubset s s id
-
--- export
--- inclusionTransitive : (ls : Set a) -> (ms : Set a) -> (rs : Set a) ->
---                       Subset ls ms -> Subset ms rs -> Subset ls rs
--- inclusionTransitive ls ms rs (MkSubset ls ms lprf) (MkSubset ms rs rprf) =
---   MkSubset ls rs (rprf . lprf)
 
 -- export
 -- inclusionAntiSymmetric : (ls : Set a) -> (rs : Set a) ->
