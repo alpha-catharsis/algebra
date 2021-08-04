@@ -8,26 +8,31 @@ module Alpha.Algebra.Set.EmptySet
 -- Internal imports
 -------------------
 
-import Alpha.Algebra.Set.Set
 import Alpha.Algebra.Set.BasicOps
+import Alpha.Algebra.Set.Set
 
 ------------
 -- Empty set
 ------------
 
-export
-emptySet : Set a
-emptySet = MkSet (const Void) (const (No id))
+EmptySetPrf : SetFpt a
+EmptySetPrf = const Void
 
 export
-Uninhabited (Elem x EmptySet.emptySet) where
-  uninhabited (MkElem _ _ _) impossible
+emptySet : SetFn EmptySetPrf
+emptySet _ = No uninhabited
 
 export
-Uninhabited (Elem x (intersection EmptySet.emptySet rs)) where
-  uninhabited (MkElem _ _ (_, _)) impossible
+Uninhabited (SetPrf (IntersectionPrf EmptySetPrf rfpt) x) where
+  uninhabited (_,_) impossible
 
 export
-Uninhabited (Elem x (intersection ls EmptySet.emptySet)) where
-  uninhabited (MkElem _ _ (_, _)) impossible
+Uninhabited (SetPrf (IntersectionPrf lfpt EmptySetPrf) x) where
+  uninhabited (_,_) impossible
 
+----------------------
+-- Empty set relations
+----------------------
+
+-- subsetEmptySet : (rs : Set a) -> Subset (EmptySet.emptySet, rs)
+-- subsetEmptySet ls = MkSubset (emptySet, ls) (\prf => absurd (uninhabited prf))

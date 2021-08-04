@@ -11,13 +11,13 @@ module Alpha.Algebra.Set
 import public Alpha.Algebra.Set.BasicOps
 import public Alpha.Algebra.Set.DerivedOps
 import public Alpha.Algebra.Set.EmptySet
-import public Alpha.Algebra.Set.Equality
+-- import public Alpha.Algebra.Set.Equality
 import public Alpha.Algebra.Set.HoledSet
 import public Alpha.Algebra.Set.ListSet
 import public Alpha.Algebra.Set.ProductOps
 import public Alpha.Algebra.Set.PropSet
 import public Alpha.Algebra.Set.SingletonSet
 import public Alpha.Algebra.Set.Set
-import public Alpha.Algebra.Set.Subset
+-- import public Alpha.Algebra.Set.Subset
 import public Alpha.Algebra.Set.UniverseSet
 import public Alpha.Algebra.Set.VectSet

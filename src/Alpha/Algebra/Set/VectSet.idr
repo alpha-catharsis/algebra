@@ -23,6 +23,10 @@ import Alpha.Algebra.Set.Set
 -- Vect set
 -----------
 
-export
-vectSet : DecEq a => (xs : Vect k a) -> Set a
-vectSet xs = MkSet (\x => VE.Elem x xs) (\x => VE.isElem x xs)
+public export
+VectSetPrf : Vect k a -> SetFpt a
+VectSetPrf xs x = VE.Elem x xs
+
+public export
+vectSet : DecEq a => (xs : Vect k a) -> SetFn (VectSetPrf xs)
+vectSet xs x = VE.isElem x xs

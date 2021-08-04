@@ -22,6 +22,11 @@ import Alpha.Algebra.Set.Set
 -- List set
 -----------
 
-export
-listSet : DecEq a => (xs : List a) -> Set a
-listSet xs = MkSet (\x => LE.Elem x xs) (\x => LE.isElem x xs)
+public export
+ListSetPrf : List a -> SetFpt a
+ListSetPrf xs x = LE.Elem x xs
+
+public export
+listSet : DecEq a => (xs : List a) -> SetFn (ListSetPrf xs)
+listSet xs x = LE.isElem x xs
+

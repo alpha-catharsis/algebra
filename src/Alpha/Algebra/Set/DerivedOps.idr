@@ -10,70 +10,67 @@ module Alpha.Algebra.Set.DerivedOps
 
 import Alpha.Algebra.Set.Set
 import Alpha.Algebra.Set.BasicOps
-import Alpha.Decidable
 
 -----------------
 -- Set difference
 -----------------
 
 public export
-difference : Set a -> Set a -> Set a
-difference ls rs = intersection ls (complement rs)
+DifferencePrf : SetFpt a -> SetFpt a -> SetFpt a
+DifferencePrf lfpt rfpt = IntersectionPrf lfpt (ComplementPrf rfpt)
+
+public export
+difference : SetFn lfpt -> SetFn rfpt -> SetFn (DifferencePrf lfpt rfpt)
+difference lf rf = intersection lf (complement rf)
+
 
 export
-elemDifference : {x : a} -> {ls : Set a} -> {rs : Set a} ->
-                 Elem x ls -> (Elem x rs -> Void) ->
-                 Elem x (difference ls rs)
-elemDifference lprf rcontra = elemIntersection lprf (elemComplement rcontra)
+elemDifference : SetPrf lfpt x -> SetContra rfpt x ->
+                 SetPrf (DifferencePrf lfpt rfpt) x
+elemDifference lprf rcontra = (lprf, rcontra)
 
 export
-notElemDifferenceLeft : {x : a} -> {ls : Set a} -> {rs : Set a} ->
-                        (Elem x ls -> Void) -> Elem x (difference ls rs) ->
-                        Void
-notElemDifferenceLeft lcontra = \(MkElem _ _ (lprf, _)) =>
-                                  lcontra (MkElem _ _ lprf)
+notElemDifferenceLeft : SetContra lfpt x -> SetContra (DifferencePrf lfpt _) x
+notElemDifferenceLeft lcontra (lprf,_) = lcontra lprf
 
 export
-notElemDifferenceRight : {x : a} -> {ls : Set a} -> {rs : Set a} ->
-                         Elem x rs -> Elem x (difference ls rs) -> Void
-notElemDifferenceRight rprf = notElemIntersectionRight (notElemComplement rprf)
+notElemDifferenceRight : SetPrf rfpt x -> SetContra (DifferencePrf _ rfpt) x
+notElemDifferenceRight rprf contra = snd contra rprf
 
 ---------------------------
 -- Set symmetric difference
 ---------------------------
 
 public export
-symDifference : Set a -> Set a -> Set a
-symDifference ls rs = union (difference ls rs) (difference rs ls)
+SymDifferencePrf : SetFpt a -> SetFpt a -> SetFpt a
+SymDifferencePrf lfpt rfpt = UnionPrf (DifferencePrf lfpt rfpt)
+                             (DifferencePrf rfpt lfpt)
+
+public export
+symDifference : SetFn lfpt -> SetFn rfpt -> SetFn (SymDifferencePrf lfpt rfpt)
+symDifference lf rf = union (difference lf rf) (difference rf lf)
+
 
 export
-elemSymDifferenceLeft : {x : a} -> {ls : Set a} -> {rs : Set a} ->
-                        Elem x ls -> (Elem x rs -> Void) ->
-                        Elem x (symDifference ls rs)
-elemSymDifferenceLeft lprf rcontra = let (MkElem _ _ prf) =
-                                         elemDifference lprf rcontra
-                                     in MkElem _ _ (Left prf)
+elemDifferenceLeft : SetPrf lfpt x -> SetContra rfpt x ->
+                     SetPrf (SymDifferencePrf lfpt rfpt) x
+elemDifferenceLeft lprf rcontra = Left (lprf, rcontra)
 
 export
-elemSymDifferenceRight : {x : a} -> {ls : Set a} -> {rs : Set a} ->
-                         (Elem x ls -> Void) -> Elem x rs ->
-                         Elem x (symDifference ls rs)
-elemSymDifferenceRight lcontra rprf = let (MkElem _ _ prf) =
-                                        elemDifference rprf lcontra
-                                      in MkElem _ _ (Right prf)
+elemDifferenceRight : SetContra lfpt x -> SetPrf rfpt x ->
+                      SetPrf (SymDifferencePrf lfpt rfpt) x
+elemDifferenceRight lcontra rprf = Right (rprf, lcontra)
 
 export
-notElemSymDifferenceBoth : {x : a} -> {ls : Set a} -> {rs : Set a} ->
-                           Elem x ls -> Elem x rs ->
-                           Elem x (symDifference ls rs) -> Void
-notElemSymDifferenceBoth lprf rprf = notElemUnion (notElemDifferenceRight rprf)
-                                     (notElemDifferenceRight lprf)
+notElemDifferenceBoth : SetPrf lfpt x -> SetPrf rfpt x ->
+                        SetContra (SymDifferencePrf lfpt rfpt) x
+notElemDifferenceBoth lprf rprf econtra = case econtra of
+  Left (_,rcontra) => rcontra rprf
+  Right (_, lcontra) => lcontra lprf
 
 export
-notElemSymDifferenceBothNot : {x : a} -> {ls : Set a} ->
-                              {rs : Set a} -> (Elem x ls -> Void) ->
-                              (Elem x rs -> Void) ->
-                              Elem x (symDifference ls rs) -> Void
-notElemSymDifferenceBothNot lprf rprf = notElemUnion
-                                        (notElemDifferenceLeft lprf)
-                                        (notElemDifferenceLeft rprf)
+notElemDifferenceNeither : SetContra lfpt x -> SetContra rfpt x ->
+                           SetContra (SymDifferencePrf lfpt rfpt) x
+notElemDifferenceNeither lcontra rcontra econtra = case econtra of
+  Left (lprf, _) => lcontra lprf
+  Right (rprf, _) => rcontra rprf

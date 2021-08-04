@@ -8,55 +8,33 @@ module Alpha.Algebra.Set.Set
 -- External imports
 -------------------
 
-import Data.Bool
 import Decidable.Decidable
 
-----------------
--- set data type
-----------------
+------------------
+-- Set definitions
+------------------
 
 public export
-data Set : Type -> Type where
-  MkSet : (0 fpt : a -> Type) -> ((x : a) -> Dec (fpt x)) -> Set a
+SetFpt : Type -> Type
+SetFpt a = a -> Type
 
 public export
-0 setFpt : Set a -> (a -> Type)
-setFpt (MkSet fpt _) = fpt
+SetPrf : SetFpt a -> a -> Type
+SetPrf fpt x = fpt x
 
 public export
-setDec : (s : Set a) -> ((x : a) -> Dec (setFpt s x))
-setDec (MkSet _ f) = f
-
------------------
--- Elem data type
------------------
+SetContra : SetFpt a -> a -> Type
+SetContra fpt x = SetPrf fpt x -> Void
 
 public export
-data Elem : (x : a) -> (s : Set a) -> Type where
-  MkElem : (x : a) -> (s : Set a) -> (prf : setFpt s x) -> Elem x s
+SetFn : {a : Type} -> SetFpt a -> Type
+SetFn fpt = (x : a) -> Dec (fpt x)
 
 public export
-elemVal : {0 x : a} -> {0 s : Set a} -> Elem x s -> a
-elemVal (MkElem x _ _) = x
+isElem : {fpt : SetFpt a} -> (x : a) -> SetFn fpt -> Dec (fpt x)
+isElem x fn = fn x
 
 public export
-elemSet : {0 x : a} -> {0 s : Set a} -> Elem x s -> Set a
-elemSet (MkElem _ s _) = s
+elem : {fpt : SetFpt a} -> (x : a) -> SetFn fpt -> Bool
+elem x fn = isYes (isElem x fn)
 
-public export
-elemPrf : {0 x : a} -> {0 s : Set a} -> Elem x s -> setFpt s x
-elemPrf (MkElem _ _ prf) = prf
-
-export
-notElem : (x : a) -> (s : Set a) -> (setFpt s x -> Void) -> Elem x s -> Void
-notElem _ _ contra (MkElem _ _ prf) = contra prf
-
-export
-isElem : (x : a) -> (s : Set a) -> Dec (Elem x s)
-isElem x s = case setDec s x of
-  Yes prf => Yes (MkElem x s prf)
-  No contra => No (notElem x s contra)
-
-export
-elem : (x : a) -> (s : Set a) -> Bool
-elem x s = isYes (isElem x s)

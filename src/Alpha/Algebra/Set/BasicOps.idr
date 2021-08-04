@@ -16,135 +16,122 @@ import Alpha.Decidable
 -----------------
 
 public export
-complement : Set a -> Set a
-complement s = MkSet (Not . setFpt s) (\x => decNot (setDec s x))
+ComplementPrf : SetFpt a -> SetFpt a
+ComplementPrf fpt = Not . fpt
+
+public export
+complement : SetFn fpt -> SetFn (ComplementPrf fpt)
+complement f x = decNot (f x)
 
 export
-elemComplement : {x : a} -> {s : Set a} ->
-                 (Elem x s -> Void) -> Elem x (complement s)
-elemComplement contra = MkElem x (complement s) (\y => contra (MkElem x s y))
+elemComplement : SetContra fpt x -> SetPrf (ComplementPrf fpt) x
+elemComplement = id
 
 export
-notElemComplement : {x : a} -> {s : Set a} -> Elem x s ->
-                    Elem x (complement s) -> Void
-notElemComplement (MkElem x s prf) = \(MkElem x _ contra) => contra prf
+notElemComplement : SetPrf fpt x -> SetContra (ComplementPrf fpt) x
+notElemComplement prf cprf = cprf prf
+
+elemComplement2 : {fpt : SetFpt a} -> SetPrf fpt x ->
+                  SetPrf (ComplementPrf (ComplementPrf fpt)) x
+elemComplement2 prf f = f prf
 
 export
-elemComplement2 : {x : a} -> {s : Set a} ->
-                  Elem x s -> Elem x (complement (complement s))
-elemComplement2 prf = elemComplement (notElemComplement prf)
-
-export
-notElemComplement2 : {x : a} -> {s : Set a} ->
-                     (Elem x s -> Void) ->
-                     Elem x (complement (complement s)) -> Void
-notElemComplement2 contra = notElemComplement (elemComplement contra)
+notElemComplement2 : (SetContra fpt x) ->
+                     SetContra (ComplementPrf (ComplementPrf fpt)) x
+notElemComplement2 contra f = f contra
 
 ------------
 -- Set union
 ------------
 
 public export
-union : Set a -> Set a -> Set a
-union ls rs = MkSet (\x => Either (setFpt ls x) (setFpt rs x))
-              (\x => decOr (setDec ls x) (setDec rs x))
+UnionPrf : SetFpt a -> SetFpt a -> SetFpt a
+UnionPrf lfpt rfpt a = Either (lfpt a) (rfpt a)
+
+public export
+union : SetFn lfpt -> SetFn rfpt -> SetFn (UnionPrf lfpt rfpt)
+union lf rf x = decOr (lf x) (rf x)
 
 export
-elemUnionLeft : {ls : Set a} -> {rs : Set a} ->
-                Elem x ls -> Elem x (union ls rs)
-elemUnionLeft (MkElem _ _ prf) = MkElem _ _ (Left prf)
+elemUnionLeft : SetPrf lfpt x -> SetPrf (UnionPrf lfpt _) x
+elemUnionLeft prf = Left prf
 
 export
-elemUnionRight : {x : a} -> {ls : Set a} -> {rs : Set a} ->
-                 Elem x rs -> Elem x (union ls rs)
-elemUnionRight (MkElem _ _ prf) = MkElem _ _ (Right prf)
+elemUnionRight : SetPrf rfpt x -> SetPrf (UnionPrf _ rfpt) x
+elemUnionRight prf = Right prf
 
 export
-notElemUnion : {x : a} -> {ls : Set a} -> {rs : Set a} ->
-               (Elem x ls -> Void) -> (Elem x rs -> Void) ->
-               Elem x (union ls rs) -> Void
-notElemUnion lcontra rcontra = \(MkElem _ _ eprf) => case eprf of
-  Left lprf => lcontra (MkElem _ _ lprf)
-  Right rprf => rcontra (MkElem _ _ rprf)
+notElemUnion : SetContra lfpt x -> SetContra rfpt x ->
+               SetContra (UnionPrf lfpt rfpt) x
+notElemUnion lcontra rcontra = either lcontra rcontra
 
 export
-elemUnionCommutative : {x : a} -> {ls : Set a} -> {rs : Set a} ->
-                       Elem x (union ls rs) -> Elem x (union rs ls)
-elemUnionCommutative (MkElem _ _ (Left lprf)) = MkElem _ _ (Right lprf)
-elemUnionCommutative (MkElem _ _ (Right rprf)) = MkElem _ _ (Left rprf)
+elemUnionCommutative : SetPrf (UnionPrf lfpt rfpt) x ->
+                       SetPrf (UnionPrf rfpt lfpt) x
+elemUnionCommutative eprf = case eprf of
+  Left lprf => Right lprf
+  Right rprf => Left rprf
 
 export
-notElemUnionCommutative : {x : a} -> {ls : Set a} -> {rs : Set a} ->
-                          (Elem x (union ls rs) -> Void) ->
-                          Elem x (union rs ls) -> Void
-notElemUnionCommutative contra = \(MkElem _ _ eprf) => case eprf of
-  Left lprf => contra (MkElem _ _ (Right lprf))
-  Right rprf => contra (MkElem _ _ (Left rprf))
+notElemUnionCommutative : SetContra (UnionPrf lfpt rfpt) x ->
+                          SetContra (UnionPrf rfpt lfpt) x
+notElemUnionCommutative contra pprf = case pprf of
+  Left lprf => contra (Right lprf)
+  Right rprf => contra (Left rprf)
 
 export
-elemUnionIdempotent : {x : a} -> {s : Set a} -> Elem x (union s s) ->
-                      Elem x s
-elemUnionIdempotent (MkElem _ _ (Left prf)) = MkElem _ _ prf
-elemUnionIdempotent (MkElem _ _ (Right prf)) = MkElem _ _ prf
+elemUnionIdempotent : SetPrf (UnionPrf fpt fpt) x -> SetPrf fpt x
+elemUnionIdempotent eprf = case eprf of
+  Left lprf => lprf
+  Right rprf => rprf
 
 export
-notElemUnionIdempotent : {x : a} -> {s : Set a} ->
-                         (Elem x (union s s) -> Void) -> Elem x s -> Void
-notElemUnionIdempotent contra = \(MkElem _ _ prf) =>
-                                  contra (MkElem _ _ (Left prf))
+notElemUnionIdempotent : SetContra (UnionPrf fpt fpt) x -> SetContra fpt x
+notElemUnionIdempotent contra prf = contra (Left prf)
 
 -------------------
 -- Set intersection
 -------------------
 
 public export
-intersection : Set a -> Set a -> Set a
-intersection ls rs = MkSet (\x => (setFpt ls x, setFpt rs x))
-                     (\x => decAnd (setDec ls x) (setDec rs x))
+IntersectionPrf : SetFpt a -> SetFpt a -> SetFpt a
+IntersectionPrf lfpt rfpt a = (lfpt a, rfpt a)
+
+public export
+intersection : SetFn lfpt -> SetFn rfpt -> SetFn (IntersectionPrf lfpt rfpt)
+intersection lf rf x = decAnd (lf x) (rf x)
 
 export
-elemIntersection : {x : a} -> {ls : Set a} -> {rs : Set a} ->
-                   Elem x ls -> Elem x rs -> Elem x (intersection ls rs)
-elemIntersection (MkElem _ _ lprf) (MkElem _ _ rprf) = MkElem _ _ (lprf, rprf)
+elemIntersection : SetPrf lfpt x -> SetPrf rfpt x ->
+                   SetPrf (IntersectionPrf lfpt rfpt) x
+elemIntersection lprf rprf = (lprf, rprf)
 
 export
-notElemIntersectionLeft : {x : a} -> {ls : Set a} -> {rs : Set a} ->
-                          (Elem x ls -> Void) ->
-                          Elem x (intersection ls rs) -> Void
-notElemIntersectionLeft lcontra = \(MkElem _ _ (lprf, _)) =>
-                                    lcontra (MkElem _ _ lprf)
+notElemIntersectionLeft : SetContra lfpt x ->
+                          SetContra (IntersectionPrf lfpt _) x
+notElemIntersectionLeft lcontra = lcontra . fst
 
 export
-notElemIntersectionRight : {x : a} -> {ls : Set a} -> {rs : Set a} ->
-                           (Elem x rs -> Void) ->
-                           Elem x (intersection ls rs) -> Void
-notElemIntersectionRight rcontra = \(MkElem _ _ (_, rprf)) =>
-                                     rcontra (MkElem _ _ rprf)
+notElemIntersectionRight : SetContra rfpt x ->
+                          SetContra (IntersectionPrf _ rfpt) x
+notElemIntersectionRight lcontra = lcontra . snd
 
 export
-elemIntersectionCommutative : {x : a} -> {ls : Set a} ->
-                              {rs : Set a} ->
-                              Elem x (intersection ls rs) ->
-                              Elem x (intersection rs ls)
-elemIntersectionCommutative (MkElem _ _ (lprf, rprf)) = MkElem _ _ (rprf, lprf)
+elemIntersectionCommutative : SetPrf (IntersectionPrf lfpt rfpt) x ->
+                              SetPrf (IntersectionPrf rfpt lfpt) x
+elemIntersectionCommutative pprf = (snd pprf, fst pprf)
 
 export
-notElemIntersectionCommutative : {x : a} -> {ls : Set a} ->
-                                 {rs : Set a} ->
-                                 (Elem x (intersection ls rs) -> Void) ->
-                                 Elem x (intersection rs ls) -> Void
-notElemIntersectionCommutative contra = \(MkElem _ _ pprf) =>
-    contra (MkElem _ _ (snd pprf, fst pprf))
+notElemIntersectionCommutative : SetContra (IntersectionPrf lfpt rfpt) x ->
+                                 SetContra (IntersectionPrf rfpt lfpt) x
+notElemIntersectionCommutative contra (lprf, rprf) = contra (rprf, lprf)
 
 export
-elemIntersectionIdempotent : {x : a} -> {s : Set a} ->
-                             Elem x (intersection s s) -> Elem x s
-elemIntersectionIdempotent (MkElem _ _ (prf, _)) = MkElem _ _ prf
+elemIntersectionIdempotent : SetPrf (IntersectionPrf fpt fpt) x ->
+                             SetPrf fpt x
+elemIntersectionIdempotent = fst
 
 export
-notElemIntersectionIdempotent : {x : a} -> {s : Set a} ->
-                                (Elem x (intersection s s) -> Void) ->
-                                Elem x s -> Void
-notElemIntersectionIdempotent contra = \(MkElem _ _ prf) =>
-                                         contra (MkElem _ _ (prf, prf))
-
+notElemIntersectionIdempotent : SetContra (IntersectionPrf fpt fpt) x ->
+                                SetContra fpt x
+notElemIntersectionIdempotent contra prf = contra (prf,prf)

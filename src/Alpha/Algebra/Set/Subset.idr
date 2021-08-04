@@ -33,10 +33,8 @@ notSubset _ _ lprf rcontra (MkSubset _ f) = rcontra (f lprf)
 
 export
 reflSubset : ReflRel Subset
-reflSubset = \s => MkSubset (s,s) id
+reflSubset s = MkSubset (s,s) id
 
 export
 transSubset : TransRel Subset
-transSubset = \(MkSubset (s,t) lf),
-               (MkSubset (t,u) rf) =>
-              MkSubset (s,u) (rf . lf)
+transSubset (MkSubset (s,t) lf) (MkSubset (t,u) rf) = MkSubset (s,u) (rf . lf)

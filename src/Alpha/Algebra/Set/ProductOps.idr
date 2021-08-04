@@ -8,8 +8,6 @@ module Alpha.Algebra.Set.ProductOps
 -- Internal imports
 -------------------
 
-import Alpha.Algebra.Set.BasicOps
-import Alpha.Algebra.Set.DerivedOps
 import Alpha.Algebra.Set.Set
 import Alpha.Decidable
 
@@ -18,45 +16,54 @@ import Alpha.Decidable
 --------------
 
 public export
-product : Set a -> Set b -> Set (a, b)
-product ls rs = MkSet (\x => (setFpt ls (fst x), setFpt rs (snd x)))
-                (\x => decAnd (setDec ls (fst x)) (setDec rs (snd x)))
+ProductPrf : SetFpt a -> SetFpt b -> SetFpt (a,b)
+ProductPrf lfpt rfpt (a,b) = (lfpt a,rfpt b)
+
+public export
+product : SetFn lfpt -> SetFn rfpt -> SetFn (ProductPrf lfpt rfpt)
+product lf rf (x,y) = decAnd (lf x) (rf y)
 
 export
-elemProduct : {ls : Set a} -> {rs : Set b} -> Elem x ls ->
-              Elem y rs -> Elem (x, y) (product ls rs)
-elemProduct (MkElem _ _ lprf) (MkElem _ _ rprf) = MkElem _ _ (lprf, rprf)
+elemProduct : SetPrf lfpt a -> SetPrf rfpt b ->
+              SetPrf (ProductPrf lfpt rfpt) (a,b)
+elemProduct lprf rprf = (lprf,rprf)
 
 export
-notElemProductLeft : {x : a} -> {y : b} -> {ls : Set a} -> {rs : Set b} ->
-                     (Elem x ls -> Void) -> Elem (x, y) (product ls rs) -> Void
-notElemProductLeft lcontra = \(MkElem _ _ pprf) => lcontra (MkElem _ _
-                                                            (fst pprf))
+notElemProductLeft : SetContra lfpt a -> SetContra (ProductPrf lfpt _) (a,b)
+notElemProductLeft lcontra = lcontra . fst
 
 export
-notElemProductRight : {x : a} -> {y : b} -> {ls : Set a} -> {rs : Set b} ->
-                      (Elem y rs -> Void) -> Elem (x, y) (product ls rs) ->
-                      Void
-notElemProductRight rcontra = \(MkElem _ _ pprf) => rcontra (MkElem _ _
-                                                             (snd pprf))
+notElemProductRight : SetContra rfpt b -> SetContra (ProductPrf _ rfpt) (a,b)
+notElemProductRight rcontra = rcontra . snd
 
 ----------------
 -- Set coproduct
 ----------------
 
 public export
-coproduct : Set a -> Set b -> Set (Either a b)
-coproduct ls rs = MkSet (\ex => either (setFpt ls) (setFpt rs) ex)
-                  (\ex => case ex of
-                            Left lx => setDec ls lx
-                            Right rx => setDec rs rx)
+CoproductPrf : SetFpt a -> SetFpt b -> SetFpt (Either a b)
+CoproductPrf lfpt rfpt = either lfpt rfpt
+
+public export
+coproduct : SetFn lfpt -> SetFn rfpt -> SetFn (CoproductPrf lfpt rfpt)
+coproduct lf rf e = case e of
+  Left x => lf x
+  Right y => rf y
 
 export
-elemCoproductLeft : {x : a} -> {y : b} -> {ls : Set a} -> {rs : Set b} ->
-                    Elem x ls -> Elem (Left x) (coproduct ls rs)
-elemCoproductLeft (MkElem _ _ lprf) = MkElem _ _ lprf
+elemCoproductLeft : SetPrf lfpt x -> SetPrf (CoproductPrf lfpt rfpt) (Left x)
+elemCoproductLeft = id
 
 export
-elemCoproductRight : {x : a} -> {y : b} -> {ls : Set a} -> {rs : Set b} ->
-                     Elem y rs -> Elem (Right y) (coproduct ls rs)
-elemCoproductRight (MkElem _ _ rprf) = MkElem _ _ rprf
+elemCoproductRight : SetPrf rfpt x -> SetPrf (CoproductPrf lfpt rfpt) (Right x)
+elemCoproductRight = id
+
+export
+notElemCoproductLeft : SetContra lfpt x ->
+                       SetContra (CoproductPrf lfpt rfpt) (Left x)
+notElemCoproductLeft = id
+
+export
+notElemCoproductRight : SetContra rfpt x ->
+                        SetContra (CoproductPrf lfpt rfpt) (Right x)
+notElemCoproductRight = id
