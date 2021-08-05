@@ -16,28 +16,28 @@ import Alpha.Decidable
 -----------------
 
 public export
-ComplementPrf : SetFpt a -> SetFpt a
-ComplementPrf fpt = Not . fpt
+ComplementFpt : SetFpt a -> SetFpt a
+ComplementFpt fpt = Not . fpt
 
 public export
-complement : SetFn fpt -> SetFn (ComplementPrf fpt)
+complement : Set fpt -> Set (ComplementFpt fpt)
 complement f x = decNot (f x)
 
 export
-elemComplement : SetContra fpt x -> SetPrf (ComplementPrf fpt) x
+elemComplement : NotElem x fpt -> Elem x (ComplementFpt fpt)
 elemComplement = id
 
 export
-notElemComplement : SetPrf fpt x -> SetContra (ComplementPrf fpt) x
+notElemComplement : Elem x fpt -> NotElem x (ComplementFpt fpt)
 notElemComplement prf cprf = cprf prf
 
-elemComplement2 : {fpt : SetFpt a} -> SetPrf fpt x ->
-                  SetPrf (ComplementPrf (ComplementPrf fpt)) x
+elemComplement2 : {fpt : SetFpt a} -> Elem x fpt ->
+                  Elem x (ComplementFpt (ComplementFpt fpt))
 elemComplement2 prf f = f prf
 
 export
-notElemComplement2 : (SetContra fpt x) ->
-                     SetContra (ComplementPrf (ComplementPrf fpt)) x
+notElemComplement2 : (NotElem x fpt) ->
+                     NotElem x (ComplementFpt (ComplementFpt fpt))
 notElemComplement2 contra f = f contra
 
 ------------
@@ -45,48 +45,48 @@ notElemComplement2 contra f = f contra
 ------------
 
 public export
-UnionPrf : SetFpt a -> SetFpt a -> SetFpt a
-UnionPrf lfpt rfpt a = Either (lfpt a) (rfpt a)
+UnionFpt : SetFpt a -> SetFpt a -> SetFpt a
+UnionFpt lfpt rfpt a = Either (lfpt a) (rfpt a)
 
 public export
-union : SetFn lfpt -> SetFn rfpt -> SetFn (UnionPrf lfpt rfpt)
+union : Set lfpt -> Set rfpt -> Set (UnionFpt lfpt rfpt)
 union lf rf x = decOr (lf x) (rf x)
 
 export
-elemUnionLeft : SetPrf lfpt x -> SetPrf (UnionPrf lfpt _) x
+elemUnionLeft : Elem x lfpt -> Elem x (UnionFpt lfpt _)
 elemUnionLeft prf = Left prf
 
 export
-elemUnionRight : SetPrf rfpt x -> SetPrf (UnionPrf _ rfpt) x
+elemUnionRight : Elem x rfpt -> Elem x (UnionFpt _ rfpt)
 elemUnionRight prf = Right prf
 
 export
-notElemUnion : SetContra lfpt x -> SetContra rfpt x ->
-               SetContra (UnionPrf lfpt rfpt) x
+notElemUnion : NotElem x lfpt -> NotElem x rfpt ->
+               NotElem x (UnionFpt lfpt rfpt)
 notElemUnion lcontra rcontra = either lcontra rcontra
 
 export
-elemUnionCommutative : SetPrf (UnionPrf lfpt rfpt) x ->
-                       SetPrf (UnionPrf rfpt lfpt) x
+elemUnionCommutative : Elem x (UnionFpt lfpt rfpt) ->
+                       Elem x (UnionFpt rfpt lfpt)
 elemUnionCommutative eprf = case eprf of
   Left lprf => Right lprf
   Right rprf => Left rprf
 
 export
-notElemUnionCommutative : SetContra (UnionPrf lfpt rfpt) x ->
-                          SetContra (UnionPrf rfpt lfpt) x
+notElemUnionCommutative : NotElem x (UnionFpt lfpt rfpt) ->
+                          NotElem x (UnionFpt rfpt lfpt)
 notElemUnionCommutative contra pprf = case pprf of
   Left lprf => contra (Right lprf)
   Right rprf => contra (Left rprf)
 
 export
-elemUnionIdempotent : SetPrf (UnionPrf fpt fpt) x -> SetPrf fpt x
+elemUnionIdempotent : Elem x (UnionFpt fpt fpt) -> Elem x fpt
 elemUnionIdempotent eprf = case eprf of
   Left lprf => lprf
   Right rprf => rprf
 
 export
-notElemUnionIdempotent : SetContra (UnionPrf fpt fpt) x -> SetContra fpt x
+notElemUnionIdempotent : NotElem x (UnionFpt fpt fpt) -> NotElem x fpt
 notElemUnionIdempotent contra prf = contra (Left prf)
 
 -------------------
@@ -94,44 +94,44 @@ notElemUnionIdempotent contra prf = contra (Left prf)
 -------------------
 
 public export
-IntersectionPrf : SetFpt a -> SetFpt a -> SetFpt a
-IntersectionPrf lfpt rfpt a = (lfpt a, rfpt a)
+IntersectionFpt : SetFpt a -> SetFpt a -> SetFpt a
+IntersectionFpt lfpt rfpt a = (lfpt a, rfpt a)
 
 public export
-intersection : SetFn lfpt -> SetFn rfpt -> SetFn (IntersectionPrf lfpt rfpt)
+intersection : Set lfpt -> Set rfpt -> Set (IntersectionFpt lfpt rfpt)
 intersection lf rf x = decAnd (lf x) (rf x)
 
 export
-elemIntersection : SetPrf lfpt x -> SetPrf rfpt x ->
-                   SetPrf (IntersectionPrf lfpt rfpt) x
+elemIntersection : Elem x lfpt -> Elem x rfpt ->
+                   Elem x (IntersectionFpt lfpt rfpt)
 elemIntersection lprf rprf = (lprf, rprf)
 
 export
-notElemIntersectionLeft : SetContra lfpt x ->
-                          SetContra (IntersectionPrf lfpt _) x
+notElemIntersectionLeft : NotElem x lfpt ->
+                          NotElem x (IntersectionFpt lfpt _)
 notElemIntersectionLeft lcontra = lcontra . fst
 
 export
-notElemIntersectionRight : SetContra rfpt x ->
-                          SetContra (IntersectionPrf _ rfpt) x
+notElemIntersectionRight : NotElem x rfpt ->
+                           NotElem x (IntersectionFpt _ rfpt)
 notElemIntersectionRight lcontra = lcontra . snd
 
 export
-elemIntersectionCommutative : SetPrf (IntersectionPrf lfpt rfpt) x ->
-                              SetPrf (IntersectionPrf rfpt lfpt) x
+elemIntersectionCommutative : Elem x (IntersectionFpt lfpt rfpt) ->
+                              Elem x (IntersectionFpt rfpt lfpt)
 elemIntersectionCommutative pprf = (snd pprf, fst pprf)
 
 export
-notElemIntersectionCommutative : SetContra (IntersectionPrf lfpt rfpt) x ->
-                                 SetContra (IntersectionPrf rfpt lfpt) x
+notElemIntersectionCommutative : NotElem x (IntersectionFpt lfpt rfpt) ->
+                                 NotElem x (IntersectionFpt rfpt lfpt)
 notElemIntersectionCommutative contra (lprf, rprf) = contra (rprf, lprf)
 
 export
-elemIntersectionIdempotent : SetPrf (IntersectionPrf fpt fpt) x ->
-                             SetPrf fpt x
+elemIntersectionIdempotent : Elem x (IntersectionFpt fpt fpt) ->
+                             Elem x fpt
 elemIntersectionIdempotent = fst
 
 export
-notElemIntersectionIdempotent : SetContra (IntersectionPrf fpt fpt) x ->
-                                SetContra fpt x
+notElemIntersectionIdempotent : NotElem x (IntersectionFpt fpt fpt) ->
+                                NotElem x fpt
 notElemIntersectionIdempotent contra prf = contra (prf,prf)

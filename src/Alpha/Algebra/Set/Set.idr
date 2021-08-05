@@ -19,22 +19,22 @@ SetFpt : Type -> Type
 SetFpt a = a -> Type
 
 public export
-SetPrf : SetFpt a -> a -> Type
-SetPrf fpt x = fpt x
+Elem : a -> SetFpt a -> Type
+Elem x fpt = fpt x
 
 public export
-SetContra : SetFpt a -> a -> Type
-SetContra fpt x = SetPrf fpt x -> Void
+NotElem : a -> SetFpt a -> Type
+NotElem x fpt = Elem x fpt -> Void
 
 public export
-SetFn : {a : Type} -> SetFpt a -> Type
-SetFn fpt = (x : a) -> Dec (fpt x)
+Set : {a : Type} -> SetFpt a -> Type
+Set fpt = (x : a) -> Dec (fpt x)
 
 public export
-isElem : {fpt : SetFpt a} -> (x : a) -> SetFn fpt -> Dec (fpt x)
+isElem : {fpt : SetFpt a} -> (x : a) -> Set fpt -> Dec (fpt x)
 isElem x fn = fn x
 
 public export
-elem : {fpt : SetFpt a} -> (x : a) -> SetFn fpt -> Bool
+elem : {fpt : SetFpt a} -> (x : a) -> Set fpt -> Bool
 elem x fn = isYes (isElem x fn)
 

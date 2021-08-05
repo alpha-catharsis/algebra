@@ -16,24 +16,24 @@ import Alpha.Decidable
 --------------
 
 public export
-ProductPrf : SetFpt a -> SetFpt b -> SetFpt (a,b)
-ProductPrf lfpt rfpt (a,b) = (lfpt a,rfpt b)
+ProductFpt : SetFpt a -> SetFpt b -> SetFpt (a,b)
+ProductFpt lfpt rfpt (a,b) = (lfpt a,rfpt b)
 
 public export
-product : SetFn lfpt -> SetFn rfpt -> SetFn (ProductPrf lfpt rfpt)
+product : Set lfpt -> Set rfpt -> Set (ProductFpt lfpt rfpt)
 product lf rf (x,y) = decAnd (lf x) (rf y)
 
 export
-elemProduct : SetPrf lfpt a -> SetPrf rfpt b ->
-              SetPrf (ProductPrf lfpt rfpt) (a,b)
+elemProduct : Elem x lfpt -> Elem y rfpt ->
+              Elem (x,y) (ProductFpt lfpt rfpt)
 elemProduct lprf rprf = (lprf,rprf)
 
 export
-notElemProductLeft : SetContra lfpt a -> SetContra (ProductPrf lfpt _) (a,b)
+notElemProductLeft : NotElem x lfpt -> NotElem (x,y) (ProductFpt lfpt _)
 notElemProductLeft lcontra = lcontra . fst
 
 export
-notElemProductRight : SetContra rfpt b -> SetContra (ProductPrf _ rfpt) (a,b)
+notElemProductRight : NotElem y rfpt -> NotElem (x,y) (ProductFpt _ rfpt)
 notElemProductRight rcontra = rcontra . snd
 
 ----------------
@@ -41,29 +41,29 @@ notElemProductRight rcontra = rcontra . snd
 ----------------
 
 public export
-CoproductPrf : SetFpt a -> SetFpt b -> SetFpt (Either a b)
-CoproductPrf lfpt rfpt = either lfpt rfpt
+CoproductFpt : SetFpt a -> SetFpt b -> SetFpt (Either a b)
+CoproductFpt lfpt rfpt = either lfpt rfpt
 
 public export
-coproduct : SetFn lfpt -> SetFn rfpt -> SetFn (CoproductPrf lfpt rfpt)
+coproduct : Set lfpt -> Set rfpt -> Set (CoproductFpt lfpt rfpt)
 coproduct lf rf e = case e of
   Left x => lf x
   Right y => rf y
 
 export
-elemCoproductLeft : SetPrf lfpt x -> SetPrf (CoproductPrf lfpt rfpt) (Left x)
+elemCoproductLeft : Elem x lfpt -> Elem (Left x) (CoproductFpt lfpt rfpt)
 elemCoproductLeft = id
 
 export
-elemCoproductRight : SetPrf rfpt x -> SetPrf (CoproductPrf lfpt rfpt) (Right x)
+elemCoproductRight : Elem x rfpt -> Elem (Right x) (CoproductFpt lfpt rfpt)
 elemCoproductRight = id
 
 export
-notElemCoproductLeft : SetContra lfpt x ->
-                       SetContra (CoproductPrf lfpt rfpt) (Left x)
+notElemCoproductLeft : NotElem x lfpt ->
+                       NotElem (Left x) (CoproductFpt lfpt rfpt)
 notElemCoproductLeft = id
 
 export
-notElemCoproductRight : SetContra rfpt x ->
-                        SetContra (CoproductPrf lfpt rfpt) (Right x)
+notElemCoproductRight : NotElem x rfpt ->
+                        NotElem (Right x) (CoproductFpt lfpt rfpt)
 notElemCoproductRight = id

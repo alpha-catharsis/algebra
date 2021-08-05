@@ -21,9 +21,9 @@ import Alpha.Algebra.Set.Set
 ----------------
 
 public export
-SingletonSetPrf : (v : a) -> SetFpt a
-SingletonSetPrf v x = (x = v)
+SingletonSetFpt : (v : a) -> SetFpt a
+SingletonSetFpt v x = (x = v)
 
 public export
-singletonSet : DecEq a => (v : a) -> SetFn (SingletonSetPrf v)
+singletonSet : DecEq a => (v : a) -> Set (SingletonSetFpt v)
 singletonSet v x = decEq x v

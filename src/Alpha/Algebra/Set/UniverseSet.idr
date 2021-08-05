@@ -15,15 +15,15 @@ import Alpha.Algebra.Set.Set
 -- Universe set
 ---------------
 
-UniverseSetPrf : SetFpt a
-UniverseSetPrf _ = ()
+UniverseSetFpt : SetFpt a
+UniverseSetFpt _ = ()
 
 export
-universeSet : SetFn UniverseSetPrf
+universeSet : Set UniverseSetFpt
 universeSet _ = Yes ()
 
 export
-Uninhabited (SetPrf (ComplementPrf UniverseSetPrf) x) where
+Uninhabited (Elem x (ComplementFpt UniverseSetFpt)) where
   uninhabited contra = contra ()
 
 

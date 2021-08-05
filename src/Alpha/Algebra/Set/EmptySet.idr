@@ -15,19 +15,19 @@ import Alpha.Algebra.Set.Set
 -- Empty set
 ------------
 
-EmptySetPrf : SetFpt a
-EmptySetPrf _ = Void
+EmptySetFpt : SetFpt a
+EmptySetFpt _ = Void
 
 export
-emptySet : SetFn EmptySetPrf
+emptySet : Set EmptySetFpt
 emptySet _ = No uninhabited
 
 export
-Uninhabited (SetPrf (IntersectionPrf EmptySetPrf rfpt) x) where
+Uninhabited (Elem x (IntersectionFpt EmptySetFpt rfpt)) where
   uninhabited (_,_) impossible
 
 export
-Uninhabited (SetPrf (IntersectionPrf lfpt EmptySetPrf) x) where
+Uninhabited (Elem x (IntersectionFpt lfpt EmptySetFpt)) where
   uninhabited (_,_) impossible
 
 ----------------------

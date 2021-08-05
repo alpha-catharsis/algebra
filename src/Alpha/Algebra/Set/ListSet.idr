@@ -23,10 +23,10 @@ import Alpha.Algebra.Set.Set
 -----------
 
 public export
-ListSetPrf : List a -> SetFpt a
-ListSetPrf xs x = LE.Elem x xs
+ListSetFpt : List a -> SetFpt a
+ListSetFpt xs x = LE.Elem x xs
 
 public export
-listSet : DecEq a => (xs : List a) -> SetFn (ListSetPrf xs)
+listSet : DecEq a => (xs : List a) -> Set (ListSetFpt xs)
 listSet xs x = LE.isElem x xs
 
