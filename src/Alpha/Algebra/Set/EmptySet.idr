@@ -16,7 +16,7 @@ import Alpha.Algebra.Set.Set
 ------------
 
 EmptySetPrf : SetFpt a
-EmptySetPrf = const Void
+EmptySetPrf _ = Void
 
 export
 emptySet : SetFn EmptySetPrf

@@ -16,7 +16,7 @@ import Alpha.Algebra.Set.Set
 ---------------
 
 UniverseSetPrf : SetFpt a
-UniverseSetPrf = const ()
+UniverseSetPrf _ = ()
 
 export
 universeSet : SetFn UniverseSetPrf

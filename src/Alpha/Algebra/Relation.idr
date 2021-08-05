@@ -11,37 +11,45 @@ module Alpha.Algebra.Relation
 import Data.Bool
 import Decidable.Decidable
 
--------------------
--- Internal imports
--------------------
-
--- import Alpha.Algebra.Set.Set
--- import Alpha.Algebra.Set.ProductOps
--- import Alpha.Decidable
-
 ---------------------
 -- Relation data type
 ---------------------
 
--- public export
--- RelFpt : Type -> Type -> Type
--- RelFpt a b = (a,b) -> Type
+public export
+RelFpt : (Type,Type) -> Type
+RelFpt (a,b) = (a,b) -> Type
 
--- public export
--- RelPrf : RelFpt a b -> (a,b) -> Type
--- RelPrf fpt p = fpt p
+public export
+RelPrf : RelFpt (a,b) -> (a,b) -> Type
+RelPrf fpt p = fpt p
 
--- public export
--- RelDec : RelFpt a b -> (a,b) -> Type
--- RelDec fpt p = Dec (RelPrf fpt p)
+public export
+RelContra : RelFpt (a,b) -> (a,b) -> Type
+RelContra fpt p = RelPrf fpt p -> Void
 
--- export
--- related : RelDec fpt (x,y) -> Bool
--- related d = isYes d
+public export
+RelFn : {a : Type} -> {b : Type} -> RelFpt (a,b) -> Type
+RelFn fpt = (p : (a,b)) -> Dec (fpt p)
+
+public export
+areRelated : {fpt : RelFpt (a,b)} -> (p : (a,b)) -> RelFn fpt -> Dec (fpt p)
+areRelated p fn = fn p
+
+public export
+related : {fpt : RelFpt (a,b)} -> (p : (a,b)) -> RelFn fpt -> Bool
+related p fn = isYes (areRelated p fn)
 
 ----------------------
 -- Relation properties
 ----------------------
+
+public export
+ReflRel : {a : Type} -> RelFpt (a,a) -> Type
+ReflRel fpt = {p : (a,a)} -> RelPrf fpt p
+
+public export
+SymRel : {a : Type} -> RelFpt (a,a) -> Type
+SymRel fpt = {p : (a,a)} -> RelPrf fpt p -> RelPrf fpt (snd p, fst p)
 
 -- public export
 -- ReflRel : {a : Type} -> RelFpt a a -> Type
