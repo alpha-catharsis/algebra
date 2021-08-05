@@ -18,6 +18,6 @@ import public Alpha.Algebra.Set.ProductOps
 import public Alpha.Algebra.Set.PropSet
 import public Alpha.Algebra.Set.SingletonSet
 import public Alpha.Algebra.Set.Set
--- import public Alpha.Algebra.Set.Subset
+import public Alpha.Algebra.Set.Subset
 import public Alpha.Algebra.Set.UniverseSet
 import public Alpha.Algebra.Set.VectSet

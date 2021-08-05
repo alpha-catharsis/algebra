@@ -17,7 +17,7 @@ import Alpha.Decidable
 
 public export
 ProductFpt : SetFpt a -> SetFpt b -> SetFpt (a,b)
-ProductFpt lfpt rfpt (a,b) = (lfpt a,rfpt b)
+ProductFpt lfpt rfpt (x,y) = (lfpt x,rfpt y)
 
 public export
 product : Set lfpt -> Set rfpt -> Set (ProductFpt lfpt rfpt)

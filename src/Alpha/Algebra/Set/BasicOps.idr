@@ -46,7 +46,7 @@ notElemComplement2 contra f = f contra
 
 public export
 UnionFpt : SetFpt a -> SetFpt a -> SetFpt a
-UnionFpt lfpt rfpt a = Either (lfpt a) (rfpt a)
+UnionFpt lfpt rfpt x = Either (lfpt x) (rfpt x)
 
 public export
 union : Set lfpt -> Set rfpt -> Set (UnionFpt lfpt rfpt)
@@ -95,7 +95,7 @@ notElemUnionIdempotent contra prf = contra (Left prf)
 
 public export
 IntersectionFpt : SetFpt a -> SetFpt a -> SetFpt a
-IntersectionFpt lfpt rfpt a = (lfpt a, rfpt a)
+IntersectionFpt lfpt rfpt x = (lfpt x, rfpt x)
 
 public export
 intersection : Set lfpt -> Set rfpt -> Set (IntersectionFpt lfpt rfpt)

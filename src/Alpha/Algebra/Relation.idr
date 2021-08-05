@@ -51,24 +51,16 @@ public export
 SymRel : {a : Type} -> RelFpt (a,a) -> Type
 SymRel fpt = {p : (a,a)} -> Related p fpt -> Related (snd p, fst p) fpt
 
--- public export
--- ReflRel : {a : Type} -> RelFpt a a -> Type
--- ReflRel fpt = (x : a) -> Related fpt (x,x)
+public export
+TransRel : {a : Type} -> RelFpt (a,a) -> Type
+TransRel fpt = {x : a} -> {y : a} -> {z : a} -> Related (x,y) fpt ->
+               Related (y,z) fpt -> Related (x,z) fpt
 
--- public export
--- SymmRel : {a : Type} -> RelFpt a a -> Type
--- SymmRel fpt = {x : a} -> {y : a} -> Related fpt (x,y) -> Related fpt (y,x)
+public export
+EquivRel : {a : Type} -> RelFpt (a,a) -> Type
+EquivRel fpt = (ReflRel fpt, SymRel fpt, TransRel fpt)
 
--- public export
--- TransRel : {a : Type} -> RelFpt a a -> Type
--- TransRel fpt = {x : a} -> {y : a} -> {z : a} -> Related fpt (x,y) ->
---                Related fpt (y,z) -> Related fpt (x,z)
-
--- public export
--- EquivRel : {a : Type} -> RelFpt a a -> Type
--- EquivRel fpt = (ReflRel fpt, SymmRel fpt, TransRel fpt)
-
--- public export
--- AntiSymmRel : {a : Type} -> RelFpt a a -> RelFpt a a -> Type
--- AntiSymmRel fpt efpt = {x : a} -> {y : a} -> Related fpt (x,y) ->
---                        Related fpt (y,x) -> Related efpt (x,y)
+public export
+AntiSymRel : {a : Type} -> RelFpt (a,a) -> RelFpt (a,a) -> Type
+AntiSymRel fpt efpt = {x : a} -> {y : a} -> Related (x,y) fpt ->
+                       Related (y,x) fpt -> Related (x,y) efpt

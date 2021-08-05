@@ -16,16 +16,16 @@ import Alpha.Algebra.Relation
 -------------------
 
 public export
-data Subset : RelFpt (Set a) (Set a) where
-  MkSubset : (ss : (Set a, Set a)) ->
-             (prf : {x : a} -> Elem x (fst ss) -> Elem x (snd ss)) ->
-             Subset ss
+Subset : {a : Type} -> {lfpt : SetFpt a} -> {rfpt : SetFpt a} ->
+         RelFpt (Set lfpt, Set rfpt)
+Subset _ = ({ax : a} -> Elem ax lfpt -> Elem ax rfpt)
 
 export
-notSubset : (ss : (Set a, Set a)) -> (x : a) ->
-            Elem x (fst ss) -> (Elem x (snd ss) -> Void) ->
-            Subset ss -> Void
-notSubset _ _ lprf rcontra (MkSubset _ f) = rcontra (f lprf)
+notSubset : {a : Type} -> {lfpt : SetFpt a} -> {rfpt : SetFpt a} ->
+            {ls : Set lfpt} -> {rs : Set rfpt} ->
+            {x : a} -> Elem x lfpt -> (Elem x rfpt -> Void) ->
+            NotRelated (ls,rs) Subset
+notSubset lprf rcontra f = rcontra (f lprf)
 
 --------------------
 -- Subset properties
@@ -33,8 +33,8 @@ notSubset _ _ lprf rcontra (MkSubset _ f) = rcontra (f lprf)
 
 export
 reflSubset : ReflRel Subset
-reflSubset s = MkSubset (s,s) id
+reflSubset = id
 
-export
-transSubset : TransRel Subset
-transSubset (MkSubset (s,t) lf) (MkSubset (t,u) rf) = MkSubset (s,u) (rf . lf)
+-- export
+-- transSubset : TransRel Subset
+-- transSubset f g = g . f
