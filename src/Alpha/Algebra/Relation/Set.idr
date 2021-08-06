@@ -24,9 +24,9 @@ notSubset : {x : a} -> Elem x ls -> (Elem x rs -> Void) ->
             NotRelated (ls,rs) Subset
 notSubset lprf rcontra f = rcontra (f lprf)
 
---------------------
+---------------------
 -- EqualSets relation
---------------------
+---------------------
 
 public export
 EqualSets : {a : Type} -> Rel (Set a, Set a)
@@ -42,18 +42,32 @@ notEqualSetsRight : {ls : Set a} -> {rs : Set a} -> (Subset (rs,ls) -> Void) ->
                     EqualSets (ls,rs) -> Void
 notEqualSetsRight rcontra prf = rcontra (snd prf)
 
------------------------
--- DisjointSet relation
------------------------
+------------------------
+-- DisjointSets relation
+------------------------
 
 public export
 DisjointSets : {a : Type} -> Rel (Set a, Set a)
 DisjointSets (ls, rs) = ({ax : a} -> Elem ax ls -> NotElem ax rs,
                          {ax : a} -> Elem ax rs -> NotElem ax ls)
 
+export
 notDisjointSets : {x : a} -> Elem x ls -> Elem x rs ->
                   NotRelated (ls,rs) DisjointSets
 notDisjointSets lprf rprf (lcontra, _) = lcontra lprf rprf
+
+---------------------------
+-- OverlappingSets relation
+---------------------------
+
+public export
+OverlappingSets : {a : Type} -> Rel (Set a, Set a)
+OverlappingSets (ls,rs) = (ax ** (Elem ax ls, Elem ax rs))
+
+export
+notOverlappingSets : ({ax : a} -> Elem ax ls -> NotElem ax rs) ->
+                     NotRelated (ls,rs) OverlappingSets
+notOverlappingSets f (ax ** (lprf, rprf)) = f lprf rprf
 
 --------------------
 -- Subset projection
