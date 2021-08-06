@@ -20,10 +20,12 @@ public export
 EqualSet : {a : Type} -> Rel (Set a, Set a)
 EqualSet (ls,rs) = (Related (ls,rs) Subset, Related (rs,ls) Subset)
 
+export
 notEqualSetLeft : {ls : Set a} -> {rs : Set a} -> (Subset (ls,rs) -> Void) ->
                   EqualSet (ls,rs) -> Void
 notEqualSetLeft lcontra prf = lcontra (fst prf)
 
+export
 notEqualSetRight : {ls : Set a} -> {rs : Set a} -> (Subset (rs,ls) -> Void) ->
                    EqualSet (ls,rs) -> Void
 notEqualSetRight rcontra prf = rcontra (snd prf)
@@ -44,9 +46,24 @@ export
 transEqualSet : TransRel EqualSet
 transEqualSet (f,g) (h,i) = (h . f, g . i)
 
+-- export
+-- transEqualSet2 : TransRel2 EqualSet
+
+export
 equivEqualSet : EquivRel EqualSet
 equivEqualSet = (reflEqualSet, symEqualSet, transEqualSet)
 
 export
 antiSymSubset : AntiSymRel Subset EqualSet
 antiSymSubset f g = (f,g)
+
+-----------------------
+-- EqualSet projections
+-----------------------
+
+elemEqualSet : {x : a} -> Elem x ls -> Related (ls,rs) EqualSet -> Elem x rs
+elemEqualSet prf (f,_) = f prf
+
+notElemEqualSet : {x : a} -> NotElem x ls -> Related (ls,rs) EqualSet ->
+                  NotElem x rs
+notElemEqualSet lcontra (_,g) rprf = lcontra (g rprf)

@@ -56,6 +56,14 @@ TransRel : {a : Type} -> Rel (a,a) -> Type
 TransRel r = {x : a} -> {y : a} -> {z : a} -> Related (x,y) r ->
              Related (y,z) r -> Related (x,z) r
 
+-- public export
+-- TransRel2 : ((pt : (Type, Type)) -> Type) -> Type
+-- TransRel2 fr = {d : Type} -> {e : Type} -> {f : Type} ->
+--                {x : d} -> {y : e} -> {z : f} ->
+--                {lr : fr (d,e)} -> {rr : fr (e,f)} -> {r : fr (d,f)} ->
+--                Related (x,y) lr {a=d} {b=e} -> Related (y,z) rr ->
+--                Related (x,z) r
+
 public export
 EquivRel : {a : Type} -> Rel (a,a) -> Type
 EquivRel r = (ReflRel r, SymRel r, TransRel r)

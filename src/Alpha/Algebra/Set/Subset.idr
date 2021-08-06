@@ -29,9 +29,16 @@ notSubset lprf rcontra f = rcontra (f lprf)
 --------------------
 
 export
-reflSubset : {a : Type} -> ReflRel Subset
+reflSubset : ReflRel Subset
 reflSubset = id
 
--- export
--- transSubset : TransRel Subset
--- transSubset f g = g . f
+export
+transSubset : TransRel Subset
+transSubset f g = g . f
+
+--------------------
+-- Subset projection
+--------------------
+
+elemSubset : {x : a} -> Elem x ls -> Related (ls,rs) Subset -> Elem x rs
+elemSubset prf f = f prf
