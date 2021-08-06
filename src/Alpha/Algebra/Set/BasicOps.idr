@@ -76,7 +76,7 @@ subsetUnionCommutative ef = case ef of
 
 export
 equalUnionCommutative : {ls : Set a} -> {rs : Set a} ->
-                        Related (Union ls rs, Union rs ls) EqualSet
+                        Related (Union ls rs, Union rs ls) EqualSets
 equalUnionCommutative = (subsetUnionCommutative {ls} {rs},
                          subsetUnionCommutative {ls=rs} {rs=ls})
 
@@ -87,7 +87,7 @@ subsetUnionIdempotent = Left
 
 export
 equalUnionIdempotent : {ls : Set a} ->
-                       Related (ls, Union ls ls) EqualSet
+                       Related (ls, Union ls ls) EqualSets
 equalUnionIdempotent = (Left, \ef => case ef of
                                        Left f => f
                                        Right f => f)
@@ -108,18 +108,6 @@ export
 elemIntersection : Elem x ls -> Elem x rs ->
                    Elem x (Intersection ls rs)
 elemIntersection lprf rprf = (lprf, rprf)
-
-export
-notElemIntersectionLeft : NotElem x ls ->
-                          NotElem x (Intersection ls _)
-notElemIntersectionLeft lcontra = lcontra . fst
-
-export
-notElemIntersectionRight : NotElem x rs ->
-                           NotElem x (Intersection _ rs)
-notElemIntersectionRight lcontra = lcontra . snd
-
---
 
 export
 subsetIntersectionLeft : {ls : Set a} ->
@@ -144,5 +132,5 @@ subsetIntersectionIdempotent f = (f, f)
 
 export
 equalIntersectionIdempotent : {ls : Set a} ->
-                              Related (ls, Intersection ls ls) EqualSet
+                              Related (ls, Intersection ls ls) EqualSets
 equalIntersectionIdempotent = (\f => (f, f), fst)
