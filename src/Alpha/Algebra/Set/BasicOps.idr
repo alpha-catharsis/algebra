@@ -8,6 +8,8 @@ module Alpha.Algebra.Set.BasicOps
 -- Internal imports
 -------------------
 
+import Alpha.Algebra.Relation.Relation
+import Alpha.Algebra.Relation.Set
 import Alpha.Algebra.Set.Set
 import Alpha.Decidable
 
@@ -53,41 +55,42 @@ union : SetDec ls -> SetDec rs -> SetDec (Union ls rs)
 union lf rf x = decOr (lf x) (rf x)
 
 export
-elemUnionLeft : Elem x ls -> Elem x (Union ls _)
-elemUnionLeft prf = Left prf
-
-export
-elemUnionRight : Elem x rs -> Elem x (Union _ rs)
-elemUnionRight prf = Right prf
-
-export
 notElemUnion : NotElem x ls -> NotElem x rs ->
                NotElem x (Union ls rs)
 notElemUnion lcontra rcontra = either lcontra rcontra
 
 export
-elemUnionCommutative : Elem x (Union ls rs) ->
-                       Elem x (Union rs ls)
-elemUnionCommutative eprf = case eprf of
-  Left lprf => Right lprf
-  Right rprf => Left rprf
+subsetUnionLeft : {s : Set a} -> Related (s, (Union s _)) Subset
+subsetUnionLeft = Left
 
 export
-notElemUnionCommutative : NotElem x (Union ls rs) ->
-                          NotElem x (Union rs ls)
-notElemUnionCommutative contra pprf = case pprf of
-  Left lprf => contra (Right lprf)
-  Right rprf => contra (Left rprf)
+subsetUnionRight : {s : Set a} -> Related (s, (Union _ s)) Subset
+subsetUnionRight = Right
 
 export
-elemUnionIdempotent : Elem x (Union fpt fpt) -> Elem x fpt
-elemUnionIdempotent eprf = case eprf of
-  Left lprf => lprf
-  Right rprf => rprf
+subsetUnionCommutative : {ls : Set a} -> {rs : Set a} ->
+                         Related (Union ls rs, Union rs ls) Subset
+subsetUnionCommutative ef = case ef of
+  Left f => Right f
+  Right f => Left f
 
 export
-notElemUnionIdempotent : NotElem x (Union fpt fpt) -> NotElem x fpt
-notElemUnionIdempotent contra prf = contra (Left prf)
+equalUnionCommutative : {ls : Set a} -> {rs : Set a} ->
+                        Related (Union ls rs, Union rs ls) EqualSet
+equalUnionCommutative = (subsetUnionCommutative {ls} {rs},
+                         subsetUnionCommutative {ls=rs} {rs=ls})
+
+export
+subsetUnionIdempotent : {ls : Set a} ->
+                        Related (ls, Union ls ls) Subset
+subsetUnionIdempotent = Left
+
+export
+equalUnionIdempotent : {ls : Set a} ->
+                       Related (ls, Union ls ls) EqualSet
+equalUnionIdempotent = (Left, \ef => case ef of
+                                       Left f => f
+                                       Right f => f)
 
 -------------------
 -- Set intersection
@@ -116,22 +119,30 @@ notElemIntersectionRight : NotElem x rs ->
                            NotElem x (Intersection _ rs)
 notElemIntersectionRight lcontra = lcontra . snd
 
-export
-elemIntersectionCommutative : Elem x (Intersection ls rs) ->
-                              Elem x (Intersection rs ls)
-elemIntersectionCommutative pprf = (snd pprf, fst pprf)
+--
 
 export
-notElemIntersectionCommutative : NotElem x (Intersection ls rs) ->
-                                 NotElem x (Intersection rs ls)
-notElemIntersectionCommutative contra (lprf, rprf) = contra (rprf, lprf)
+subsetIntersectionLeft : {ls : Set a} ->
+                         Related (Intersection ls _, ls) Subset
+subsetIntersectionLeft = fst
 
 export
-elemIntersectionIdempotent : Elem x (Intersection fpt fpt) ->
-                             Elem x fpt
-elemIntersectionIdempotent = fst
+subsetIntersectionRight : {rs : Set a} ->
+                          Related (Intersection _ rs, rs) Subset
+subsetIntersectionRight = snd
 
 export
-notElemIntersectionIdempotent : NotElem x (Intersection fpt fpt) ->
-                                NotElem x fpt
-notElemIntersectionIdempotent contra prf = contra (prf,prf)
+subsetIntersectionCommutative : {ls : Set a} -> {rs : Set a} ->
+                                Related (Intersection ls rs,
+                                         Intersection rs ls) Subset
+subsetIntersectionCommutative (f,g) = (g,f)
+
+export
+subsetIntersectionIdempotent : {ls : Set a} ->
+                               Related (ls, Intersection ls ls) Subset
+subsetIntersectionIdempotent f = (f, f)
+
+export
+equalIntersectionIdempotent : {ls : Set a} ->
+                              Related (ls, Intersection ls ls) EqualSet
+equalIntersectionIdempotent = (\f => (f, f), fst)

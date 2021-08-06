@@ -8,10 +8,11 @@ module Alpha.Algebra.Set.UniverseSet
 -- Internal imports
 -------------------
 
-import Alpha.Algebra.Relation
+import Alpha.Algebra.Relation.Relation
+import Alpha.Algebra.Relation.Set
 import Alpha.Algebra.Set.BasicOps
 import Alpha.Algebra.Set.Set
-import Alpha.Algebra.Set.Subset
+
 
 ---------------
 -- Universe set

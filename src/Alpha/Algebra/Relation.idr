@@ -9,3 +9,4 @@ module Alpha.Algebra.Relation
 -----------------
 
 import public Alpha.Algebra.Relation.Relation
+import public Alpha.Algebra.Relation.Set
