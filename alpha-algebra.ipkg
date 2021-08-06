@@ -13,7 +13,8 @@ authors = "Alpha Catharsis"
 -- depends =
 
 -- modules to install
-modules = Alpha.Algebra.Relation,
+modules = Alpha.Algebra.Function,
+          Alpha.Algebra.Relation,
           Alpha.Algebra.Set
 
 -- main file (i.e. file to load at REPL)

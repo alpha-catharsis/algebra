@@ -14,6 +14,7 @@ import Decidable.Equality
 -- Internal imports
 -------------------
 
+import Alpha.Algebra.Set.PointedSet
 import Alpha.Algebra.Set.Set
 
 ----------------
@@ -27,3 +28,4 @@ SingletonSetFpt v x = (x = v)
 public export
 singletonSet : DecEq a => (v : a) -> Set (SingletonSetFpt v)
 singletonSet v x = decEq x v
+

@@ -14,6 +14,7 @@ import public Alpha.Algebra.Set.EmptySet
 -- import public Alpha.Algebra.Set.Equality
 import public Alpha.Algebra.Set.HoledSet
 import public Alpha.Algebra.Set.ListSet
+import public Alpha.Algebra.Set.PointedSet
 import public Alpha.Algebra.Set.ProductOps
 import public Alpha.Algebra.Set.PropSet
 import public Alpha.Algebra.Set.SingletonSet
