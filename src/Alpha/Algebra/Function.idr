@@ -1,11 +1,11 @@
 ---------------------
-  -- Module declaration
-  ---------------------
+-- Module declaration
+---------------------
 
-  module Alpha.Algebra.Function
+module Alpha.Algebra.Function
 
-  -----------------
-  -- Public imports
-  -----------------
+-----------------
+-- Public imports
+-----------------
 
-  import public Alpha.Algebra.Function.NullryFn
+-- import public Alpha.Algebra.Function.NullryFn

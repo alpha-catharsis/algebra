@@ -21,9 +21,9 @@ import Alpha.Algebra.Set.Set
 ------------------
 
 public export
-PropSetFpt : (a -> Bool) -> SetFpt a
-PropSetFpt f x = (f x = True)
+PropSet : (a -> Bool) -> Set a
+PropSet f x = (f x = True)
 
 public export
-propSet : (f : a -> Bool) -> Set (PropSetFpt f)
+propSet : (f : a -> Bool) -> SetDec (PropSet f)
 propSet f x = decEq (f x) True

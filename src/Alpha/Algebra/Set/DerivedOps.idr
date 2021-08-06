@@ -16,25 +16,25 @@ import Alpha.Algebra.Set.BasicOps
 -----------------
 
 public export
-DifferenceFpt : SetFpt a -> SetFpt a -> SetFpt a
-DifferenceFpt lfpt rfpt = IntersectionFpt lfpt (ComplementFpt rfpt)
+Difference : Set a -> Set a -> Set a
+Difference ls rs = Intersection ls (Complement rs)
 
 public export
-difference : Set lfpt -> Set rfpt -> Set (DifferenceFpt lfpt rfpt)
+difference : SetDec ls -> SetDec rs -> SetDec (Difference ls rs)
 difference lf rf = intersection lf (complement rf)
 
 
 export
-elemDifference : Elem x lfpt -> NotElem x rfpt ->
-                 Elem x (DifferenceFpt lfpt rfpt)
+elemDifference : Elem x ls -> NotElem x rs ->
+                 Elem x (Difference ls rs)
 elemDifference lprf rcontra = (lprf, rcontra)
 
 export
-notElemDifferenceLeft : NotElem x lfpt -> NotElem x (DifferenceFpt lfpt _)
+notElemDifferenceLeft : NotElem x ls -> NotElem x (Difference ls _)
 notElemDifferenceLeft lcontra (lprf,_) = lcontra lprf
 
 export
-notElemDifferenceRight : Elem x rfpt -> NotElem x (DifferenceFpt _ rfpt)
+notElemDifferenceRight : Elem x rs -> NotElem x (Difference _ rs)
 notElemDifferenceRight rprf contra = snd contra rprf
 
 ---------------------------
@@ -42,35 +42,34 @@ notElemDifferenceRight rprf contra = snd contra rprf
 ---------------------------
 
 public export
-SymDifferenceFpt : SetFpt a -> SetFpt a -> SetFpt a
-SymDifferenceFpt lfpt rfpt = UnionFpt (DifferenceFpt lfpt rfpt)
-                             (DifferenceFpt rfpt lfpt)
+SymDifference : Set a -> Set a -> Set a
+SymDifference ls rs = Union (Difference ls rs) (Difference rs ls)
 
 public export
-symDifference : Set lfpt -> Set rfpt -> Set (SymDifferenceFpt lfpt rfpt)
+symDifference : SetDec ls -> SetDec rs -> SetDec (SymDifference ls rs)
 symDifference lf rf = union (difference lf rf) (difference rf lf)
 
 
 export
-elemDifferenceLeft : Elem x lfpt -> NotElem x rfpt ->
-                     Elem x (SymDifferenceFpt lfpt rfpt)
+elemDifferenceLeft : Elem x ls -> NotElem x rs ->
+                     Elem x (SymDifference ls rs)
 elemDifferenceLeft lprf rcontra = Left (lprf, rcontra)
 
 export
-elemDifferenceRight : NotElem x lfpt -> Elem x rfpt ->
-                      Elem x (SymDifferenceFpt lfpt rfpt)
+elemDifferenceRight : NotElem x ls -> Elem x rs ->
+                      Elem x (SymDifference ls rs)
 elemDifferenceRight lcontra rprf = Right (rprf, lcontra)
 
 export
-notElemDifferenceBoth : Elem x lfpt -> Elem x rfpt ->
-                        NotElem x (SymDifferenceFpt lfpt rfpt)
+notElemDifferenceBoth : Elem x ls -> Elem x rs ->
+                        NotElem x (SymDifference ls rs)
 notElemDifferenceBoth lprf rprf econtra = case econtra of
   Left (_,rcontra) => rcontra rprf
   Right (_, lcontra) => lcontra lprf
 
 export
-notElemDifferenceNeither : NotElem x lfpt -> NotElem x rfpt ->
-                           NotElem x (SymDifferenceFpt lfpt rfpt)
+notElemDifferenceNeither : NotElem x ls -> NotElem x rs ->
+                           NotElem x (SymDifference ls rs)
 notElemDifferenceNeither lcontra rcontra econtra = case econtra of
   Left (lprf, _) => lcontra lprf
   Right (rprf, _) => rcontra rprf

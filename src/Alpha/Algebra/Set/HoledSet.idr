@@ -22,9 +22,9 @@ import Alpha.Decidable
 ------------
 
 public export
-HoledSetFpt : (v : a) -> SetFpt a
-HoledSetFpt v x = (x = v) -> Void
+HoledSet : (v : a) -> Set a
+HoledSet v x = (x = v) -> Void
 
 public export
-holedSet : DecEq a => (v : a) -> Set (HoledSetFpt v)
+holedSet : DecEq a => (v : a) -> SetDec (HoledSet v)
 holedSet v x = decNot (decEq x v)

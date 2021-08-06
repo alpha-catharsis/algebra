@@ -15,26 +15,26 @@ import Decidable.Decidable
 ------------------
 
 public export
-SetFpt : Type -> Type
-SetFpt a = a -> Type
+Set : Type -> Type
+Set a = a -> Type
 
 public export
-Elem : a -> SetFpt a -> Type
-Elem x fpt = fpt x
+Elem : a -> Set a -> Type
+Elem x s = s x
 
 public export
-NotElem : a -> SetFpt a -> Type
-NotElem x fpt = Elem x fpt -> Void
+NotElem : a -> Set a -> Type
+NotElem x s = Elem x s -> Void
 
 public export
-Set : {a : Type} -> SetFpt a -> Type
-Set fpt = (x : a) -> Dec (fpt x)
+SetDec : {a : Type} -> Set a -> Type
+SetDec s = (x : a) -> Dec (Elem x s)
 
 public export
-isElem : {fpt : SetFpt a} -> (x : a) -> Set fpt -> Dec (fpt x)
+isElem : {s : Set a} -> (x : a) -> SetDec s -> Dec (Elem x s)
 isElem x fn = fn x
 
 public export
-elem : {fpt : SetFpt a} -> (x : a) -> Set fpt -> Bool
+elem : {s : Set a} -> (x : a) -> SetDec s -> Bool
 elem x fn = isYes (isElem x fn)
 
