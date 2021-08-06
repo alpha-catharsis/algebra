@@ -16,14 +16,11 @@ import Alpha.Algebra.Relation
 -------------------
 
 public export
-Subset : {a : Type} -> {lfpt : SetFpt a} -> {rfpt : SetFpt a} ->
-         RelFpt (Set lfpt, Set rfpt)
-Subset _ = ({ax : a} -> Elem ax lfpt -> Elem ax rfpt)
+Subset : {a : Type} -> Rel (Set a, Set a)
+Subset (ls,rs) = ({ax : a} -> Elem ax ls -> Elem ax rs)
 
 export
-notSubset : {a : Type} -> {lfpt : SetFpt a} -> {rfpt : SetFpt a} ->
-            {ls : Set lfpt} -> {rs : Set rfpt} ->
-            {x : a} -> Elem x lfpt -> (Elem x rfpt -> Void) ->
+notSubset : {x : a} -> Elem x ls -> (Elem x rs -> Void) ->
             NotRelated (ls,rs) Subset
 notSubset lprf rcontra f = rcontra (f lprf)
 
@@ -32,7 +29,7 @@ notSubset lprf rcontra f = rcontra (f lprf)
 --------------------
 
 export
-reflSubset : ReflRel Subset
+reflSubset : {a : Type} -> ReflRel Subset
 reflSubset = id
 
 -- export

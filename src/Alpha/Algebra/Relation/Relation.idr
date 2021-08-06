@@ -1,66 +1,66 @@
 ---------------------
-  -- Module declaration
-  ---------------------
+-- Module declaration
+---------------------
 
-  module Alpha.Algebra.Relation.Relation
+module Alpha.Algebra.Relation.Relation
 
-  -------------------
-  -- External imports
-  -------------------
+-------------------
+-- External imports
+-------------------
 
-  import Data.Bool
-  import Decidable.Decidable
+import Data.Bool
+import Decidable.Decidable
 
-  ---------------------
-  -- Relation data type
-  ---------------------
+---------------------
+-- Relation data type
+---------------------
 
-  public export
-  RelFpt : (Type,Type) -> Type
-  RelFpt (a,b) = (a,b) -> Type
+public export
+Rel : (Type,Type) -> Type
+Rel (a,b) = (a,b) -> Type
 
-  public export
-  Related : (a,b) -> RelFpt (a,b) -> Type
-  Related p fpt = fpt p
+public export
+Related : (a,b) -> Rel (a,b) -> Type
+Related p r = r p
 
-  public export
-  NotRelated : (a,b) -> RelFpt (a,b) -> Type
-  NotRelated fpt p = Related fpt p -> Void
+public export
+NotRelated : (a,b) -> Rel (a,b) -> Type
+NotRelated r p = Related r p -> Void
 
-  public export
-  Rel : {a : Type} -> {b : Type} -> RelFpt (a,b) -> Type
-  Rel fpt = (p : (a,b)) -> Dec (fpt p)
+public export
+RelDec : {a : Type} -> {b : Type} -> Rel (a,b) -> Type
+RelDec r = (p : (a,b)) -> Dec (r p)
 
-  public export
-  areRelated : {fpt : RelFpt (a,b)} -> (p : (a,b)) -> Rel fpt -> Dec (fpt p)
-  areRelated p fn = fn p
+public export
+areRelated : {r : Rel (a,b)} -> (p : (a,b)) -> RelDec r -> Dec (r p)
+areRelated p fn = fn p
 
-  public export
-  related : {fpt : RelFpt (a,b)} -> (p : (a,b)) -> Rel fpt -> Bool
-  related p fn = isYes (areRelated p fn)
+public export
+related : {r : Rel (a,b)} -> (p : (a,b)) -> RelDec r -> Bool
+related p fn = isYes (areRelated p fn)
 
-  ----------------------
-  -- Relation properties
-  ----------------------
+----------------------
+-- Relation properties
+----------------------
 
-  public export
-  ReflRel : {a : Type} -> RelFpt (a,a) -> Type
-  ReflRel fpt = {p : (a,a)} -> Related p fpt
+public export
+ReflRel : {a : Type} -> Rel (a,a) -> Type
+ReflRel r = {x : a} -> Related (x,x) r
 
-  public export
-  SymRel : {a : Type} -> RelFpt (a,a) -> Type
-  SymRel fpt = {p : (a,a)} -> Related p fpt -> Related (snd p, fst p) fpt
+public export
+SymRel : {a : Type} -> Rel (a,a) -> Type
+SymRel r = {x : a} -> {y : a} -> Related (x,y) r -> Related (y,x) r
 
-  public export
-  TransRel : {a : Type} -> RelFpt (a,a) -> Type
-  TransRel fpt = {x : a} -> {y : a} -> {z : a} -> Related (x,y) fpt ->
-  Related (y,z) fpt -> Related (x,z) fpt
+-- public export
+-- TransRel : {a : Type} -> Rel (a,a) -> Type
+-- TransRel r = {x : a} -> {y : a} -> {z : a} -> Related (x,y) r ->
+--              Related (y,z) r -> Related (x,z) r
 
-  public export
-  EquivRel : {a : Type} -> RelFpt (a,a) -> Type
-  EquivRel fpt = (ReflRel fpt, SymRel fpt, TransRel fpt)
+-- public export
+-- EquivRel : {a : Type} -> Rel (a,a) -> Type
+-- EquivRel r = (ReflRel r, SymRel r, TransRel r)
 
-  public export
-  AntiSymRel : {a : Type} -> RelFpt (a,a) -> RelFpt (a,a) -> Type
-  AntiSymRel fpt efpt = {x : a} -> {y : a} -> Related (x,y) fpt ->
-  Related (y,x) fpt -> Related (x,y) efpt
+-- public export
+-- AntiSymRel : {a : Type} -> Rel (a,a) -> Rel (a,a) -> Type
+-- AntiSymRel r er = {x : a} -> {y : a} -> Related (x,y) r ->
+--                   Related (y,x) r -> Related (x,y) er
