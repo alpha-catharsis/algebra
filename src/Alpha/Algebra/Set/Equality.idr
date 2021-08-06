@@ -17,18 +17,16 @@ import Alpha.Algebra.Set.Subset
 ---------------------
 
 public export
-data EqualSet : RelFpt (Set a) (Set a) where
-  MkEqualSet : (ss : (Set a, Set a)) ->
-               Subset ss -> Subset (snd ss, fst ss) ->
-               EqualSet ss
+EqualSet : {a : Type} -> Rel (Set a, Set a)
+EqualSet (ls,rs) = (Related (ls,rs) Subset, Related (rs,ls) Subset)
 
-notEqualSetLeft : (ss : (Set a, Set a)) ->
-                (Subset ss -> Void) -> EqualSet ss -> Void
-notEqualSetLeft _ lcontra (MkEqualSet _ lprf _) = lcontra lprf
+notEqualSetLeft : {ls : Set a} -> {rs : Set a} -> (Subset (ls,rs) -> Void) ->
+                  EqualSet (ls,rs) -> Void
+notEqualSetLeft lcontra prf = lcontra (fst prf)
 
-notEqualSetRight : (ss : (Set a, Set a)) ->
-                   (Subset (snd ss, fst ss) -> Void) -> EqualSet ss -> Void
-notEqualSetRight _ rcontra (MkEqualSet _ _ rprf) = rcontra rprf
+notEqualSetRight : {ls : Set a} -> {rs : Set a} -> (Subset (rs,ls) -> Void) ->
+                   EqualSet (ls,rs) -> Void
+notEqualSetRight rcontra prf = rcontra (snd prf)
 
 ----------------------
 -- EqualSet properties
@@ -36,21 +34,19 @@ notEqualSetRight _ rcontra (MkEqualSet _ _ rprf) = rcontra rprf
 
 export
 reflEqualSet : ReflRel EqualSet
-reflEqualSet s = MkEqualSet (s,s) (reflSubset s) (reflSubset s)
+reflEqualSet = (id,id)
 
 export
-symmEqualSet : SymmRel EqualSet
-symmEqualSet (MkEqualSet (s,t) fprf bprf) = MkEqualSet (t,s) bprf fprf
+symEqualSet : SymRel EqualSet
+symEqualSet (f,g) = (g,f)
 
 export
 transEqualSet : TransRel EqualSet
-transEqualSet (MkEqualSet (s,t) lfprf lbprf) (MkEqualSet (t,u) rfprf rbprf) =
-  MkEqualSet (s,u) (transSubset lfprf rfprf) (transSubset rbprf lbprf)
+transEqualSet (f,g) (h,i) = (h . f, g . i)
 
 equivEqualSet : EquivRel EqualSet
-equivEqualSet = (reflEqualSet, symmEqualSet, transEqualSet)
+equivEqualSet = (reflEqualSet, symEqualSet, transEqualSet)
 
 export
-antiSymmSubset : AntiSymmRel Subset EqualSet
-antiSymmSubset lprf@(MkSubset (x,y) _) rprf@(MkSubset (y,x) _) =
-  MkEqualSet (x,y) lprf rprf
+antiSymSubset : AntiSymRel Subset EqualSet
+antiSymSubset f g = (f,g)

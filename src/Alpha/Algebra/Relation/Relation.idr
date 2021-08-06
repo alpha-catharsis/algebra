@@ -51,16 +51,16 @@ public export
 SymRel : {a : Type} -> Rel (a,a) -> Type
 SymRel r = {x : a} -> {y : a} -> Related (x,y) r -> Related (y,x) r
 
--- public export
--- TransRel : {a : Type} -> Rel (a,a) -> Type
--- TransRel r = {x : a} -> {y : a} -> {z : a} -> Related (x,y) r ->
---              Related (y,z) r -> Related (x,z) r
+public export
+TransRel : {a : Type} -> Rel (a,a) -> Type
+TransRel r = {x : a} -> {y : a} -> {z : a} -> Related (x,y) r ->
+             Related (y,z) r -> Related (x,z) r
 
--- public export
--- EquivRel : {a : Type} -> Rel (a,a) -> Type
--- EquivRel r = (ReflRel r, SymRel r, TransRel r)
+public export
+EquivRel : {a : Type} -> Rel (a,a) -> Type
+EquivRel r = (ReflRel r, SymRel r, TransRel r)
 
--- public export
--- AntiSymRel : {a : Type} -> Rel (a,a) -> Rel (a,a) -> Type
--- AntiSymRel r er = {x : a} -> {y : a} -> Related (x,y) r ->
---                   Related (y,x) r -> Related (x,y) er
+public export
+AntiSymRel : {a : Type} -> Rel (a,a) -> Rel (a,a) -> Type
+AntiSymRel r er = {x : a} -> {y : a} -> Related (x,y) r ->
+                  Related (y,x) r -> Related (x,y) er
