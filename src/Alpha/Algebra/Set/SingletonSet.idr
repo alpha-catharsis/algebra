@@ -14,6 +14,8 @@ import Decidable.Equality
 -- Internal imports
 -------------------
 
+import Alpha.Algebra.Relation.Relation
+import Alpha.Algebra.Relation.Set
 -- import Alpha.Algebra.Set.PointedSet
 import Alpha.Algebra.Set.Set
 
@@ -29,3 +31,8 @@ public export
 singletonSet : DecEq a => (v : a) -> SetDec (SingletonSet v)
 singletonSet v x = decEq x v
 
+export
+disjointSingletonSets : {v : a} -> {v' : a} -> (v = v' -> Void) ->
+                        Related (SingletonSet v, SingletonSet v') DisjointSets
+disjointSingletonSets contra = (\veq => rewrite veq in contra,
+                                \veq' => rewrite veq' in negEqSym contra)
