@@ -42,6 +42,10 @@ notElemComplement2 : (NotElem x s) ->
                      NotElem x (Complement (Complement s))
 notElemComplement2 contra f = f contra
 
+export
+disjointComplement : {s : Set a} -> Related (s, Complement s) DisjointSets
+disjointComplement = (\x,f => f x, id)
+
 ------------
 -- Set union
 ------------
@@ -60,11 +64,11 @@ notElemUnion : NotElem x ls -> NotElem x rs ->
 notElemUnion lcontra rcontra = either lcontra rcontra
 
 export
-subsetUnionLeft : {s : Set a} -> Related (s, (Union s _)) Subset
+subsetUnionLeft : {s : Set a} -> Related (s, Union s _) Subset
 subsetUnionLeft = Left
 
 export
-subsetUnionRight : {s : Set a} -> Related (s, (Union _ s)) Subset
+subsetUnionRight : {s : Set a} -> Related (s, Union _ s) Subset
 subsetUnionRight = Right
 
 export

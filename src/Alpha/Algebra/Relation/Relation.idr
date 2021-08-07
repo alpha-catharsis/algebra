@@ -65,10 +65,6 @@ TransRel r = {x : a} -> {y : a} -> {z : a} -> Related (x,y) r ->
 --                Related (x,z) r
 
 public export
-EquivRel : {a : Type} -> Rel (a,a) -> Type
-EquivRel r = (ReflRel r, SymRel r, TransRel r)
-
-public export
 AntiSymRel : {a : Type} -> Rel (a,a) -> Rel (a,a) -> Type
 AntiSymRel r er = {x : a} -> {y : a} -> Related (x,y) r ->
                   Related (y,x) r -> Related (x,y) er

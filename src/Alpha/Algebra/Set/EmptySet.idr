@@ -40,3 +40,27 @@ Uninhabited (Elem x (Intersection ls EmptySet)) where
 export
 subsetEmptySet : Related (EmptySet, rs) Subset
 subsetEmptySet = absurd
+
+export
+neutralEmptyUnionLeft : {s : Set a} -> Related (s, Union EmptySet s) EqualSets
+neutralEmptyUnionLeft = (Right, \ef => case ef of
+                                         Left f => absurd (uninhabited f)
+                                         Right f => f)
+
+export
+neutralEmptyUnionRight : {s : Set a} -> Related (s, Union s EmptySet) EqualSets
+neutralEmptyUnionRight = (Left, \ef => case ef of
+                                         Left f => f
+                                         Right f => absurd (uninhabited f))
+
+export
+absorbEmptyIntersectionLeft : {s : Set a} ->
+   Related (EmptySet, Intersection EmptySet s) EqualSets
+absorbEmptyIntersectionLeft = (\lprf => (lprf, absurd (uninhabited lprf)),
+                                         fst)
+
+export
+absorbEmptyIntersectionRight : {s : Set a} ->
+  Related (EmptySet, Intersection s EmptySet) EqualSets
+absorbEmptyIntersectionRight = (\rprf => (absurd (uninhabited rprf), rprf),
+                                          snd)

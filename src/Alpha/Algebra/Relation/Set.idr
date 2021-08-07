@@ -95,6 +95,15 @@ notElemEqualSets : {x : a} -> NotElem x ls -> Related (ls,rs) EqualSets ->
                   NotElem x rs
 notElemEqualSets lcontra (_,g) rprf = lcontra (g rprf)
 
+--------------------------
+-- DisjointSets projection
+--------------------------
+
+export
+notElemDisjointSets : {x : a} -> Elem x ls ->
+                      Related (ls,rs) DisjointSets -> NotElem x rs
+notElemDisjointSets lprf (f,g) rprf = f lprf rprf
+
 --------------------
 -- Subset properties
 --------------------
@@ -106,6 +115,10 @@ reflSubset = id
 export
 transSubset : TransRel Subset
 transSubset f g = g . f
+
+export
+antiSymSubset : AntiSymRel Subset EqualSets
+antiSymSubset f g = (f,g)
 
 ----------------------
 -- EqualSets properties
@@ -123,13 +136,18 @@ export
 transEqualSets : TransRel EqualSets
 transEqualSets (f,g) (h,i) = (h . f, g . i)
 
--- export
--- transEqualSets2 : TransRel2 EqualSets
+--------------------------
+-- DisjointSets properties
+--------------------------
 
 export
-equivEqualSets : EquivRel EqualSets
-equivEqualSets = (reflEqualSets, symEqualSets, transEqualSets)
+symDisjointSets : SymRel DisjointSets
+symDisjointSets (f,g) = (g,f)
+
+-----------------------------
+-- OverlappingSets properties
+-----------------------------
 
 export
-antiSymSubset : AntiSymRel Subset EqualSets
-antiSymSubset f g = (f,g)
+symOverlappingSets : SymRel OverlappingSets
+symOverlappingSets (ax ** (lprf, rprf)) = (ax ** (rprf, lprf))
