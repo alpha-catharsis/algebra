@@ -14,6 +14,8 @@ import Decidable.Equality
 -- Internal imports
 -------------------
 
+import Alpha.Algebra.Function.NullryFn
+import Alpha.Algebra.Set.PointedSet
 import Alpha.Algebra.Set.Set
 
 ------------------
@@ -27,3 +29,8 @@ PropSet f x = (f x = True)
 public export
 propSet : (f : a -> Bool) -> SetDec (PropSet f)
 propSet f x = decEq (f x) True
+
+export
+propPointedSet : {f : (a -> Bool)} -> SetDec (PropSet f) -> (x : a) ->
+                 {auto prf : f x = True} -> PointedSet (PropSet f)
+propPointedSet sd x = (sd, (x ** prf))

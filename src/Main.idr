@@ -71,4 +71,24 @@ main = do
   printLn (6 `elem` (setDec s6))
   printLn (5 `elem` (setDec s6))
 
+  printLn ("******")
+  let s7 = UniversePointedSet 1
+  printLn (basepoint s7)
+  printLn (0 `elem` (setDec s7))
+  printLn (1 `elem` (setDec s7))
+
+  printLn ("******")
+  let s8 = propPointedSet (propSet (> 5) {a=Integer}) 6
+  printLn (basepoint s8)
+  printLn (5 `elem` (setDec s8))
+  printLn (6 `elem` (setDec s8))
+
+  printLn ("******")
+  let s9 = listPointedSet (listSet [1,2,3]) 2
+  printLn (basepoint s9)
+  printLn (4 `elem` (setDec s9))
+  printLn (3 `elem` (setDec s9))
+
+
+
   putStrLn "OK"

@@ -8,9 +8,11 @@ module Alpha.Algebra.Set.UniverseSet
 -- Internal imports
 -------------------
 
+import Alpha.Algebra.Function.NullryFn
 import Alpha.Algebra.Relation.Relation
 import Alpha.Algebra.Relation.Set
 import Alpha.Algebra.Set.BasicOps
+import Alpha.Algebra.Set.PointedSet
 import Alpha.Algebra.Set.Set
 
 
@@ -65,3 +67,7 @@ export
 absorbUniverseUnionRight : {s : Set a} ->
   Related (UniverseSet, Union s UniverseSet) EqualSets
 absorbUniverseUnionRight = (Right, \_ => ())
+
+export
+UniversePointedSet : {a : Type} -> (x : a) -> PointedSet UniverseSet {a}
+UniversePointedSet x = (universeSet, (x ** ()))
