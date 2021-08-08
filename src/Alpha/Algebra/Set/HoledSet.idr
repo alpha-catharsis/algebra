@@ -35,6 +35,6 @@ data Negg : {a : Type} -> (x : a) -> (y : a) -> Type where
   MkNegg : (x = y -> Void) -> Negg x y
 
 export
-HoledPointedSet : DecEq a => {v : a} -> SetDec (HoledSet v) -> (x : a) ->
-                  (x = v -> Void) -> PointedSet (HoledSet v)
-HoledPointedSet sd x contra = pointedSet sd x contra
+HoledPointedSet : {a : Type} -> DecEq a => {v : a} -> SetDec (HoledSet v) ->
+                  (x : a) -> (x = v -> Void) -> PointedSet (HoledSet v)
+HoledPointedSet sd x prf = pointedSet sd (nullryFn (HoledSet v) x {prf})

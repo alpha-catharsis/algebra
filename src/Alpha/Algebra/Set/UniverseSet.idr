@@ -70,4 +70,4 @@ absorbUniverseUnionRight = (Right, \_ => ())
 
 export
 UniversePointedSet : {a : Type} -> (x : a) -> PointedSet UniverseSet {a}
-UniversePointedSet x = pointedSet universeSet x ()
+UniversePointedSet x = pointedSet universeSet (nullryFn UniverseSet x)

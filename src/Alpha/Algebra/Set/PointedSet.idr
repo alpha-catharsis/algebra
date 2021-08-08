@@ -20,8 +20,12 @@ PointedSet : {a : Type} -> Set a -> Type
 PointedSet s = (SetDec s, NullryFn s)
 
 export
-pointedSet : {s : Set a} -> SetDec s -> (x : a) -> Elem x s -> PointedSet s
-pointedSet sd x prf = (sd, (x ** prf))
+pointedSet : {s : Set a} -> SetDec s -> NullryFn s -> PointedSet s
+pointedSet sd f = (sd, f)
+
+-- export
+-- pointedSet : {s : Set a} -> SetDec s -> (x : a) -> Elem x s -> PointedSet s
+-- pointedSet sd x prf = (sd, (x ** prf))
 
 public export
 setDec : {s : Set a} -> PointedSet s -> SetDec s

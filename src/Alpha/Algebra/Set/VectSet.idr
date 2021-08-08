@@ -34,6 +34,7 @@ vectSet : DecEq a => (xs : Vect k a) -> SetDec (VectSet xs)
 vectSet xs x = VE.isElem x xs
 
 export
-vectPointedSet : {xs : Vect k a} -> SetDec (VectSet xs) -> (x : a) ->
-                {auto prf : VE.Elem x xs} -> PointedSet (VectSet xs)
-vectPointedSet sd x = pointedSet sd x prf
+vectPointedSet : {a : Type} -> {xs : Vect k a} -> SetDec (VectSet xs) ->
+                 (x : a) -> {auto prf : VE.Elem x xs} ->
+                 PointedSet (VectSet xs)
+vectPointedSet sd x = pointedSet sd (nullryFn (VectSet xs) x {prf})

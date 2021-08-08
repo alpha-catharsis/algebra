@@ -33,6 +33,7 @@ listSet : DecEq a => (xs : List a) -> SetDec (ListSet xs)
 listSet xs x = LE.isElem x xs
 
 export
-listPointedSet : {xs : List a} -> SetDec (ListSet xs) -> (x : a) ->
-                 {auto prf : LE.Elem x xs} -> PointedSet (ListSet xs)
-listPointedSet sd x = pointedSet sd x prf
+listPointedSet : {a : Type} -> {xs : List a} -> SetDec (ListSet xs) ->
+                 (x : a) -> {auto prf : LE.Elem x xs} ->
+                 PointedSet (ListSet xs)
+listPointedSet sd x = pointedSet sd (nullryFn (ListSet xs) x {prf})

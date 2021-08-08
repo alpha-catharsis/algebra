@@ -40,6 +40,6 @@ disjointSingletonSets contra = (\veq => rewrite veq in contra,
 
 
 export
-singletonPointedSet : DecEq a => {v : a} -> SetDec (SingletonSet v) ->
-                      PointedSet (SingletonSet v)
-singletonPointedSet sd = pointedSet sd v Refl
+singletonPointedSet : {a : Type} -> DecEq a => {v : a} ->
+                      SetDec (SingletonSet v) -> PointedSet (SingletonSet v)
+singletonPointedSet sd = pointedSet sd (nullryFn (SingletonSet v) v)
