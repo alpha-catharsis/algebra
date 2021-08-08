@@ -13,6 +13,7 @@ import public Alpha.Algebra.Set.DerivedOps
 import public Alpha.Algebra.Set.EmptySet
 import public Alpha.Algebra.Set.HoledSet
 import public Alpha.Algebra.Set.ListSet
+import public Alpha.Algebra.Set.Nat
 import public Alpha.Algebra.Set.PointedSet
 import public Alpha.Algebra.Set.ProductOps
 import public Alpha.Algebra.Set.PropSet
