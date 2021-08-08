@@ -33,4 +33,4 @@ propSet f x = decEq (f x) True
 export
 propPointedSet : {f : (a -> Bool)} -> SetDec (PropSet f) -> (x : a) ->
                  {auto prf : f x = True} -> PointedSet (PropSet f)
-propPointedSet sd x = (sd, (x ** prf))
+propPointedSet sd x = pointedSet sd x prf

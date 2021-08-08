@@ -37,4 +37,4 @@ data Negg : {a : Type} -> (x : a) -> (y : a) -> Type where
 export
 HoledPointedSet : DecEq a => {v : a} -> SetDec (HoledSet v) -> (x : a) ->
                   (x = v -> Void) -> PointedSet (HoledSet v)
-HoledPointedSet sd x contra = (sd, (x ** contra))
+HoledPointedSet sd x contra = pointedSet sd x contra

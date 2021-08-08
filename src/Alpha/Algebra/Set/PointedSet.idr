@@ -19,6 +19,10 @@ public export
 PointedSet : {a : Type} -> Set a -> Type
 PointedSet s = (SetDec s, NullryFn s)
 
+export
+pointedSet : {s : Set a} -> SetDec s -> (x : a) -> Elem x s -> PointedSet s
+pointedSet sd x prf = (sd, (x ** prf))
+
 public export
 setDec : {s : Set a} -> PointedSet s -> SetDec s
 setDec (s,_) = s

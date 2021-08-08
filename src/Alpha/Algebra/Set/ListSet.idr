@@ -35,4 +35,4 @@ listSet xs x = LE.isElem x xs
 export
 listPointedSet : {xs : List a} -> SetDec (ListSet xs) -> (x : a) ->
                  {auto prf : LE.Elem x xs} -> PointedSet (ListSet xs)
-listPointedSet sd x = (sd, (x ** prf))
+listPointedSet sd x = pointedSet sd x prf
