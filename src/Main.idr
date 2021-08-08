@@ -3,6 +3,7 @@ module Main
 import Data.List.Elem
 import Decidable.Equality
 
+import Alpha.Algebra.Function
 import Alpha.Algebra.Set
 
 main : IO ()
@@ -63,5 +64,11 @@ main = do
   printLn (1 `elem` s5)
   printLn (2 `elem` s5)
   printLn (3 `elem` s5)
+
+  printLn ("******")
+  let s6 = singletonPointedSet (singletonSet 5)
+  printLn (basepoint s6)
+  printLn (6 `elem` (setDec s6))
+  printLn (5 `elem` (setDec s6))
 
   putStrLn "OK"

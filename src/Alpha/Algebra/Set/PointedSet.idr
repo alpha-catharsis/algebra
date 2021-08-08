@@ -8,7 +8,7 @@ module Alpha.Algebra.Set.PointedSet
 -- Internal imports
 -------------------
 
-import Alpha.Algebra.Function
+import Alpha.Algebra.Function.NullryFn
 import Alpha.Algebra.Set.Set
 
 --------------
@@ -16,14 +16,18 @@ import Alpha.Algebra.Set.Set
 --------------
 
 public export
-PointedSet : {a : Type} -> {fpt : SetFpt a} -> Set fpt -> Type
-PointedSet _ = NullryFn fpt
+PointedSet : {a : Type} -> Set a -> Type
+PointedSet s = (SetDec s, NullryFn s)
 
 public export
-pointedSet : (s : Set fpt) -> (x : a) -> (prf : Elem x fpt) -> PointedSet s
-pointedSet _ x prf = (x ** prf)
+setDec : {s : Set a} -> PointedSet s -> SetDec s
+setDec (s,_) = s
 
 public export
-basepoint : {fpt : SetFpt a} -> {s : Set fpt} -> PointedSet s -> a
-basepoint (x ** _) = x
+basepoint : {s : Set a} -> PointedSet s -> a
+basepoint (_,(x ** _)) = x
 
+public export
+basepointPrf : {s : Set a} -> (ps : PointedSet s) ->
+               Elem (basepoint ps) s
+basepointPrf (_,(_ ** prf)) = prf

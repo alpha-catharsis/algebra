@@ -2,7 +2,7 @@
 -- Module declaration
 ---------------------
 
-module Alpha.Algebra.Function.NullryFn
+module Alpha.Algebra.Function.UnaryFn
 
 -------------------
 -- Internal imports
@@ -15,5 +15,5 @@ import Alpha.Algebra.Set.Set
 -------------------
 
 public export
-NullryFn : {a : Type} -> (s : Set a) -> Type
-NullryFn s = (x ** Elem x s)
+UnaryFn : {a : Type} -> {b : Type} -> (ls : Set a) -> (rs : Set b) -> Type
+UnaryFn ls rs = (x ** Elem x ls) -> (y ** Elem y rs)
