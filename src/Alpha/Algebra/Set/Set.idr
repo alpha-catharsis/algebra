@@ -10,31 +10,36 @@ module Alpha.Algebra.Set.Set
 
 import Decidable.Decidable
 
-------------------
--- Set definitions
-------------------
+-----------------
+-- Set definition
+-----------------
 
 public export
 Set : Type -> Type
-Set a = a -> Type
+Set a = (fpt : (x : a) -> Type ** (x : a) -> Dec (fpt x))
 
 public export
-Elem : a -> Set a -> Type
-Elem x s = s x
+isElem : (x : a) -> (s : Set a) -> Dec (fst s x)
+isElem x s = snd s x
 
 public export
-NotElem : a -> Set a -> Type
-NotElem x s = Elem x s -> Void
+elem : (x : a) -> (s : Set a) -> Bool
+elem x s = isYes (isElem x s)
 
 public export
-SetDec : {a : Type} -> Set a -> Type
-SetDec s = (x : a) -> Dec (Elem x s)
+ProvenElem : {a : Type} -> (s : Set a) -> Type
+ProvenElem s = (x : a ** fst s x)
 
 public export
-isElem : {s : Set a} -> (x : a) -> SetDec s -> Dec (Elem x s)
-isElem x fn = fn x
+proven : {a : Type} -> {s : Set a} -> ProvenElem s -> a
+proven p = fst p
 
 public export
-elem : {s : Set a} -> (x : a) -> SetDec s -> Bool
-elem x fn = isYes (isElem x fn)
+provenPrf : {a : Type} -> {s : Set a} -> (p : ProvenElem s) -> fst s (fst p)
+provenPrf p = snd p
 
+public export
+maybeProven : (x : a) -> (s : Set a) -> Maybe (ProvenElem s)
+maybeProven x s = case isElem x s of
+  Yes prf => Just (x ** prf)
+  No _ => Nothing

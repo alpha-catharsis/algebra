@@ -8,17 +8,12 @@ module Alpha.Algebra.Set
 -- Public imports
 -----------------
 
-import public Alpha.Algebra.Set.BasicOps
-import public Alpha.Algebra.Set.DerivedOps
-import public Alpha.Algebra.Set.EmptySet
-import public Alpha.Algebra.Set.HoledSet
-import public Alpha.Algebra.Set.ListSet
-import public Alpha.Algebra.Set.Nat
-import public Alpha.Algebra.Set.PointedSet
-import public Alpha.Algebra.Set.ProductOps
-import public Alpha.Algebra.Set.PropSet
-import public Alpha.Algebra.Set.SingletonSet
+import public Alpha.Algebra.Set.Basic
+import public Alpha.Algebra.Set.List
+import public Alpha.Algebra.Set.Ops
+import public Alpha.Algebra.Set.Pointed
+import public Alpha.Algebra.Set.Prod
+import public Alpha.Algebra.Set.Prop
 import public Alpha.Algebra.Set.Set
-import public Alpha.Algebra.Set.UnarySystem
-import public Alpha.Algebra.Set.UniverseSet
-import public Alpha.Algebra.Set.VectSet
+import public Alpha.Algebra.Set.Singleton
+import public Alpha.Algebra.Set.Vect
