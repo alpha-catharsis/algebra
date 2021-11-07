@@ -8,8 +8,8 @@ module Alpha.Algebra.Set.Rules.Union
 -- Internal imports
 -------------------
 
-import public Alpha.Algebra.Set.Ops
-import public Alpha.Algebra.Set.Set
+import Alpha.Algebra.Set.Ops
+import Alpha.Algebra.Set.Set
 
 --------------
 -- Union rules
@@ -26,6 +26,18 @@ rightUnionRule : {x : a} -> {s : Set a} -> {s' : Set a} -> fst s' x ->
 rightUnionRule prf' = Right prf'
 
 public export
+unionNotRule : {x : a} -> {s : Set a} -> {s' : Set a} -> (fst s x -> Void) ->
+               (fst s' x -> Void) -> fst (union s s') x -> Void
+unionNotRule contra contra' eprf = case eprf of
+  Left prf => contra prf
+  Right prf' => contra' prf'
+
+public export
 invUnionRule : {x : a} -> {s : Set a} -> {s' : Set a} -> fst (union s s') x ->
                Either (fst s x) (fst s' x)
 invUnionRule = id
+
+public export
+invUnionNotRule : {x : a} -> {s : Set a} -> {s' : Set a} ->
+                  (fst (union s s') x -> Void) -> (fst s x, fst s' x) -> Void
+invUnionNotRule contra pprf = contra (Left (fst pprf))
