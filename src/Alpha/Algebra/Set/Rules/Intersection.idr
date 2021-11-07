@@ -16,38 +16,38 @@ import Alpha.Algebra.Set.Set
 ---------------------
 
 public export
-interRule : {x : a} -> {s : Set a} -> {s' : Set a} -> fst s x ->
-            fst s' x -> fst (inter s s') x
-interRule prf prf' = (prf, prf')
+interRule : {x : a} -> {ls : Set a} -> {rs : Set a} -> setPrf ls x ->
+            setPrf rs x -> setPrf (inter ls rs) x
+interRule lprf rprf = (lprf, rprf)
 
 public export
-interNotLeftRule : {x : a} -> {s : Set a} -> {s' : Set a} ->
-                   (fst s x -> Void) -> fst (inter s s') x -> Void
-interNotLeftRule contra = contra . fst
+interNotLeftRule : {x : a} -> {ls : Set a} -> {rs : Set a} ->
+                   (setPrf ls x -> Void) -> setPrf (inter ls rs) x -> Void
+interNotLeftRule lcontra = lcontra . fst
 
 public export
-interNotRightRule : {x : a} -> {s : Set a} -> {s' : Set a} ->
-                    (fst s' x -> Void) -> fst (inter s s') x -> Void
-interNotRightRule contra = contra . snd
+interNotRightRule : {x : a} -> {ls : Set a} -> {rs : Set a} ->
+                    (setPrf rs x -> Void) -> setPrf (inter ls rs) x -> Void
+interNotRightRule rcontra = rcontra . snd
 
 public export
-invLeftInterRule : {x : a} -> {s : Set a} -> {s' : Set a} ->
-                   fst (inter s s') x -> fst s x
-invLeftInterRule (prf, _) = prf
+invLeftInterRule : {x : a} -> {ls : Set a} -> {rs : Set a} ->
+                   setPrf (inter ls rs) x -> setPrf ls x
+invLeftInterRule (lprf, _) = lprf
 
 public export
-invRightInterRule : {x : a} -> {s : Set a} -> {s' : Set a} ->
-                    fst (inter s s') x -> fst s' x
-invRightInterRule (_, prf') = prf'
+invRightInterRule : {x : a} -> {ls : Set a} -> {rs : Set a} ->
+                    setPrf (inter ls rs) x -> setPrf rs x
+invRightInterRule (_, rprf) = rprf
 
 public export
-invInterNotLeftRule : {x : a} -> {s : Set a} -> {s' : Set a} ->
-                      (fst (inter s s') x -> Void) -> (fst s' x) ->
-                      fst s x -> Void
-invInterNotLeftRule contra prf' prf = void (contra (prf, prf'))
+invInterNotLeftRule : {x : a} -> {ls : Set a} -> {rs : Set a} ->
+                      (setPrf (inter ls rs) x -> Void) -> (setPrf rs x) ->
+                      setPrf ls x -> Void
+invInterNotLeftRule pcontra rprf lprf = void (pcontra (lprf, rprf))
 
 public export
-invInterNotRightRule : {x : a} -> {s : Set a} -> {s' : Set a} ->
-                       (fst (inter s s') x -> Void) -> (fst s x) ->
-                       fst s' x -> Void
-invInterNotRightRule contra prf prf' = void (contra (prf, prf'))
+invInterNotRightRule : {x : a} -> {ls : Set a} -> {rs : Set a} ->
+                       (setPrf (inter ls rs) x -> Void) -> (setPrf ls x) ->
+                       setPrf rs x -> Void
+invInterNotRightRule pcontra lprf rprf = void (pcontra (lprf, rprf))

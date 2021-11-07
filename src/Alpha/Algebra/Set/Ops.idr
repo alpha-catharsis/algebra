@@ -17,7 +17,7 @@ import Alpha.Decidable
 
 public export
 compl : Set a -> Set a
-compl s = (\x => fst s x -> Void ** \x => decNot (snd s x))
+compl s = (\x => setPrf s x -> Void ** \x => decNot (setDec s x))
 
 ---------------
 -- Intersection
@@ -25,7 +25,8 @@ compl s = (\x => fst s x -> Void ** \x => decNot (snd s x))
 
 public export
 inter : Set a -> Set a -> Set a
-inter s s' = (\x => (fst s x, fst s' x) ** \x => decAnd (snd s x) (snd s' x))
+inter ls rs = (\x => (setPrf ls x, setPrf rs x) **
+               \x => decAnd (setDec ls x) (setDec rs x))
 
 --------
 -- Union
@@ -33,7 +34,8 @@ inter s s' = (\x => (fst s x, fst s' x) ** \x => decAnd (snd s x) (snd s' x))
 
 public export
 union : Set a -> Set a -> Set a
-union s s' = (\x => Either (fst s x) (fst s' x) ** \x => decOr (snd s x) (snd s' x))
+union ls rs = (\x => Either (setPrf ls x) (setPrf rs x) **
+               \x => decOr (setDec ls x) (setDec rs x))
 
 -------------
 -- Difference
@@ -41,7 +43,7 @@ union s s' = (\x => Either (fst s x) (fst s' x) ** \x => decOr (snd s x) (snd s'
 
 public export
 diff : Set a -> Set a -> Set a
-diff s s' = inter s (compl s')
+diff ls rs = inter ls (compl rs)
 
 -----------------------
 -- Symmetric difference
@@ -49,4 +51,4 @@ diff s s' = inter s (compl s')
 
 public export
 symmDiff : Set a -> Set a -> Set a
-symmDiff s s' = union (diff s s') (diff s' s)
+symmDiff ls rs = union (diff ls rs) (diff rs ls)

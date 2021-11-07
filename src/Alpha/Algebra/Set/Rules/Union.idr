@@ -16,42 +16,47 @@ import Alpha.Algebra.Set.Set
 --------------
 
 public export
-leftUnionRule : {x : a} -> {s : Set a} -> {s' : Set a} -> fst s x ->
-                fst (union s s') x
-leftUnionRule prf = Left prf
+leftUnionRule : {x : a} -> {ls : Set a} -> {rs : Set a} -> setPrf ls x ->
+                setPrf (union ls rs) x
+leftUnionRule lprf = Left lprf
 
 public export
-rightUnionRule : {x : a} -> {s : Set a} -> {s' : Set a} -> fst s' x ->
-                 fst (union s s') x
-rightUnionRule prf' = Right prf'
+rightUnionRule : {x : a} -> {ls : Set a} -> {rs : Set a} -> setPrf rs x ->
+                 setPrf (union ls rs) x
+rightUnionRule rprf = Right rprf
 
 public export
-unionNotRule : {x : a} -> {s : Set a} -> {s' : Set a} -> (fst s x -> Void) ->
-               (fst s' x -> Void) -> fst (union s s') x -> Void
-unionNotRule contra contra' eprf = case eprf of
-  Left prf => contra prf
-  Right prf' => contra' prf'
+unionNotRule : {x : a} -> {ls : Set a} -> {rs : Set a} ->
+               (setPrf ls x -> Void) -> (setPrf rs x -> Void) ->
+               setPrf (union ls rs) x -> Void
+unionNotRule lcontra rcontra eprf = case eprf of
+  Left lprf => lcontra lprf
+  Right rprf => rcontra rprf
 
 public export
-invUnionRule : {x : a} -> {s : Set a} -> {s' : Set a} -> fst (union s s') x ->
-               Either (fst s x) (fst s' x)
+invUnionRule : {x : a} -> {ls : Set a} -> {rs : Set a} ->
+               setPrf (union ls rs) x ->
+               Either (setPrf ls x) (setPrf rs x)
 invUnionRule = id
 
 public export
-invUnionLeftRule : {x : a} -> {s : Set a} -> {s' : Set a} ->
-                   fst (union s s') x -> (fst s' x -> Void) -> fst s x
-invUnionLeftRule eprf contra' = case eprf of
-  Left prf => prf
-  Right prf' => void (contra' prf')
+invUnionLeftRule : {x : a} -> {ls : Set a} -> {rs : Set a} ->
+                   setPrf (union ls rs) x -> (setPrf rs x -> Void) ->
+                   setPrf ls x
+invUnionLeftRule eprf rcontra = case eprf of
+  Left lprf => lprf
+  Right rprf => void (rcontra rprf)
 
 public export
-invUnionRightRule : {x : a} -> {s : Set a} -> {s' : Set a} ->
-                    fst (union s s') x -> (fst s x -> Void) -> fst s' x
-invUnionRightRule eprf contra = case eprf of
-  Left prf => void (contra prf)
-  Right prf' => prf'
+invUnionRightRule : {x : a} -> {ls : Set a} -> {rs : Set a} ->
+                    setPrf (union ls rs) x -> (setPrf ls x -> Void) ->
+                    setPrf rs x
+invUnionRightRule eprf lcontra = case eprf of
+  Left lprf => void (lcontra lprf)
+  Right rprf => rprf
 
 public export
-invUnionNotRule : {x : a} -> {s : Set a} -> {s' : Set a} ->
-                  (fst (union s s') x -> Void) -> (fst s x, fst s' x) -> Void
-invUnionNotRule contra pprf = contra (Left (fst pprf))
+invUnionNotRule : {x : a} -> {ls : Set a} -> {rs : Set a} ->
+                  (setPrf (union ls rs) x -> Void) ->
+                  (setPrf ls x, setPrf rs x) -> Void
+invUnionNotRule econtra pprf = econtra (Left (fst pprf))

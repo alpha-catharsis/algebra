@@ -25,3 +25,8 @@ pointedSet p = fst p
 public export
 basepoint : {a : Type} -> (p : Pointed a) -> a
 basepoint p = proven (snd p)
+
+public export
+pointedPrf : {a : Type} -> (p : Pointed a) ->
+             setPrf (pointedSet p) (basepoint p)
+pointedPrf p = provenPrf (snd p)

@@ -24,8 +24,8 @@ import Alpha.Decidable
 
 public export
 prod : Set a -> Set b -> Set (a,b)
-prod s s' = (\(x,y) => (fst s x, fst s' y) **
-             \(x,y) => decAnd (snd s x) (snd s' y))
+prod ls rs = (\(x,y) => (setPrf ls x, setPrf rs y) **
+              \(x,y) => decAnd (setDec ls x) (setDec rs y))
 
 ----------------
 -- Set coproduct
@@ -33,12 +33,12 @@ prod s s' = (\(x,y) => (fst s x, fst s' y) **
 
 public export
 coprod : Set a -> Set b -> Set (Either a b)
-coprod s s' = ((\e => case e of
-                   Left lx => fst s lx
-                   Right rx => fst s' rx) **
+coprod ls rs = ((\e => case e of
+                   Left lx => setPrf ls lx
+                   Right rx => setPrf rs rx) **
                (\e => case e of
-                   Left lx => snd s lx
-                   Right rx => snd s' rx))
+                   Left lx => setDec ls lx
+                   Right rx => setDec rs rx))
 
 ----------------------
 -- Set pointed product
@@ -46,5 +46,5 @@ coprod s s' = ((\e => case e of
 
 public export
 pointedProd : DecEq a => Pointed a -> Pointed b -> Pointed (a,b)
-pointedProd (s ** (x ** prf)) (s' ** (y ** prf')) =
-               (prod s s' ** ((x,y) ** (prf, prf')))
+pointedProd (ls ** (x ** lprf)) (rs ** (y ** rprf)) =
+               (prod ls rs ** ((x,y) ** (lprf, rprf)))

@@ -18,42 +18,41 @@ import Alpha.Algebra.Set.Set
 -------------------
 
 public export
-diffRule : {x : a} -> {s : Set a} -> {s' : Set a} -> fst s x ->
-           (fst s' x -> Void) -> fst (diff s s') x
-diffRule prf contra = interRule {s'=compl s'} prf (complRule contra)
+diffRule : {x : a} -> {ls : Set a} -> {rs : Set a} -> setPrf ls x ->
+           (setPrf rs x -> Void) -> setPrf (diff ls rs) x
+diffRule lprf rcontra = interRule {rs=compl rs} lprf (complRule rcontra)
 
 public export
-diffNotLeftRule : {x : a} -> {s : Set a} -> {s' : Set a} ->
-                  (fst s x -> Void) -> fst (diff s s') x -> Void
-diffNotLeftRule contra = interNotLeftRule {s'=compl s'} contra
+diffNotLeftRule : {x : a} -> {ls : Set a} -> {rs : Set a} ->
+                  (setPrf ls x -> Void) -> setPrf (diff ls rs) x -> Void
+diffNotLeftRule lcontra = interNotLeftRule {rs=compl rs} lcontra
 
 public export
-diffNotRightRule : {x : a} -> {s : Set a} -> {s' : Set a} ->
-                   fst s' x -> fst (diff s s') x -> Void
-diffNotRightRule contra' = interNotRightRule {s'=compl s'}
-                             (complNotRule contra')
+diffNotRightRule : {x : a} -> {ls : Set a} -> {rs : Set a} ->
+                   setPrf rs x -> setPrf (diff ls rs) x -> Void
+diffNotRightRule rprf = interNotRightRule {rs=compl rs} (complNotRule rprf)
 
 public export
-invDiffLeftRule : {x : a} -> {s : Set a} -> {s' : Set a} ->
-                  fst (diff s s') x -> fst s x
-invDiffLeftRule prf = invLeftInterRule {s'=compl s'} prf
+invDiffLeftRule : {x : a} -> {ls : Set a} -> {rs : Set a} ->
+                  setPrf (diff ls rs) x -> setPrf ls x
+invDiffLeftRule lprf = invLeftInterRule {rs=compl rs} lprf
 
 public export
-invDiffRightRule : {x : a} -> {s : Set a} -> {s' : Set a} ->
-                   (fst (diff s s') x -> Void) -> fst s x ->
-                   fst s' x
-invDiffRightRule dcontra prf = invDblComplRule (invInterNotRightRule
-                                                {s'=compl s'} dcontra prf)
+invDiffRightRule : {x : a} -> {ls : Set a} -> {rs : Set a} ->
+                   (setPrf (diff ls rs) x -> Void) -> setPrf ls x ->
+                   setPrf rs x
+invDiffRightRule pcontra lprf = invDblComplRule (invInterNotRightRule
+                                                 {rs=compl rs} pcontra lprf)
 
 public export
-invDiffNotLeftRule : {x : a} -> {s : Set a} -> {s' : Set a} ->
-                     (fst (diff s s') x -> Void) -> (fst s' x -> Void) ->
-                     fst s x -> Void
-invDiffNotLeftRule dcontra contra' = invInterNotLeftRule {s'=compl s'}
-                                     dcontra contra'
+invDiffNotLeftRule : {x : a} -> {ls : Set a} -> {rs : Set a} ->
+                     (setPrf (diff ls rs) x -> Void) ->
+                     (setPrf rs x -> Void) -> setPrf ls x -> Void
+invDiffNotLeftRule pcontra rcontra = invInterNotLeftRule {rs=compl rs}
+                                     pcontra rcontra
 
 public export
-invDiffNotRightRule : {x : a} -> {s : Set a} -> {s' : Set a} ->
-                      fst (diff s s') x -> fst s' x -> Void
-invDiffNotRightRule dprf = invComplNotRule
-                           (invRightInterRule dprf {s'=compl s'})
+invDiffNotRightRule : {x : a} -> {ls : Set a} -> {rs : Set a} ->
+                      setPrf (diff ls rs) x -> setPrf rs x -> Void
+invDiffNotRightRule pprf = invComplNotRule
+                           (invRightInterRule pprf {rs=compl rs})

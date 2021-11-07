@@ -19,7 +19,15 @@ Set : Type -> Type
 Set a = (fpt : (x : a) -> Type ** (x : a) -> Dec (fpt x))
 
 public export
-isElem : (x : a) -> (s : Set a) -> Dec (fst s x)
+setPrf : Set a -> (x : a) -> Type
+setPrf = fst
+
+public export
+setDec : (s : Set a) -> (x : a) -> Dec (setPrf s x)
+setDec = snd
+
+public export
+isElem : (x : a) -> (s : Set a) -> Dec (setPrf s x)
 isElem x s = snd s x
 
 public export
@@ -28,14 +36,14 @@ elem x s = isYes (isElem x s)
 
 public export
 ProvenElem : {a : Type} -> (s : Set a) -> Type
-ProvenElem s = (x : a ** fst s x)
+ProvenElem s = (x : a ** setPrf s x)
 
 public export
 proven : {a : Type} -> {s : Set a} -> ProvenElem s -> a
 proven p = fst p
 
 public export
-provenPrf : {a : Type} -> {s : Set a} -> (p : ProvenElem s) -> fst s (fst p)
+provenPrf : {a : Type} -> {s : Set a} -> (p : ProvenElem s) -> setPrf s (fst p)
 provenPrf p = snd p
 
 public export
