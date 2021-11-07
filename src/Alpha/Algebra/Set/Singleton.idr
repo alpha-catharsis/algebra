@@ -26,6 +26,10 @@ public export
 singl : DecEq a => (x : a) -> Set a
 singl x = (\y => y = x ** \y => decEq y x)
 
+public export
+singlProven : DecEq a => (x : a) -> ProvenElem (singl x)
+singlProven x = (x ** Refl)
+
 ------------
 -- Holed set
 ------------
