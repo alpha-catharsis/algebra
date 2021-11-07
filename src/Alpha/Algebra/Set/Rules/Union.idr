@@ -38,6 +38,20 @@ invUnionRule : {x : a} -> {s : Set a} -> {s' : Set a} -> fst (union s s') x ->
 invUnionRule = id
 
 public export
+invUnionLeftRule : {x : a} -> {s : Set a} -> {s' : Set a} ->
+                   fst (union s s') x -> (fst s' x -> Void) -> fst s x
+invUnionLeftRule eprf contra' = case eprf of
+  Left prf => prf
+  Right prf' => void (contra' prf')
+
+public export
+invUnionRightRule : {x : a} -> {s : Set a} -> {s' : Set a} ->
+                    fst (union s s') x -> (fst s x -> Void) -> fst s' x
+invUnionRightRule eprf contra = case eprf of
+  Left prf => void (contra prf)
+  Right prf' => prf'
+
+public export
 invUnionNotRule : {x : a} -> {s : Set a} -> {s' : Set a} ->
                   (fst (union s s') x -> Void) -> (fst s x, fst s' x) -> Void
 invUnionNotRule contra pprf = contra (Left (fst pprf))
