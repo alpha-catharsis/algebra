@@ -5,6 +5,12 @@
 module Alpha.Algebra.Set.Basic
 
 -------------------
+-- External imports
+-------------------
+
+import Data.DPair
+
+-------------------
 -- Internal imports
 -------------------
 
@@ -16,7 +22,7 @@ import public Alpha.Algebra.Set.Set
 ---------------
 
 public export
-UnivPrfTy : SetPrfTy a
+0 UnivPrfTy : SetPrfTy a
 UnivPrfTy = const ()
 
 public export
@@ -25,14 +31,14 @@ univ = const (Yes ())
 
 public export
 univProven : a -> ProvenElem (UnivPrfTy {a})
-univProven x = (x ** ())
+univProven x = Element x ()
 
 ------------
 -- Empty set
 ------------
 
 public export
-EmptyPrfTy : SetPrfTy a
+0 EmptyPrfTy : SetPrfTy a
 EmptyPrfTy = ComplPrfTy UnivPrfTy
 
 Uninhabited (EmptyPrfTy x) where
@@ -44,4 +50,4 @@ empty = compl univ
 
 public export
 emptyDisproven : a -> DisprovenElem (EmptyPrfTy {a})
-emptyDisproven x = (x ** absurd)
+emptyDisproven x = Element x absurd

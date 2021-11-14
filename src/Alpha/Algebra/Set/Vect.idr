@@ -23,7 +23,7 @@ import Alpha.Algebra.Set.Set
 -----------
 
 public export
-VectPrfTy : Vect k a -> SetPrfTy a
+0 VectPrfTy : Vect k a -> SetPrfTy a
 VectPrfTy xs x = Elem x xs
 
 public export

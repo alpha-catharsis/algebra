@@ -16,7 +16,7 @@ import Alpha.Decidable
 -------------
 
 public export
-ComplPrfTy : SetPrfTy a -> SetPrfTy a
+0 ComplPrfTy : SetPrfTy a -> SetPrfTy a
 ComplPrfTy pf x = pf x -> Void
 
 public export
@@ -28,7 +28,7 @@ compl s x = decNot (s x)
 ---------------
 
 public export
-InterPrfTy : SetPrfTy a -> SetPrfTy a -> SetPrfTy a
+0 InterPrfTy : SetPrfTy a -> SetPrfTy a -> SetPrfTy a
 InterPrfTy lpf rpf x = (lpf x, rpf x)
 
 public export
@@ -40,7 +40,7 @@ inter ls rs x = decAnd (ls x) (rs x)
 --------
 
 public export
-UnionPrfTy : SetPrfTy a -> SetPrfTy a -> SetPrfTy a
+0 UnionPrfTy : SetPrfTy a -> SetPrfTy a -> SetPrfTy a
 UnionPrfTy lpf rpf x = Either (lpf x) (rpf x)
 
 public export
@@ -52,7 +52,7 @@ union ls rs x = decOr (ls x) (rs x)
 -------------
 
 public export
-DiffPrfTy : SetPrfTy a -> SetPrfTy a -> SetPrfTy a
+0 DiffPrfTy : SetPrfTy a -> SetPrfTy a -> SetPrfTy a
 DiffPrfTy lpf rpf = InterPrfTy lpf (ComplPrfTy rpf)
 
 public export
@@ -64,7 +64,7 @@ diff ls rs = inter ls (compl rs)
 -----------------------
 
 public export
-SymmDiffPrfTy : SetPrfTy a -> SetPrfTy a -> SetPrfTy a
+0 SymmDiffPrfTy : SetPrfTy a -> SetPrfTy a -> SetPrfTy a
 SymmDiffPrfTy lpf rpf = UnionPrfTy (DiffPrfTy lpf rpf) (DiffPrfTy rpf lpf)
 
 public export

@@ -22,7 +22,7 @@ import Alpha.Algebra.Set.Set
 -----------
 
 public export
-ListPrfTy : List a -> SetPrfTy a
+0 ListPrfTy : List a -> SetPrfTy a
 ListPrfTy xs x = Elem x xs
 
 public export

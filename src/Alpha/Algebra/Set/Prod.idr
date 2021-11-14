@@ -8,6 +8,7 @@ module Alpha.Algebra.Set.Prod
 -- External imports
 -------------------
 
+import Data.DPair
 import Decidable.Equality
 
 -------------------
@@ -23,7 +24,7 @@ import Alpha.Decidable
 --------------
 
 public export
-ProdPrfTy : SetPrfTy a -> SetPrfTy b -> SetPrfTy (a,b)
+0 ProdPrfTy : SetPrfTy a -> SetPrfTy b -> SetPrfTy (a,b)
 ProdPrfTy lpf rpf (x,y) = (lpf x, rpf y)
 
 public export
@@ -35,7 +36,7 @@ prod ls rs (x,y) = decAnd (ls x) (rs y)
 ----------------
 
 public export
-CoprodPrfTy : SetPrfTy a -> SetPrfTy b -> SetPrfTy (Either a b)
+0 CoprodPrfTy : SetPrfTy a -> SetPrfTy b -> SetPrfTy (Either a b)
 CoprodPrfTy lpf rpf e =  case e of
                            Left lx => lpf lx
                            Right rx => rpf rx
@@ -53,5 +54,5 @@ coprod ls rs e = case e of
 
 public export
 pointedProd : Pointed lpty -> Pointed rpty -> Pointed (ProdPrfTy lpty rpty)
-pointedProd (ls, (x ** lprf)) (rs, (y ** rprf)) = (prod ls rs,
-                                                   ((x,y) ** (lprf, rprf)))
+pointedProd (MkPointed ls (Element x lprf)) (MkPointed rs (Element y rprf)) =
+        MkPointed (prod ls rs) (Element (x,y) (lprf, rprf))

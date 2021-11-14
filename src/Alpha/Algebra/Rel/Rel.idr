@@ -20,21 +20,21 @@ import Alpha.Algebra.Set.Set
 -- Relation definition
 ----------------------
 
-public export
-0 RelPrfTy : Type -> Type -> Type
-RelPrfTy a b = SetPrfTy (a,b)
+-- public export
+-- 0 RelPrfTy : Type -> Type -> Type
+-- RelPrfTy a b = SetPrfTy (a,b)
 
-public export
-Rel : {a : Type} -> {b : Type} -> RelPrfTy a b -> Type
-Rel pf = (p : (a,b)) -> Dec (pf p)
+-- public export
+-- Rel : {a : Type} -> {b : Type} -> RelPrfTy a b -> Type
+-- Rel pf = (p : (a,b)) -> Dec (pf p)
 
-public export
-areRelated : (x : a) -> (y : b) -> (r : Rel pty) -> Dec (pty (x,y))
-areRelated x y r = r (x,y)
+-- public export
+-- areRelated : (x : a) -> (y : b) -> (r : Rel pty) -> Dec (pty (x,y))
+-- areRelated x y r = r (x,y)
 
-public export
-related : (x : a) -> (y : b) -> {pty : RelPrfTy a b} -> (r : Rel pty) -> Bool
-related x y r = isYes (areRelated x y r)
+-- public export
+-- related : (x : a) -> (y : b) -> {pty : RelPrfTy a b} -> (r : Rel pty) -> Bool
+-- related x y r = isYes (areRelated x y r)
 
 ----------------------
 -- Relation properties

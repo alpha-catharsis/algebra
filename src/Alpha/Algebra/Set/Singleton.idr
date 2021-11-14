@@ -8,6 +8,7 @@ module Alpha.Algebra.Set.Singleton
 -- External imports
 -------------------
 
+import Data.DPair
 import Decidable.Equality
 
 -------------------
@@ -23,7 +24,7 @@ import Alpha.Algebra.Set.Set
 ----------------
 
 public export
-SinglPrfTy : (x : a) -> SetPrfTy a
+0 SinglPrfTy : (x : a) -> SetPrfTy a
 SinglPrfTy y x = y = x
 
 public export
@@ -32,14 +33,14 @@ singl y x = decEq y x
 
 public export
 singlProven : (x : a) -> ProvenElem (SinglPrfTy x)
-singlProven x = (x ** Refl)
+singlProven x = Element x Refl
 
 ------------
 -- Holed set
 ------------
 
 public export
-HoledPrfTy : (x : a) -> SetPrfTy a
+0 HoledPrfTy : (x : a) -> SetPrfTy a
 HoledPrfTy x = ComplPrfTy (SinglPrfTy x)
 
 Uninhabited (HoledPrfTy x x) where
@@ -51,7 +52,7 @@ holed x = compl (singl x)
 
 public export
 holedDisproven : DecEq a => (x : a) -> DisprovenElem (HoledPrfTy x)
-holedDisproven x = (x ** absurd)
+holedDisproven x = Element x absurd
 
 --------------------
 -- Pointed singleton
@@ -59,4 +60,4 @@ holedDisproven x = (x ** absurd)
 
 public export
 pointedSingl : DecEq a => (x : a) -> Pointed (SinglPrfTy x)
-pointedSingl x = (singl x, (x ** Refl))
+pointedSingl x = MkPointed (singl x) (Element x Refl)
