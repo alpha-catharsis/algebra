@@ -20,37 +20,29 @@ import Alpha.Algebra.Set.Set
 -- Relation definition
 ----------------------
 
--- public export
--- RelPrf : (a : Type) -> (b : Type) -> Type
--- RelPrf a b = SetPrf (a,b)
+public export
+0 RelPrfTy : Type -> Type -> Type
+RelPrfTy a b = SetPrfTy (a,b)
 
--- public export
--- RelDec : {a : Type} -> {b : Type} -> (prf : RelPrf a b) -> Type
--- RelDec prf = (p : (a,b)) -> Dec (prf p)
+public export
+Rel : {a : Type} -> {b : Type} -> RelPrfTy a b -> Type
+Rel pf = (p : (a,b)) -> Dec (pf p)
 
--- public export
--- Rel : Type -> Type -> Type
--- Rel a b = Set (a,b)
+public export
+areRelated : (x : a) -> (y : b) -> (r : Rel pty) -> Dec (pty (x,y))
+areRelated x y r = r (x,y)
 
--- public export
--- relPrf : Rel a b -> RelPrf a b
--- relPrf = setPrf
-
--- public export
--- relDec : (r : Rel a b) -> RelDec (relPrf r)
--- relDec = setDec
-
--- public export
--- areRelated : (x : a) -> (y : b) -> (r : Rel a b) -> Dec (relPrf r (x,y))
--- areRelated x y r = relDec r (x,y)
-
--- public export
--- related : (x : a) -> (y : b) -> (r : Rel a b) -> Bool
--- related x y r = isYes (areRelated x y r)
+public export
+related : (x : a) -> (y : b) -> {pty : RelPrfTy a b} -> (r : Rel pty) -> Bool
+related x y r = isYes (areRelated x y r)
 
 ----------------------
 -- Relation properties
 ----------------------
+
+-- public export
+-- RelRefl : RelPrfTy a a ->
+-- RelRefl = {a : Type} -> (x : a) -> ptyf a a (x,x)
 
 -- public export
 -- RelRefl : {a : Type} -> RelPrf a a -> Type

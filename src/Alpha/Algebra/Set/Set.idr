@@ -16,7 +16,7 @@ import Decidable.Decidable
 
 public export
 0 SetPrfTy : Type -> Type
-SetPrfTy a = (x : a) -> Type
+SetPrfTy a = a -> Type
 
 public export
 Set : {a : Type} -> SetPrfTy a -> Type
