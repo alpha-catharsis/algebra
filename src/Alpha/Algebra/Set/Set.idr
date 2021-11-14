@@ -15,23 +15,19 @@ import Decidable.Decidable
 -----------------
 
 public export
-Set : Type -> Type
-Set a = (fpt : (x : a) -> Type ** (x : a) -> Dec (fpt x))
+0 SetPrfTy : Type -> Type
+SetPrfTy a = (x : a) -> Type
 
 public export
-setPrf : Set a -> (x : a) -> Type
-setPrf = fst
+Set : {a : Type} -> SetPrfTy a -> Type
+Set pf = (x : a) -> Dec (pf x)
 
 public export
-setDec : (s : Set a) -> (x : a) -> Dec (setPrf s x)
-setDec = snd
+isElem : (x : a) -> (s : Set pty) -> Dec (pty x)
+isElem x s = s x
 
 public export
-isElem : (x : a) -> (s : Set a) -> Dec (setPrf s x)
-isElem x s = snd s x
-
-public export
-elem : (x : a) -> (s : Set a) -> Bool
+elem : (x : a) -> (s : Set {a} pty) -> Bool
 elem x s = isYes (isElem x s)
 
 -----------------
@@ -39,16 +35,15 @@ elem x s = isYes (isElem x s)
 -----------------
 
 public export
-ProvenElem : {a : Type} -> (s : Set a) -> Type
-ProvenElem s = (x : a ** setPrf s x)
+ProvenElem : {a : Type} -> SetPrfTy a -> Type
+ProvenElem pf = (x : a ** pf x)
 
 public export
-provenElem : {a : Type} -> {s : Set a} -> ProvenElem s -> a
+provenElem : {a : Type} -> {pty : SetPrfTy a} -> ProvenElem pty -> a
 provenElem p = fst p
 
 public export
-provenElemPrf : {a : Type} -> {s : Set a} -> (p : ProvenElem s) ->
-                setPrf s (fst p)
+provenElemPrf : (p : ProvenElem pty) -> pty (fst p)
 provenElemPrf p = snd p
 
 --------------------
@@ -56,16 +51,15 @@ provenElemPrf p = snd p
 --------------------
 
 public export
-DisprovenElem : {a : Type} -> (s : Set a) -> Type
-DisprovenElem s = (x : a ** setPrf s x -> Void)
+DisprovenElem : {a : Type} -> SetPrfTy a -> Type
+DisprovenElem pf = (x : a ** pf x -> Void)
 
 public export
-disprovenElem : {a : Type} -> {s : Set a} -> DisprovenElem s -> a
+disprovenElem : {a : Type} -> {pty : SetPrfTy a} -> DisprovenElem pty -> a
 disprovenElem d = fst d
 
 public export
-disprovenElemPrf : {a : Type} -> {s : Set a} -> (d : DisprovenElem s) ->
-                   setPrf s (fst d) -> Void
+disprovenElemPrf : (d : DisprovenElem pty) -> pty (fst d) -> Void
 disprovenElemPrf d = snd d
 
 -------------------
@@ -73,15 +67,14 @@ disprovenElemPrf d = snd d
 -------------------
 
 public export
-eitherSetPrf : (x : a) -> (s : Set a) ->
-               Either (setPrf s x -> Void) (setPrf s x)
+eitherSetPrf : (x : a) -> (s : Set {a} pty) -> Either (pty x -> Void) (pty x)
 eitherSetPrf x s = case isElem x s of
   No contra => Left contra
   Yes prf => Right prf
 
 public export
-eitherProvenElem : (x : a) -> (s : Set a) ->
-                   Either (DisprovenElem s) (ProvenElem s)
+eitherProvenElem : (x : a) -> (s : Set {a} pty) ->
+                   Either (DisprovenElem pty) (ProvenElem pty)
 eitherProvenElem x s = case isElem x s of
   No contra => Left (x ** contra)
   Yes prf => Right (x ** prf)

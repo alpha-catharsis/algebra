@@ -16,25 +16,21 @@ import Alpha.Algebra.Set.Set
 -------------------
 
 public export
-complRule : {x : a} -> {s : Set a} -> (setPrf s x -> Void) ->
-            setPrf (compl s) x
+complRule : {pty : SetPrfTy a} -> (pty x -> Void) -> ComplPrfTy pty x
 complRule = id
 
 public export
-complNotRule : {x : a} -> {s : Set a} -> setPrf s x ->
-               setPrf (compl s) x -> Void
-complNotRule prf = \f => f prf
+complNotRule : {pty : SetPrfTy a} -> pty x -> ComplPrfTy pty x -> Void
+complNotRule pf = \f => f pf
 
 public export
-invComplRule : {x : a} -> {s : Set a} -> (setPrf (compl s) x -> Void) ->
-               setPrf s x
-invComplRule prf = void (prf f)
-  where f : setPrf s x -> Void
-        f prf' = f prf'
+invComplRule : (ComplPrfTy pty x -> Void) -> pty x
+invComplRule pf = void (pf f)
+  where f : pty x -> Void
+        f pf' = f pf'
 
 public export
-invComplNotRule : {x : a} -> {s : Set a} -> setPrf (compl s) x ->
-                  setPrf s x -> Void
+invComplNotRule : ComplPrfTy pty x -> pty x -> Void
 invComplNotRule = id
 
 --------------------------
@@ -42,24 +38,21 @@ invComplNotRule = id
 --------------------------
 
 public export
-dblComplRule : {x : a} -> {s : Set a} -> setPrf s x ->
-               setPrf (compl (compl s)) x
+dblComplRule : {pty : SetPrfTy a} -> pty x -> ComplPrfTy (ComplPrfTy pty) x
 dblComplRule prf = \f => f prf
 
 public export
-dblComplNotRule : {x : a} -> {s : Set a} -> (setPrf s x -> Void) ->
-                  setPrf (compl (compl s)) x -> Void
+dblComplNotRule : {pty : SetPrfTy a} -> (pty x -> Void) ->
+                  ComplPrfTy (ComplPrfTy pty) x -> Void
 dblComplNotRule contra = \f => f contra
 
 public export
-invDblComplRule : {x : a} -> {s : Set a} -> setPrf (compl (compl s)) x ->
-                  setPrf s x
+invDblComplRule : ComplPrfTy (ComplPrfTy pty) x -> pty x
 invDblComplRule prf = void (prf f)
-  where f : setPrf s x -> Void
+  where f : pty x -> Void
         f prf' = f prf'
 
 public export
-invDblComplNotRule : {x : a} -> {s : Set a} ->
-                     (setPrf (compl (compl s)) x -> Void) -> setPrf s x -> Void
+invDblComplNotRule : (ComplPrfTy (ComplPrfTy pty) x -> Void) -> pty x -> Void
 invDblComplNotRule contra = \y => contra (\f => contra
                                (\g => contra (\f1 => contra (\g1 => f y))))

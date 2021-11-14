@@ -15,18 +15,21 @@ import Alpha.Algebra.Set.Set
 --------------
 
 public export
-Pointed : (a : Type) -> Type
-Pointed a = (s : Set a ** ProvenElem s)
+Pointed : {a : Type} -> SetPrfTy a -> Type
+Pointed pty = (Set pty, ProvenElem pty)
 
 public export
-pointedSet : {a : Type} -> (p : Pointed a) -> Set a
-pointedSet p = fst p
+pointedSet : Pointed pty -> Set pty
+pointedSet = fst
 
 public export
-basepoint : {a : Type} -> (p : Pointed a) -> a
-basepoint p = provenElem (snd p)
+pointedProven : Pointed pty -> ProvenElem pty
+pointedProven = snd
 
 public export
-pointedPrf : {a : Type} -> (p : Pointed a) ->
-             setPrf (pointedSet p) (basepoint p)
-pointedPrf p = provenElemPrf (snd p)
+basepoint : {a : Type} -> {pty : SetPrfTy a} -> Pointed pty -> a
+basepoint = provenElem . pointedProven
+
+public export
+pointedPrf : (p : Pointed pty) -> pty (basepoint p)
+pointedPrf p = provenElemPrf (pointedProven p)

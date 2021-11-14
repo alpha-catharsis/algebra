@@ -23,5 +23,9 @@ import Alpha.Algebra.Set.Set
 -----------
 
 public export
-vect : DecEq a => Vect k a -> Set a
-vect xs = (\x => Elem x xs ** \x => isElem x xs)
+VectPrfTy : Vect k a -> SetPrfTy a
+VectPrfTy xs x = Elem x xs
+
+public export
+vect : DecEq a => (xs : Vect k a) -> Set (VectPrfTy xs)
+vect xs x = isElem x xs

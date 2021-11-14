@@ -16,38 +16,34 @@ import Alpha.Algebra.Set.Set
 ---------------------
 
 public export
-interRule : {x : a} -> {ls : Set a} -> {rs : Set a} -> setPrf ls x ->
-            setPrf rs x -> setPrf (inter ls rs) x
-interRule lprf rprf = (lprf, rprf)
+interRule : {lpty : SetPrfTy a} -> {rpty : SetPrfTy a} -> lpty x ->
+            rpty x -> InterPrfTy lpty rpty x
+interRule lpf rpf = (lpf, rpf)
 
 public export
-interNotLeftRule : {x : a} -> {ls : Set a} -> {rs : Set a} ->
-                   (setPrf ls x -> Void) -> setPrf (inter ls rs) x -> Void
+interNotLeftRule : {lpty : SetPrfTy a} -> {rpty : SetPrfTy a} ->
+                   (lpty x -> Void) -> InterPrfTy lpty rpty x -> Void
 interNotLeftRule lcontra = lcontra . fst
 
 public export
-interNotRightRule : {x : a} -> {ls : Set a} -> {rs : Set a} ->
-                    (setPrf rs x -> Void) -> setPrf (inter ls rs) x -> Void
+interNotRightRule : {lpty : SetPrfTy a} -> {rpty : SetPrfTy a} ->
+                    (rpty x -> Void) -> InterPrfTy lpty rpty x -> Void
 interNotRightRule rcontra = rcontra . snd
 
 public export
-invLeftInterRule : {x : a} -> {ls : Set a} -> {rs : Set a} ->
-                   setPrf (inter ls rs) x -> setPrf ls x
-invLeftInterRule (lprf, _) = lprf
+invInterLeftRule : InterPrfTy lpty rpty x -> lpty x
+invInterLeftRule (lpf, _) = lpf
 
 public export
-invRightInterRule : {x : a} -> {ls : Set a} -> {rs : Set a} ->
-                    setPrf (inter ls rs) x -> setPrf rs x
-invRightInterRule (_, rprf) = rprf
+invInterRightRule : InterPrfTy lpty rpty x -> rpty x
+invInterRightRule (_, rpf) = rpf
 
 public export
-invInterNotLeftRule : {x : a} -> {ls : Set a} -> {rs : Set a} ->
-                      (setPrf (inter ls rs) x -> Void) -> (setPrf rs x) ->
-                      setPrf ls x -> Void
-invInterNotLeftRule pcontra rprf lprf = void (pcontra (lprf, rprf))
+invInterNotLeftRule : (InterPrfTy lpty rpty x -> Void) -> rpty x ->
+                      lpty x -> Void
+invInterNotLeftRule pcontra rpf lpf = void (pcontra (lpf, rpf))
 
 public export
-invInterNotRightRule : {x : a} -> {ls : Set a} -> {rs : Set a} ->
-                       (setPrf (inter ls rs) x -> Void) -> (setPrf ls x) ->
-                       setPrf rs x -> Void
-invInterNotRightRule pcontra lprf rprf = void (pcontra (lprf, rprf))
+invInterNotRightRule : (InterPrfTy lpty rpty x -> Void) -> lpty x ->
+                       rpty x -> Void
+invInterNotRightRule pcontra lpf rpf = void (pcontra (lpf, rpf))

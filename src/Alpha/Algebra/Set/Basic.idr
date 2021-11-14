@@ -16,11 +16,15 @@ import public Alpha.Algebra.Set.Set
 ---------------
 
 public export
-univ : Set a
-univ = (const () ** const (Yes ()))
+UnivPrfTy : SetPrfTy a
+UnivPrfTy = const ()
 
 public export
-univProven : a -> ProvenElem (univ {a})
+univ : Set UnivPrfTy
+univ = const (Yes ())
+
+public export
+univProven : a -> ProvenElem (UnivPrfTy {a})
 univProven x = (x ** ())
 
 ------------
@@ -28,5 +32,16 @@ univProven x = (x ** ())
 ------------
 
 public export
-empty : Set a
+EmptyPrfTy : SetPrfTy a
+EmptyPrfTy = ComplPrfTy UnivPrfTy
+
+Uninhabited (EmptyPrfTy x) where
+  uninhabited f = f ()
+
+public export
+empty : Set EmptyPrfTy
 empty = compl univ
+
+public export
+emptyDisproven : a -> DisprovenElem (EmptyPrfTy {a})
+emptyDisproven x = (x ** absurd)

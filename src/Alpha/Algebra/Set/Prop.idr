@@ -21,5 +21,9 @@ import Alpha.Algebra.Set.Set
 ------------------
 
 public export
-prop : (a -> Bool) -> Set a
-prop f = (\x => f x = True ** \x => decEq (f x) True)
+PropPrfTy : (a -> Bool) -> SetPrfTy a
+PropPrfTy f x = f x = True
+
+public export
+prop : (pty: a -> Bool) -> Set (PropPrfTy pty)
+prop f x = decEq (f x) True

@@ -22,5 +22,9 @@ import Alpha.Algebra.Set.Set
 -----------
 
 public export
-list : DecEq a => List a -> Set a
-list xs = (\x => Elem x xs ** \x => isElem x xs)
+ListPrfTy : List a -> SetPrfTy a
+ListPrfTy xs x = Elem x xs
+
+public export
+list : DecEq a => (xs : List a) -> Set (ListPrfTy xs)
+list xs x = isElem x xs

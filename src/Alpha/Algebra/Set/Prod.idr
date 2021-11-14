@@ -23,28 +23,35 @@ import Alpha.Decidable
 --------------
 
 public export
-prod : Set a -> Set b -> Set (a,b)
-prod ls rs = (\(x,y) => (setPrf ls x, setPrf rs y) **
-              \(x,y) => decAnd (setDec ls x) (setDec rs y))
+ProdPrfTy : SetPrfTy a -> SetPrfTy b -> SetPrfTy (a,b)
+ProdPrfTy lpf rpf (x,y) = (lpf x, rpf y)
+
+public export
+prod : Set lpty -> Set rpty -> Set (ProdPrfTy lpty rpty)
+prod ls rs (x,y) = decAnd (ls x) (rs y)
 
 ----------------
 -- Set coproduct
 ----------------
 
 public export
-coprod : Set a -> Set b -> Set (Either a b)
-coprod ls rs = ((\e => case e of
-                   Left lx => setPrf ls lx
-                   Right rx => setPrf rs rx) **
-               (\e => case e of
-                   Left lx => setDec ls lx
-                   Right rx => setDec rs rx))
+CoprodPrfTy : SetPrfTy a -> SetPrfTy b -> SetPrfTy (Either a b)
+CoprodPrfTy lpf rpf e =  case e of
+                           Left lx => lpf lx
+                           Right rx => rpf rx
+
+
+public export
+coprod : Set lpty -> Set rpty -> Set (CoprodPrfTy lpty rpty)
+coprod ls rs e = case e of
+                   Left lx => ls lx
+                   Right rx => rs rx
 
 ----------------------
 -- Set pointed product
 ----------------------
 
 public export
-pointedProd : DecEq a => Pointed a -> Pointed b -> Pointed (a,b)
-pointedProd (ls ** (x ** lprf)) (rs ** (y ** rprf)) =
-               (prod ls rs ** ((x,y) ** (lprf, rprf)))
+pointedProd : Pointed lpty -> Pointed rpty -> Pointed (ProdPrfTy lpty rpty)
+pointedProd (ls, (x ** lprf)) (rs, (y ** rprf)) = (prod ls rs,
+                                                   ((x,y) ** (lprf, rprf)))

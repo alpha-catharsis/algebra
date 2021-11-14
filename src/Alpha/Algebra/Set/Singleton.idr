@@ -23,11 +23,15 @@ import Alpha.Algebra.Set.Set
 ----------------
 
 public export
-singl : DecEq a => (x : a) -> Set a
-singl x = (\y => y = x ** \y => decEq y x)
+SinglPrfTy : (x : a) -> SetPrfTy a
+SinglPrfTy y x = y = x
 
 public export
-singlProven : DecEq a => (x : a) -> ProvenElem (singl x)
+singl : DecEq a => (x : a) -> Set (SinglPrfTy x)
+singl y x = decEq y x
+
+public export
+singlProven : (x : a) -> ProvenElem (SinglPrfTy x)
 singlProven x = (x ** Refl)
 
 ------------
@@ -35,13 +39,24 @@ singlProven x = (x ** Refl)
 ------------
 
 public export
-holed : DecEq a => (x : a) -> Set a
+HoledPrfTy : (x : a) -> SetPrfTy a
+HoledPrfTy x = ComplPrfTy (SinglPrfTy x)
+
+Uninhabited (HoledPrfTy x x) where
+  uninhabited f = f Refl
+
+public export
+holed : DecEq a => (x : a) -> Set (HoledPrfTy x)
 holed x = compl (singl x)
+
+public export
+holedDisproven : DecEq a => (x : a) -> DisprovenElem (HoledPrfTy x)
+holedDisproven x = (x ** absurd)
 
 --------------------
 -- Pointed singleton
 --------------------
 
 public export
-pointedSingl : DecEq a => (x : a) -> Pointed a
-pointedSingl x = (singl x ** (x ** Refl))
+pointedSingl : DecEq a => (x : a) -> Pointed (SinglPrfTy x)
+pointedSingl x = (singl x, (x ** Refl))
