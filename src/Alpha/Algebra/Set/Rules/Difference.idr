@@ -18,43 +18,35 @@ import Alpha.Algebra.Set.Set
 -------------------
 
 public export
-0 diffRule : {lpty : SetPrfTy a} -> {rpty : SetPrfTy a} -> lpty x ->
-             (rpty x -> Void) -> DiffPrfTy lpty rpty x
-diffRule lpf rcontra = interRule {lpty} {rpty=ComplPrfTy rpty} lpf
-                       (complRule {pty=rpty} rcontra)
+0 diffRule : SetPrf ls x -> (SetPrf rs x -> Void) -> SetPrf (diff ls rs) x
+diffRule lprf rcontra = interRule {rs=compl rs} lprf (complRule rcontra)
+
 
 public export
-0 diffNotLeftRule : {lpty : SetPrfTy a} -> {rpty : SetPrfTy a} ->
-                    (lpty x -> Void) -> DiffPrfTy lpty rpty x -> Void
-diffNotLeftRule lcontra = interNotLeftRule {lpty} {rpty=ComplPrfTy rpty} lcontra
+0 diffNotLeftRule : (SetPrf ls x -> Void) -> SetPrf (diff ls rs) x -> Void
+diffNotLeftRule lcontra = interNotLeftRule {rs=compl rs} lcontra
 
 public export
-0 diffNotRightRule : {lpty : SetPrfTy a} -> {rpty : SetPrfTy a} ->
-                     rpty x -> DiffPrfTy lpty rpty x -> Void
-diffNotRightRule rpf = interNotRightRule {lpty} {rpty=ComplPrfTy rpty}
-                       (complNotRule {pty=rpty} rpf)
+0 diffNotRightRule : SetPrf rs x -> SetPrf (diff ls rs) x -> Void
+diffNotRightRule rprf = interNotRightRule {rs=compl rs} (complNotRule rprf)
 
 public export
-0 invDiffLeftRule : DiffPrfTy lpty rpty x -> lpty x
-invDiffLeftRule lpf = invInterLeftRule {lpty} {rpty=ComplPrfTy rpty} lpf
+0 invDiffLeftRule : SetPrf (diff ls rs) x -> SetPrf ls x
+invDiffLeftRule lprf = invInterLeftRule {rs=compl rs} lprf
 
 public export
-0 invDiffRightRule : (DiffPrfTy lpty rpty x -> Void) -> lpty x ->
-                     rpty x
-invDiffRightRule pcontra lpf = invDblComplRule {pty=rpty}
-                               (invInterNotRightRule {lpty}
-                                {rpty=ComplPrfTy rpty} pcontra lpf)
+0 invDiffRightRule : (SetPrf (diff ls rs) x -> Void) -> SetPrf ls x ->
+                     SetPrf rs x
+invDiffRightRule pcontra lprf = invDblComplRule (invInterNotRightRule
+                                                 {rs=compl rs} pcontra lprf)
 
 public export
-0 invDiffNotLeftRule : {lpty : SetPrfTy a} -> {rpty : SetPrfTy a} ->
-                       (DiffPrfTy lpty rpty x -> Void) ->
-                       (rpty x -> Void) -> lpty x -> Void
-invDiffNotLeftRule pcontra rcontra = invInterNotLeftRule {lpty}
-                                     {rpty=ComplPrfTy rpty}
+0 invDiffNotLeftRule : (SetPrf (diff ls rs) x -> Void) ->
+                       (SetPrf rs x -> Void) -> SetPrf ls x -> Void
+invDiffNotLeftRule pcontra rcontra = invInterNotLeftRule {rs=compl rs}
                                      pcontra rcontra
 
 public export
-0 invDiffNotRightRule : {lpty : SetPrfTy a} -> {rpty : SetPrfTy a} ->
-                        DiffPrfTy lpty rpty x -> rpty x -> Void
-invDiffNotRightRule ppf = invComplNotRule {pty=rpty}
-                          (invInterRightRule {lpty} {rpty=ComplPrfTy rpty} ppf)
+0 invDiffNotRightRule : SetPrf (diff ls rs) x -> SetPrf rs x -> Void
+invDiffNotRightRule pprf = invComplNotRule
+                           (invInterRightRule {rs=compl rs} pprf)

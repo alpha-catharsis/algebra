@@ -22,32 +22,24 @@ import public Alpha.Algebra.Set.Set
 ---------------
 
 public export
-0 UnivPrfTy : SetPrfTy a
-UnivPrfTy = const ()
+univ : Set a
+univ = MkSet (const ()) (const (Yes ()))
 
 public export
-univ : Set UnivPrfTy
-univ = const (Yes ())
-
-public export
-univProven : a -> ProvenElem (UnivPrfTy {a})
-univProven x = Element x ()
+univProvenElem : a -> ProvenElem (univ {a})
+univProvenElem x = MkProvenElem x ()
 
 ------------
 -- Empty set
 ------------
 
 public export
-0 EmptyPrfTy : SetPrfTy a
-EmptyPrfTy = ComplPrfTy UnivPrfTy
+empty : Set a
+empty = compl univ
 
-Uninhabited (EmptyPrfTy x) where
+Uninhabited (SetPrf Basic.empty x) where
   uninhabited f = f ()
 
 public export
-empty : Set EmptyPrfTy
-empty = compl univ
-
-public export
-emptyDisproven : a -> DisprovenElem (EmptyPrfTy {a})
-emptyDisproven x = Element x absurd
+emptyDisproven : a -> DisprovenElem (empty {a})
+emptyDisproven x = MkDisprovenElem x absurd

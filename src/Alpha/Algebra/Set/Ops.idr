@@ -16,47 +16,33 @@ import Alpha.Decidable
 -------------
 
 public export
-0 ComplPrfTy : SetPrfTy a -> SetPrfTy a
-ComplPrfTy pf x = pf x -> Void
-
-public export
-compl : Set pty -> Set (ComplPrfTy pty)
-compl s x = decNot (s x)
+compl : Set a -> Set a
+compl s = MkSet (\x => SetPrf s x -> Void) (\x => decNot (setDec s x))
 
 ---------------
 -- Intersection
 ---------------
 
 public export
-0 InterPrfTy : SetPrfTy a -> SetPrfTy a -> SetPrfTy a
-InterPrfTy lpf rpf x = (lpf x, rpf x)
-
-public export
-inter : Set lpty -> Set rpty -> Set (InterPrfTy lpty rpty)
-inter ls rs x = decAnd (ls x) (rs x)
+inter : Set a -> Set a -> Set a
+inter ls rs = MkSet (\x => (SetPrf ls x, SetPrf rs x))
+              (\x => decAnd (setDec ls x) (setDec rs x))
 
 --------
 -- Union
 --------
 
 public export
-0 UnionPrfTy : SetPrfTy a -> SetPrfTy a -> SetPrfTy a
-UnionPrfTy lpf rpf x = Either (lpf x) (rpf x)
-
-public export
-union : Set lpty -> Set rpty -> Set (UnionPrfTy lpty rpty)
-union ls rs x = decOr (ls x) (rs x)
+union : Set a -> Set a -> Set a
+union ls rs = MkSet (\x => Either (SetPrf ls x) (SetPrf rs x))
+              (\x => decOr (setDec ls x) (setDec rs x))
 
 -------------
 -- Difference
 -------------
 
 public export
-0 DiffPrfTy : SetPrfTy a -> SetPrfTy a -> SetPrfTy a
-DiffPrfTy lpf rpf = InterPrfTy lpf (ComplPrfTy rpf)
-
-public export
-diff : Set lpty -> Set rpty -> Set (DiffPrfTy lpty rpty)
+diff : Set a -> Set a -> Set a
 diff ls rs = inter ls (compl rs)
 
 -----------------------
@@ -64,9 +50,5 @@ diff ls rs = inter ls (compl rs)
 -----------------------
 
 public export
-0 SymmDiffPrfTy : SetPrfTy a -> SetPrfTy a -> SetPrfTy a
-SymmDiffPrfTy lpf rpf = UnionPrfTy (DiffPrfTy lpf rpf) (DiffPrfTy rpf lpf)
-
-public export
-symmDiff : Set lpty -> Set rpty -> Set (SymmDiffPrfTy lpty rpty)
+symmDiff : Set a -> Set a -> Set a
 symmDiff ls rs = union (diff ls rs) (diff rs ls)

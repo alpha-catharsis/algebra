@@ -16,42 +16,39 @@ import Alpha.Algebra.Set.Set
 --------------
 
 public export
-0 leftUnionRule : {lpty : SetPrfTy a} -> {rpty : SetPrfTy a} -> lpty x ->
-                  UnionPrfTy lpty rpty x
-leftUnionRule lpf = Left lpf
+0 leftUnionRule : SetPrf ls x -> SetPrf (union ls rs) x
+leftUnionRule = Left
 
 public export
-0 rightUnionRule : {lpty : SetPrfTy a} -> {rpty : SetPrfTy a} -> rpty x ->
-                   UnionPrfTy lpty rpty x
-rightUnionRule rpf = Right rpf
+0 rightUnionRule : SetPrf rs x -> SetPrf (union ls rs) x
+rightUnionRule = Right
 
 public export
-0 unionNotRule : {lpty : SetPrfTy a} -> {rpty : SetPrfTy a} ->
-                 (lpty x -> Void) -> (rpty x -> Void) ->
-                 UnionPrfTy lpty rpty x -> Void
+0 unionNotRule : (SetPrf ls x -> Void) -> (SetPrf rs x -> Void) ->
+                 SetPrf (union ls rs) x -> Void
 unionNotRule lcontra rcontra eprf = case eprf of
-  Left lpf => lcontra lpf
-  Right rpf => rcontra rpf
+  Left lprf => lcontra lprf
+  Right rprf => rcontra rprf
 
 public export
-0 invUnionRule : UnionPrfTy lpty rpty x -> Either (lpty x) (rpty x)
+0 invUnionRule : SetPrf (union ls rs) x -> Either (SetPrf ls x) (SetPrf rs x)
 invUnionRule = id
 
 public export
-0 invUnionLeftRule : UnionPrfTy lpty rpty x -> (rpty x -> Void) ->
-                     lpty x
+0 invUnionLeftRule : SetPrf (union ls rs) x -> (SetPrf rs x -> Void) ->
+                     SetPrf ls x
 invUnionLeftRule eprf rcontra = case eprf of
-  Left lpf => lpf
-  Right rpf => void (rcontra rpf)
+  Left lprf => lprf
+  Right rprf => void (rcontra rprf)
 
 public export
-0 invUnionRightRule : UnionPrfTy lpty rpty x -> (lpty x -> Void) ->
-                      rpty x
-invUnionRightRule epf lcontra = case epf of
-  Left lpf => void (lcontra lpf)
-  Right rpf => rpf
+0 invUnionRightRule : SetPrf (union ls rs) x -> (SetPrf ls x -> Void) ->
+                      SetPrf rs x
+invUnionRightRule eprf lcontra = case eprf of
+  Left lprf => void (lcontra lprf)
+  Right rprf => rprf
 
 public export
-0 invUnionNotRule : (UnionPrfTy lpty rpty x -> Void) ->
-                    (lpty x, rpty x) -> Void
-invUnionNotRule econtra pf = econtra (Left (fst pf))
+0 invUnionNotRule : (SetPrf (union ls rs) x -> Void) ->
+                    (SetPrf ls x, SetPrf rs x) -> Void
+invUnionNotRule econtra prf = econtra (Left (fst prf))

@@ -24,35 +24,29 @@ import Alpha.Decidable
 --------------
 
 public export
-0 ProdPrfTy : SetPrfTy a -> SetPrfTy b -> SetPrfTy (a,b)
-ProdPrfTy lpf rpf (x,y) = (lpf x, rpf y)
-
-public export
-prod : Set lpty -> Set rpty -> Set (ProdPrfTy lpty rpty)
-prod ls rs (x,y) = decAnd (ls x) (rs y)
+prod : Set a -> Set b -> Set (a,b)
+prod ls rs = MkSet (\(x,y) => (SetPrf ls x, SetPrf rs y))
+             (\(x,y) => decAnd (setDec ls x) (setDec rs y))
 
 ----------------
 -- Set coproduct
 ----------------
 
 public export
-0 CoprodPrfTy : SetPrfTy a -> SetPrfTy b -> SetPrfTy (Either a b)
-CoprodPrfTy lpf rpf e =  case e of
-                           Left lx => lpf lx
-                           Right rx => rpf rx
-
-
-public export
-coprod : Set lpty -> Set rpty -> Set (CoprodPrfTy lpty rpty)
-coprod ls rs e = case e of
-                   Left lx => ls lx
-                   Right rx => rs rx
+coprod : Set a -> Set b -> Set (Either a b)
+coprod ls rs = MkSet (\e => case e of
+                              Left x => SetPrf ls x
+                              Right y => SetPrf rs y)
+                     (\e => case e of
+                              Left x => setDec ls x
+                              Right y => setDec rs y)
 
 ----------------------
 -- Set pointed product
 ----------------------
 
 public export
-pointedProd : Pointed lpty -> Pointed rpty -> Pointed (ProdPrfTy lpty rpty)
-pointedProd (MkPointed ls (Element x lprf)) (MkPointed rs (Element y rprf)) =
-        MkPointed (prod ls rs) (Element (x,y) (lprf, rprf))
+pointedProd : Pointed a -> Pointed b -> Pointed (a,b)
+pointedProd lp rp = MkPointed (prod (pointedSet lp)  (pointedSet rp))
+                    (MkProvenElem (basepoint lp, basepoint rp)
+                                  (basepointPrf lp, basepointPrf rp))

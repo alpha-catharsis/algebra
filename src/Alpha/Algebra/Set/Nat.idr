@@ -16,9 +16,5 @@ import public Alpha.Algebra.Set.Set
 ----------
 
 public export
-0 NatPrfTy : SetPrfTy Nat
-NatPrfTy = UnivPrfTy
-
-public export
-nat : Set NatPrfTy
+nat : Set Nat
 nat = univ

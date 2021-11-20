@@ -18,65 +18,55 @@ import Alpha.Algebra.Set.Set
 -----------------------------
 
 public export
-0 symmDiffLeftRule : {lpty : SetPrfTy a} -> {rpty : SetPrfTy a} -> lpty x ->
-                     (rpty x -> Void) -> SymmDiffPrfTy lpty rpty x
-symmDiffLeftRule lpf rcontra = leftUnionRule {lpty=DiffPrfTy lpty rpty}
-                                {rpty=DiffPrfTy rpty lpty}
-                                (diffRule {lpty} {rpty} lpf rcontra)
+0 symmDiffLeftRule : SetPrf ls x -> (SetPrf rs x -> Void) ->
+                     SetPrf (symmDiff ls rs) x
+symmDiffLeftRule lprf rcontra = leftUnionRule {ls=diff ls rs} {rs=diff rs ls}
+                                (diffRule lprf rcontra)
+
 
 public export
-0 symmDiffRightRule : {lpty : SetPrfTy a} -> {rpty : SetPrfTy a} ->
-                      (lpty x -> Void) -> rpty x ->
-                      SymmDiffPrfTy lpty rpty x
-symmDiffRightRule lcontra rpf = rightUnionRule {lpty=DiffPrfTy lpty rpty}
-                                 {rpty=DiffPrfTy rpty lpty}
-                                 (diffRule {lpty=rpty} {rpty=lpty} rpf lcontra)
+0 symmDiffRightRule : (SetPrf ls x -> Void) -> SetPrf rs x ->
+                      SetPrf (symmDiff ls rs) x
+symmDiffRightRule lcontra rprf = rightUnionRule {ls=diff ls rs} {rs=diff rs ls}
+                                 (diffRule rprf lcontra)
 
 public export
-0 symmDiffNotBothRule : {lpty : SetPrfTy a} -> {rpty : SetPrfTy a} -> lpty x ->
-                        rpty x -> SymmDiffPrfTy lpty rpty x -> Void
-symmDiffNotBothRule lpf rpf = unionNotRule {lpty=DiffPrfTy lpty rpty}
-                                {rpty=DiffPrfTy rpty lpty}
-                                (diffNotRightRule {lpty} {rpty} rpf)
-                                (diffNotRightRule {lpty=rpty} {rpty=lpty} lpf)
+0 symmDiffNotBothRule : SetPrf ls x -> SetPrf rs x ->
+                        SetPrf (symmDiff ls rs) x -> Void
+symmDiffNotBothRule lprf rprf = unionNotRule {ls=diff ls rs} {rs=diff rs ls}
+                                (diffNotRightRule rprf)
+                                (diffNotRightRule lprf)
 
 public export
-0 symmDiffNotNeitherRule : {lpty : SetPrfTy a} -> {rpty : SetPrfTy a} ->
-                           (lpty x -> Void) -> (rpty x -> Void) ->
-                           SymmDiffPrfTy lpty rpty x -> Void
-symmDiffNotNeitherRule lcontra rcontra = unionNotRule {lpty=DiffPrfTy lpty rpty}
-                                         {rpty=DiffPrfTy rpty lpty}
-                                         (diffNotLeftRule {lpty} {rpty} lcontra)
-                                         (diffNotLeftRule {lpty=rpty}
-                                          {rpty=lpty} rcontra)
+0 symmDiffNotNeitherRule : (SetPrf ls x -> Void) -> (SetPrf rs x -> Void) ->
+                           SetPrf (symmDiff ls rs) x -> Void
+symmDiffNotNeitherRule lcontra rcontra = unionNotRule {ls=diff ls rs}
+                                         {rs=diff rs ls}
+                                         (diffNotLeftRule lcontra)
+                                         (diffNotLeftRule rcontra)
 
 public export
-0 invSymmDiffLeftRule : {rpty : SetPrfTy a} -> {lpty : SetPrfTy a} ->
-                        SymmDiffPrfTy lpty rpty x -> (rpty x -> Void) -> lpty x
-invSymmDiffLeftRule epf rcontra = invDiffLeftRule {lpty} {rpty}
-                                  (invUnionLeftRule {lpty=DiffPrfTy lpty rpty}
-                                   {rpty=DiffPrfTy rpty lpty} epf
-                                   (diffNotLeftRule {lpty=rpty} {rpty=lpty}
-                                    rcontra))
+0 invSymmDiffLeftRule : SetPrf (symmDiff ls rs) x -> (SetPrf rs x -> Void) ->
+                        SetPrf ls x
+invSymmDiffLeftRule eprf rcontra = invDiffLeftRule
+                                   (invUnionLeftRule {ls=diff ls rs}
+                                    {rs=diff rs ls} eprf
+                                    (diffNotLeftRule rcontra))
 
 public export
-0 invSymmDiffRightRule : {lpty : SetPrfTy a} -> {rpty : SetPrfTy a} ->
-                         SymmDiffPrfTy lpty rpty x -> (lpty x -> Void) ->
-                         rpty x
-invSymmDiffRightRule epf lcontra = invDiffLeftRule {lpty=rpty} {rpty=lpty}
-                                    (invUnionRightRule
-                                     {lpty=DiffPrfTy lpty rpty}
-                                     {rpty=DiffPrfTy rpty lpty} epf
-                                     (diffNotLeftRule {lpty} {rpty} lcontra))
+0 invSymmDiffRightRule : SetPrf (symmDiff ls rs) x -> (SetPrf ls x -> Void) ->
+                         SetPrf rs x
+invSymmDiffRightRule eprf lcontra = invDiffLeftRule
+                                    (invUnionRightRule {ls=diff ls rs}
+                                     {rs=diff rs ls} eprf
+                                     (diffNotLeftRule lcontra))
 
 public export
-0 invSymmDiffNotLeftRule : {lpty : SetPrfTy a} -> {rpty : SetPrfTy a} ->
-                           (SymmDiffPrfTy lpty rpty x -> Void) ->
-                           (rpty x -> Void) -> lpty x -> Void
+0 invSymmDiffNotLeftRule : (SetPrf (symmDiff ls rs) x -> Void) ->
+                           (SetPrf rs x -> Void) -> SetPrf ls x -> Void
 invSymmDiffNotLeftRule econtra rcontra = \y => econtra (Left (y, rcontra))
 
 public export
-0 invSymmDiffNotRightRule : {lpty : SetPrfTy a} -> {rpty : SetPrfTy a} ->
-                            (SymmDiffPrfTy lpty rpty x -> Void) ->
-                            (lpty x -> Void) -> rpty x -> Void
+0 invSymmDiffNotRightRule : (SetPrf (symmDiff ls rs) x -> Void) ->
+                            (SetPrf ls x -> Void) -> SetPrf rs x -> Void
 invSymmDiffNotRightRule econtra lcontra = \y => econtra (Right (y, lcontra))

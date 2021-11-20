@@ -16,19 +16,17 @@ import Decidable.Decidable
 -----------------
 
 public export
-0 SetPrfTy : Type -> Type
-SetPrfTy a = a -> Type
+record Set (0 a : Type) where
+  constructor MkSet
+  0 SetPrf : (a -> Type)
+  setDec : (x : a) -> Dec (SetPrf x)
 
 public export
-0 Set : SetPrfTy a -> Type
-Set pf = (x : a) -> Dec (pf x)
+isElem : (x : a) -> (s : Set a) -> Dec (SetPrf s x)
+isElem x s = setDec s x
 
 public export
-isElem : (x : a) -> (s : Set pty) -> Dec (pty x)
-isElem x s = s x
-
-public export
-elem : (x : a) -> (s : Set {a} pty) -> Bool
+elem : (x : a) -> (s : Set a) -> Bool
 elem x s = isYes (isElem x s)
 
 -----------------
@@ -36,46 +34,27 @@ elem x s = isYes (isElem x s)
 -----------------
 
 public export
-0 ProvenElem : {a : Type} -> SetPrfTy a -> Type
-ProvenElem pf = Subset a pf
-
-public export
-provenElem : {0 pty : SetPrfTy a} -> ProvenElem pty -> a
-provenElem p = fst p
-
-public export
-0 provenElemPrf : (p : ProvenElem pty) -> pty (fst p)
-provenElemPrf p = snd p
+record ProvenElem {0 a : Type} (0 s : Set a) where
+  constructor MkProvenElem
+  provenElem : a
+  0 provenElemPrf : SetPrf s provenElem
 
 --------------------
 -- Disproven element
 --------------------
 
 public export
-0 DisprovenElem : {a : Type} -> SetPrfTy a -> Type
-DisprovenElem pf = Subset a (\x => pf x -> Void)
-
-public export
-disprovenElem : {0 pty : SetPrfTy a} -> DisprovenElem pty -> a
-disprovenElem d = fst d
-
-public export
-0 disprovenElemPrf : (d : DisprovenElem pty) -> pty (fst d) -> Void
-disprovenElemPrf d = snd d
-
+record DisprovenElem {0 a : Type} (0 s : Set a) where
+  constructor MkDisprovenElem
+  provenElem : a
+  0 provenElemPrf : SetPrf s provenElem -> Void
 -------------------
 -- Element checking
 -------------------
 
 public export
-eitherSetPrf : (x : a) -> Set pty -> Either (pty x -> Void) (pty x)
-eitherSetPrf x s = case isElem x s of
-  No contra => Left contra
-  Yes prf => Right prf
-
-public export
-eitherProvenElem : (x : a) -> Set {a} pty ->
-                   Either (DisprovenElem pty) (ProvenElem pty)
+eitherProvenElem : (x : a) -> (s : Set a) ->
+                   Either (DisprovenElem s) (ProvenElem s)
 eitherProvenElem x s = case isElem x s of
-  No contra => Left (Element x contra)
-  Yes prf => Right (Element x prf)
+  No contra => Left (MkDisprovenElem x contra)
+  Yes prf => Right (MkProvenElem x prf)

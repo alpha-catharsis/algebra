@@ -16,34 +16,31 @@ import Alpha.Algebra.Set.Set
 ---------------------
 
 public export
-0 interRule : {lpty : SetPrfTy a} -> {rpty : SetPrfTy a} -> lpty x ->
-              rpty x -> InterPrfTy lpty rpty x
-interRule lpf rpf = (lpf, rpf)
+0 interRule : SetPrf ls x -> SetPrf rs x -> SetPrf (inter ls rs) x
+interRule lprf rprf = (lprf, rprf)
 
 public export
-0 interNotLeftRule : {lpty : SetPrfTy a} -> {rpty : SetPrfTy a} ->
-                     (lpty x -> Void) -> InterPrfTy lpty rpty x -> Void
+0 interNotLeftRule : (SetPrf ls x -> Void) -> SetPrf (inter ls rs) x -> Void
 interNotLeftRule lcontra = lcontra . fst
 
 public export
-0 interNotRightRule : {lpty : SetPrfTy a} -> {rpty : SetPrfTy a} ->
-                      (rpty x -> Void) -> InterPrfTy lpty rpty x -> Void
+0 interNotRightRule : (SetPrf rs x -> Void) -> SetPrf (inter ls rs) x -> Void
 interNotRightRule rcontra = rcontra . snd
 
 public export
-0 invInterLeftRule : InterPrfTy lpty rpty x -> lpty x
-invInterLeftRule (lpf, _) = lpf
+0 invInterLeftRule : SetPrf (inter ls rs) x -> SetPrf ls x
+invInterLeftRule = fst
 
 public export
-0 invInterRightRule : InterPrfTy lpty rpty x -> rpty x
-invInterRightRule (_, rpf) = rpf
+0 invInterRightRule : SetPrf (inter ls rs) x -> SetPrf rs x
+invInterRightRule = snd
 
 public export
-0 invInterNotLeftRule : (InterPrfTy lpty rpty x -> Void) -> rpty x ->
-                        lpty x -> Void
-invInterNotLeftRule pcontra rpf lpf = void (pcontra (lpf, rpf))
+0 invInterNotLeftRule : (SetPrf (inter ls rs) x -> Void) -> SetPrf rs x ->
+                        SetPrf ls x -> Void
+invInterNotLeftRule pcontra rprf lprf = void (pcontra (lprf, rprf))
 
 public export
-0 invInterNotRightRule : (InterPrfTy lpty rpty x -> Void) -> lpty x ->
-                         rpty x -> Void
-invInterNotRightRule pcontra lpf rpf = void (pcontra (lpf, rpf))
+0 invInterNotRightRule : (SetPrf (inter ls rs) x -> Void) -> SetPrf ls x ->
+                         SetPrf rs x -> Void
+invInterNotRightRule pcontra lprf rprf = void (pcontra (lprf, rprf))
