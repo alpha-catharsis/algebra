@@ -10,6 +10,7 @@ module Alpha.Algebra.Set
 
 import public Alpha.Algebra.Set.Basic
 import public Alpha.Algebra.Set.List
+import public Alpha.Algebra.Set.Nat
 import public Alpha.Algebra.Set.Ops
 import public Alpha.Algebra.Set.Pointed
 import public Alpha.Algebra.Set.Prod

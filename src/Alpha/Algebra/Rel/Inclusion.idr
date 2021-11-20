@@ -17,22 +17,27 @@ import Alpha.Algebra.Set.Set
 -- Inclusion definition
 -----------------------
 
--- public export
--- InclPrf : {a : Type} -> RelPrf (Set a) (Set a)
--- InclPrf (ls,rs) = ((x : a) -> setPrf ls x -> setPrf rs x)
+public export
+0 InclPrfTy : RelPrfTy (SetPrfTy a) (SetPrfTy a)
+InclPrfTy (lpty,rpty) = ((x : a) -> lpty x -> rpty x)
 
--- public export
--- inclRefl : RelRefl InclPrf
--- inclRefl ls = \_,prf => prf
+public export
+0 inclRefl : RelRefl InclPrfTy
+inclRefl _ prf = prf
 
--- public export
--- inclTrans : RelTrans
+public export
+0 inclTrans : RelTrans InclPrfTy
+inclTrans lprf mprf x lprf' = mprf x (lprf x lprf')
 
+public export
+0 inclUniv : InclPrfTy (lpty, UnivPrfTy)
+inclUniv _ _ = ()
 
--- public export
--- inclUniv : {a : Type} -> (ls : Set a) -> InclPrf (ls, univ {a})
--- inclUniv ls = \_,_ => ()
+public export
+0 inclEmpty : InclPrfTy (EmptyPrfTy, rpty)
+inclEmpty _ prf = void (prf ())
 
--- public export
--- inclEmpty : {a : Type} -> (rs : Set a) -> InclPrf (Basic.empty {a}, rs)
--- inclEmpty rs = \x,prf => void (complNotRule {x} {s=univ} () prf)
+public export
+0 inclElem : {x : a} -> {lpty : SetPrfTy a} -> {rpty : SetPrfTy a} ->
+             InclPrfTy (lpty,rpty) -> lpty x -> rpty x
+inclElem f lprf = f x lprf
