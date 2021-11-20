@@ -18,16 +18,16 @@ import Alpha.Algebra.Set.Set
 -------------------
 
 public export
-0 diffRule : SetPrf ls x -> (SetPrf rs x -> Void) -> SetPrf (diff ls rs) x
+0 diffRule : SetPrf ls x -> SetContra rs x -> SetPrf (diff ls rs) x
 diffRule lprf rcontra = interRule {rs=compl rs} lprf (complRule rcontra)
 
 
 public export
-0 diffNotLeftRule : (SetPrf ls x -> Void) -> SetPrf (diff ls rs) x -> Void
+0 diffNotLeftRule : SetContra ls x -> SetContra (diff ls rs) x
 diffNotLeftRule lcontra = interNotLeftRule {rs=compl rs} lcontra
 
 public export
-0 diffNotRightRule : SetPrf rs x -> SetPrf (diff ls rs) x -> Void
+0 diffNotRightRule : SetPrf rs x -> SetContra (diff ls rs) x
 diffNotRightRule rprf = interNotRightRule {rs=compl rs} (complNotRule rprf)
 
 public export
@@ -35,18 +35,17 @@ public export
 invDiffLeftRule lprf = invInterLeftRule {rs=compl rs} lprf
 
 public export
-0 invDiffRightRule : (SetPrf (diff ls rs) x -> Void) -> SetPrf ls x ->
-                     SetPrf rs x
+0 invDiffRightRule : SetContra (diff ls rs) x -> SetPrf ls x -> SetPrf rs x
 invDiffRightRule pcontra lprf = invDblComplRule (invInterNotRightRule
                                                  {rs=compl rs} pcontra lprf)
 
 public export
-0 invDiffNotLeftRule : (SetPrf (diff ls rs) x -> Void) ->
-                       (SetPrf rs x -> Void) -> SetPrf ls x -> Void
+0 invDiffNotLeftRule : SetContra (diff ls rs) x -> SetContra rs x ->
+                       SetContra ls x
 invDiffNotLeftRule pcontra rcontra = invInterNotLeftRule {rs=compl rs}
                                      pcontra rcontra
 
 public export
-0 invDiffNotRightRule : SetPrf (diff ls rs) x -> SetPrf rs x -> Void
+0 invDiffNotRightRule : SetPrf (diff ls rs) x -> SetContra rs x
 invDiffNotRightRule pprf = invComplNotRule
                            (invInterRightRule {rs=compl rs} pprf)

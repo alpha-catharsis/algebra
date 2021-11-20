@@ -43,3 +43,19 @@ Uninhabited (SetPrf Basic.empty x) where
 public export
 emptyDisproven : a -> DisprovenElem (empty {a})
 emptyDisproven x = MkDisprovenElem x absurd
+
+--------------
+-- Set of sets
+--------------
+
+public export
+sets : Set (Set a)
+sets = univ
+
+----------
+-- Nat set
+----------
+
+public export
+nat : Set Nat
+nat = univ

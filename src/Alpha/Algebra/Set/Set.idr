@@ -22,6 +22,10 @@ record Set (0 a : Type) where
   setDec : (x : a) -> Dec (SetPrf x)
 
 public export
+0 SetContra : Set a -> (x : a) -> Type
+SetContra s x = Not (SetPrf s x)
+
+public export
 isElem : (x : a) -> (s : Set a) -> Dec (SetPrf s x)
 isElem x s = setDec s x
 
@@ -47,7 +51,8 @@ public export
 record DisprovenElem {0 a : Type} (0 s : Set a) where
   constructor MkDisprovenElem
   provenElem : a
-  0 provenElemPrf : SetPrf s provenElem -> Void
+  0 provenElemPrf : SetContra s provenElem
+
 -------------------
 -- Element checking
 -------------------

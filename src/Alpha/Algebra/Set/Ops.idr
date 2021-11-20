@@ -17,7 +17,7 @@ import Alpha.Decidable
 
 public export
 compl : Set a -> Set a
-compl s = MkSet (\x => SetPrf s x -> Void) (\x => decNot (setDec s x))
+compl s = MkSet (\x => SetContra s x) (\x => decNot (setDec s x))
 
 ---------------
 -- Intersection

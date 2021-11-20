@@ -20,11 +20,11 @@ public export
 interRule lprf rprf = (lprf, rprf)
 
 public export
-0 interNotLeftRule : (SetPrf ls x -> Void) -> SetPrf (inter ls rs) x -> Void
+0 interNotLeftRule : SetContra ls x -> SetContra (inter ls rs) x
 interNotLeftRule lcontra = lcontra . fst
 
 public export
-0 interNotRightRule : (SetPrf rs x -> Void) -> SetPrf (inter ls rs) x -> Void
+0 interNotRightRule : SetContra rs x -> SetContra (inter ls rs) x
 interNotRightRule rcontra = rcontra . snd
 
 public export
@@ -36,11 +36,11 @@ public export
 invInterRightRule = snd
 
 public export
-0 invInterNotLeftRule : (SetPrf (inter ls rs) x -> Void) -> SetPrf rs x ->
-                        SetPrf ls x -> Void
+0 invInterNotLeftRule : SetContra (inter ls rs) x -> SetPrf rs x ->
+                        SetContra ls x
 invInterNotLeftRule pcontra rprf lprf = void (pcontra (lprf, rprf))
 
 public export
-0 invInterNotRightRule : (SetPrf (inter ls rs) x -> Void) -> SetPrf ls x ->
-                         SetPrf rs x -> Void
+0 invInterNotRightRule : SetContra (inter ls rs) x -> SetPrf ls x ->
+                         SetContra rs x
 invInterNotRightRule pcontra lprf rprf = void (pcontra (lprf, rprf))
