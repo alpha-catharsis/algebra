@@ -57,5 +57,9 @@ sets = univ
 ----------
 
 public export
-nat : Set Nat
-nat = univ
+nats : Set Nat
+nats = univ
+
+public export
+provenNat : Nat -> ProvenElem {a=Nat} Basic.nats
+provenNat n = univProvenElem n

@@ -12,10 +12,18 @@ import Alpha.Algebra.Rel.Rel
 import Alpha.Algebra.Set.Basic
 import Alpha.Algebra.Set.Rules.Complement
 import Alpha.Algebra.Set.Set
+import Alpha.Algebra.Set.Singleton
 
 -----------------------
 -- Inclusion definition
 -----------------------
+
+-- public export
+-- 0 InclPrf : Set a -> Set a -> Type
+-- InclPrf ls rs = (x : a) -> SetPrf ls x -> SetPrf rs x
+
+-- inclUniv : Rel (sets {a}) (sets {a})
+-- inclUniv = MkRel (\px,py => )
 
 -- public export
 -- 0 InclPrfTy : RelPrfTy (SetPrfTy a) (SetPrfTy a)

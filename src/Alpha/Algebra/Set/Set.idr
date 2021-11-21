@@ -50,8 +50,8 @@ record ProvenElem {0 a : Type} (0 s : Set a) where
 public export
 record DisprovenElem {0 a : Type} (0 s : Set a) where
   constructor MkDisprovenElem
-  provenElem : a
-  0 provenElemPrf : SetContra s provenElem
+  disprovenElem : a
+  0 disprovenElemPrf : SetContra s disprovenElem
 
 -------------------
 -- Element checking
