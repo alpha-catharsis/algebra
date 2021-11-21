@@ -21,15 +21,26 @@ import Alpha.Algebra.Set.Set
 --------------
 
 public export
-record Pointed (0 a : Type) where
-  constructor MkPointed
-  pointedSet : Set a
-  pointedProven : ProvenElem pointedSet
+0 Pointed : SetPrf a -> Type
+Pointed pty = (Set pty, ProvenElem pty)
 
 public export
-basepoint : Pointed a -> a
-basepoint p = provenElem (pointedProven p)
+makePointed : Set pty -> ProvenElem pty -> Pointed pty
+makePointed s pe = (s, pe)
 
 public export
-0 basepointPrf : (p : Pointed a) -> SetPrf (pointedSet p) (basepoint p)
-basepointPrf p = provenElemPrf (pointedProven p)
+pointedSet : Pointed pty -> Set pty
+pointedSet = fst
+
+public export
+pointedProvenElem : Pointed pty -> ProvenElem pty
+pointedProvenElem = snd
+
+public export
+basepoint : {0 pty : a -> Type} -> Pointed pty -> a
+basepoint = provenElem . pointedProvenElem
+
+public export
+0 basepointPrf : (p : Pointed pty) -> pty (basepoint p)
+basepointPrf p = provenElemPrf (pointedProvenElem p)
+

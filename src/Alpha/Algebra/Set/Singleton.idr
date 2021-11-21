@@ -24,32 +24,41 @@ import Alpha.Algebra.Set.Set
 ----------------
 
 public export
-singl : DecEq a => (x : a) -> Set a
-singl y = MkSet (\x => y=x) (\x => decEq y x)
+0 SinglPrf : (y : a) -> SetPrf a
+SinglPrf y x = y = x
 
 public export
-singlProvenElem : DecEq a => (x : a) -> ProvenElem (singl x)
-singlProvenElem x = MkProvenElem x Refl
+singl : DecEq a => (y : a) -> Set (SinglPrf y)
+singl y x = decEq y x
+
+public export
+singlProvenElem : (x : a) -> ProvenElem (SinglPrf x)
+singlProvenElem x = Element x Refl
 
 ------------
 -- Holed set
 ------------
 
 public export
-holed : DecEq a => (x : a) -> Set a
-holed x = compl (singl x)
+0 HoledPrf : (x : a) -> SetPrf a
+HoledPrf x = ComplPrf (SinglPrf x)
 
-{x : a} -> DecEq a => Uninhabited (SetPrf (holed x) x) where
+public export
+Uninhabited (HoledPrf x x) where
   uninhabited f = f Refl
 
 public export
-holedDisproven : DecEq a => (x : a) -> DisprovenElem (holed x)
-holedDisproven x = MkDisprovenElem x absurd
+holed : DecEq a => (x : a) -> Set (HoledPrf x)
+holed x = compl (singl x)
+
+public export
+holedDisprovenElem : (x : a) -> DisprovenElem (HoledPrf x)
+holedDisprovenElem x = Element x absurd
 
 --------------------
 -- Pointed singleton
 --------------------
 
 public export
-pointedSingl : DecEq a => (x : a) -> Pointed a
-pointedSingl x = MkPointed (singl x) (singlProvenElem x)
+pointedSingl : DecEq a => (x : a) -> Pointed (SinglPrf x)
+pointedSingl x = makePointed (singl x) (singlProvenElem x)

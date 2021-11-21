@@ -8,6 +8,7 @@ module Alpha.Algebra.Set.Prop
 -- External imports
 -------------------
 
+import Data.DPair
 import Decidable.Equality
 
 -------------------
@@ -21,5 +22,9 @@ import Alpha.Algebra.Set.Set
 ------------------
 
 public export
-prop : (f: a -> Bool) -> Set a
-prop f = MkSet (\x => f x = True) (\x => decEq (f x) True)
+PropPrf : (f : a -> Bool) -> SetPrf a
+PropPrf f x = f x = True
+
+public export
+prop : (f : a -> Bool) -> Set (PropPrf f)
+prop f x = decEq (f x) True
