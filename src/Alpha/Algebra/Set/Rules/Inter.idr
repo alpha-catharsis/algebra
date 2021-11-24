@@ -2,7 +2,7 @@
 -- Module declaration
 ---------------------
 
-module Alpha.Algebra.Set.Rules.Intersection
+module Alpha.Algebra.Set.Rules.Inter
 
 -------------------
 -- Internal imports

@@ -24,15 +24,15 @@ import Alpha.Algebra.Set.Set
 ----------------
 
 public export
-0 SinglPrf : (y : a) -> SetPrf a
-SinglPrf y x = y = x
+0 SinglPty : (y : a) -> SetPty a
+SinglPty y x = y = x
 
 public export
-singl : DecEq a => (y : a) -> Set (SinglPrf y)
+singl : DecEq a => (y : a) -> Set (SinglPty y)
 singl y x = decEq y x
 
 public export
-singlProvenElem : (x : a) -> ProvenElem (SinglPrf x)
+singlProvenElem : (x : a) -> ProvenElem (SinglPty x)
 singlProvenElem x = Element x Refl
 
 ------------
@@ -40,19 +40,19 @@ singlProvenElem x = Element x Refl
 ------------
 
 public export
-0 HoledPrf : (x : a) -> SetPrf a
-HoledPrf x = ComplPrf (SinglPrf x)
+0 HoledPty : (x : a) -> SetPty a
+HoledPty x = ComplPty (SinglPty x)
 
 public export
-Uninhabited (HoledPrf x x) where
+Uninhabited (HoledPty x x) where
   uninhabited f = f Refl
 
 public export
-holed : DecEq a => (x : a) -> Set (HoledPrf x)
+holed : DecEq a => (x : a) -> Set (HoledPty x)
 holed x = compl (singl x)
 
 public export
-holedDisprovenElem : (x : a) -> DisprovenElem (HoledPrf x)
+holedDisprovenElem : (x : a) -> DisprovenElem (HoledPty x)
 holedDisprovenElem x = Element x absurd
 
 --------------------
@@ -60,5 +60,5 @@ holedDisprovenElem x = Element x absurd
 --------------------
 
 public export
-pointedSingl : DecEq a => (x : a) -> Pointed (SinglPrf x)
+pointedSingl : DecEq a => (x : a) -> Pointed (SinglPty x)
 pointedSingl x = makePointed (singl x) (singlProvenElem x)

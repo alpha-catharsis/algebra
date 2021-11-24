@@ -22,15 +22,15 @@ import public Alpha.Algebra.Set.Set
 ---------------
 
 public export
-0 UnivPrf : SetPrf a
-UnivPrf = const ()
+0 UnivPty : SetPty a
+UnivPty = const ()
 
 public export
-univ : Set UnivPrf
+univ : Set UnivPty
 univ = const (Yes ())
 
 public export
-univProvenElem : a -> ProvenElem (UnivPrf {a})
+univProvenElem : a -> ProvenElem (UnivPty {a})
 univProvenElem x = Element x ()
 
 ------------
@@ -38,16 +38,16 @@ univProvenElem x = Element x ()
 ------------
 
 public export
-0 EmptyPrf : SetPrf a
-EmptyPrf = ComplPrf UnivPrf
+0 EmptyPty : SetPty a
+EmptyPty = ComplPty UnivPty
 
-Uninhabited (EmptyPrf x) where
+Uninhabited (EmptyPty x) where
   uninhabited f = f ()
 
 public export
-empty : Set EmptyPrf
+empty : Set EmptyPty
 empty = compl univ
 
 public export
-emptyDisprovenElem : a -> DisprovenElem (EmptyPrf {a})
+emptyDisprovenElem : a -> DisprovenElem (EmptyPty {a})
 emptyDisprovenElem x = Element x absurd

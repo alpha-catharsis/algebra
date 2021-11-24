@@ -24,16 +24,16 @@ import Alpha.Decidable
 --------------
 
 public export
-ProdPrf : SetPrf a -> SetPrf b -> SetPrf (a,b)
-ProdPrf lpty rpty (x,y) = (lpty x, rpty y)
+ProdPty : SetPty a -> SetPty b -> SetPty (a,b)
+ProdPty lpty rpty (x,y) = (lpty x, rpty y)
 
 public export
-prod : Set lpty -> Set rpty -> Set (ProdPrf lpty rpty)
+prod : Set lpty -> Set rpty -> Set (ProdPty lpty rpty)
 prod ls rs (x,y) = decAnd (ls x) (rs y)
 
 public export
 prodProvenElem : ProvenElem lpty -> ProvenElem rpty ->
-                 ProvenElem (ProdPrf lpty rpty)
+                 ProvenElem (ProdPty lpty rpty)
 prodProvenElem px py = Element (provenElem px, provenElem py)
                                (provenElemPrf px, provenElemPrf py)
 
@@ -42,12 +42,12 @@ prodProvenElem px py = Element (provenElem px, provenElem py)
 ----------------
 
 public export
-CoprodPrf : SetPrf a -> SetPrf b -> SetPrf (Either a b)
-CoprodPrf lpty rpty e = case e of
+CoprodPty : SetPty a -> SetPty b -> SetPty (Either a b)
+CoprodPty lpty rpty e = case e of
                              Left x => lpty x
                              Right y => rpty y
 
-coprod : Set lpty -> Set rpty -> Set (CoprodPrf lpty rpty)
+coprod : Set lpty -> Set rpty -> Set (CoprodPty lpty rpty)
 coprod ls rs e = case e of
                       Left x => ls x
                       Right y => rs y
@@ -58,7 +58,7 @@ coprod ls rs e = case e of
 ----------------------
 
 public export
-pointedProd : Pointed lpty -> Pointed rpty -> Pointed (ProdPrf lpty rpty)
+pointedProd : Pointed lpty -> Pointed rpty -> Pointed (ProdPty lpty rpty)
 pointedProd lp rp = makePointed (prod (pointedSet lp) (pointedSet rp))
                     (Element (basepoint lp, basepoint rp)
                              (basepointPrf lp, basepointPrf rp))

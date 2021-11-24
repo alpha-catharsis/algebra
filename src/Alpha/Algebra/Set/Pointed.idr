@@ -21,7 +21,7 @@ import Alpha.Algebra.Set.Set
 --------------
 
 public export
-0 Pointed : SetPrf a -> Type
+0 Pointed : SetPty a -> Type
 Pointed pty = (Set pty, ProvenElem pty)
 
 public export

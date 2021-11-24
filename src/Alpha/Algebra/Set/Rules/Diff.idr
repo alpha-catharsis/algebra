@@ -2,7 +2,7 @@
 -- Module declaration
 ---------------------
 
-module Alpha.Algebra.Set.Rules.Difference
+module Alpha.Algebra.Set.Rules.Diff
 
 -------------------
 -- Internal imports

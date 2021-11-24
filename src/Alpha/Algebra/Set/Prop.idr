@@ -22,7 +22,7 @@ import Alpha.Algebra.Set.Set
 ------------------
 
 public export
-PropPrf : (f : a -> Bool) -> SetPrf a
+PropPrf : (f : a -> Bool) -> SetPty a
 PropPrf f x = f x = True
 
 public export

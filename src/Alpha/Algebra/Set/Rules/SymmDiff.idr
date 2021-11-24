@@ -2,7 +2,7 @@
 -- Module declaration
 ---------------------
 
-module Alpha.Algebra.Set.Rules.SymmDifference
+module Alpha.Algebra.Set.Rules.SymmDiff
 
 -------------------
 -- Internal imports

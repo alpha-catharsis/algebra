@@ -16,15 +16,11 @@ import Decidable.Decidable
 -----------------
 
 public export
-0 SetPrf : Type -> Type
-SetPrf a = (x : a) -> Type
+0 SetPty : Type -> Type
+SetPty a = (x : a) -> Type
 
 public export
-0 SetContra : Type -> Type
-SetContra a = Not (SetPrf a)
-
-public export
-0 Set : SetPrf a -> Type
+0 Set : SetPty a -> Type
 Set pty = (x : a) -> Dec (pty x)
 
 public export
@@ -40,32 +36,26 @@ elem x s = isYes (isElem x s)
 -----------------
 
 public export
-0 ProvenElem : {a : Type} -> SetPrf a -> Type
+0 ProvenElem : {a : Type} -> SetPty a -> Type
 ProvenElem pty = Subset a pty
 
 public export
-provenElem : {0 pty : SetPrf a} -> ProvenElem pty -> a
+0 DisprovenElem : {a : Type} -> SetPty a -> Type
+DisprovenElem pty = ProvenElem (Not . pty)
+
+public export
+provenElem : {0 pty : SetPty a} -> ProvenElem pty -> a
 provenElem = fst
 
 public export
 0 provenElemPrf : (pe : ProvenElem pty) -> pty (provenElem pe)
 provenElemPrf = snd
 
---------------------
--- Disproven element
---------------------
-
 public export
-0 DisprovenElem : {a : Type} -> SetPrf a -> Type
-DisprovenElem pty = ProvenElem (Not . pty)
-
-public export
-disprovenElem : {0 pty : SetPrf a} -> DisprovenElem pty -> a
-disprovenElem = fst
-
-public export
-0 disprovenElemPrf : (pe : DisprovenElem pty) -> Not (pty (disprovenElem pe))
-disprovenElemPrf = snd
+projectElem : {0 pty : SetPty a} -> {0 pty' : SetPty a} ->
+              (0 f : {x : a} -> pty x -> pty' x) ->
+              ProvenElem pty -> ProvenElem pty'
+projectElem f pe = Element (provenElem pe) (f (provenElemPrf pe))
 
 ------------------
 -- Element proving
@@ -78,7 +68,7 @@ eitherProvenPrf x s = case isElem x s of
     Yes prf => Right prf
 
 public export
-eitherProvenElem : (x : a) -> {0 pty : SetPrf a} -> (s : Set pty) ->
+eitherProvenElem : (x : a) -> {0 pty : SetPty a} -> (s : Set pty) ->
                    Either (DisprovenElem pty) (ProvenElem pty)
 eitherProvenElem x s = case isElem x s of
   No contra => Left (Element x contra)
