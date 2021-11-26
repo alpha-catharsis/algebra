@@ -8,7 +8,7 @@ module Alpha.Algebra.Set.Rules.SymmDiff
 -- Internal imports
 -------------------
 
-import Alpha.Algebra.Set.Rules.Difference
+import Alpha.Algebra.Set.Rules.Diff
 import Alpha.Algebra.Set.Rules.Union
 import Alpha.Algebra.Set.Ops
 import Alpha.Algebra.Set.Set

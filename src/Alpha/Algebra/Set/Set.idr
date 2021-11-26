@@ -44,6 +44,10 @@ public export
 DisprovenElem pty = ProvenElem (Not . pty)
 
 public export
+0 EitherElem : {a : Type} -> SetPty a -> Type
+EitherElem pty = Either (DisprovenElem pty) (ProvenElem pty)
+
+public export
 provenElem : {0 pty : SetPty a} -> ProvenElem pty -> a
 provenElem = fst
 
@@ -62,14 +66,7 @@ projectElem f pe = Element (provenElem pe) (f (provenElemPrf pe))
 ------------------
 
 public export
-eitherProvenPrf : (x : a) -> (s : Set pty) -> Either (Not (pty x)) (pty x)
-eitherProvenPrf x s = case isElem x s of
-    No contra => Left contra
-    Yes prf => Right prf
-
-public export
-eitherProvenElem : (x : a) -> {0 pty : SetPty a} -> (s : Set pty) ->
-                   Either (DisprovenElem pty) (ProvenElem pty)
-eitherProvenElem x s = case isElem x s of
+eitherElem : (x : a) -> {0 pty : SetPty a} -> (s : Set pty) -> EitherElem pty
+eitherElem x s = case isElem x s of
   No contra => Left (Element x contra)
   Yes prf => Right (Element x prf)
