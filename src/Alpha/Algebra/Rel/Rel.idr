@@ -72,24 +72,3 @@ projectRelated : {0 rpty : RelPty (lspty,rspty)} ->
                  ProvenRelated rpty -> ProvenRelated rpty'
 projectRelated f pr = Element (provenRelated pr) (f (provenRelatedPrf pr))
 
-----------------------
--- Relation properties
-----------------------
-
--- public export
--- record ReflRel {0 a : Type} {0 s : Set a} (r : Rel s s) where
---   constructor MkReflRel
---   0 reflPrf : (px : ProvenElem s) -> RelPrf r px px
-
--- -- 0 RelRefl : RelPrfTy a a -> Type
--- RelRefl pty = {x : a} -> pty (x,x)
-
--- public export
--- 0 RelTrans : RelPrfTy a a -> Type
--- RelTrans pty = {x : a} -> {y : a} -> {z : a} ->
---                pty (x,y) -> pty (y,z) -> pty (x,z)
-
-
--- public export
--- 0 RelAsymm : RelPrfTy a a -> RelPrfTy a a -> Type
--- RelAsymm pty epty = {x : a} -> {y : a} -> pty (x,y) -> pty (y,x) -> epty (x,y)
