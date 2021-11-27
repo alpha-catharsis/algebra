@@ -24,9 +24,9 @@ InclPty (lspty,rspty) = {e : a} -> lspty e -> rspty e
 ---------------------------
 
 public export
-0 projectIncl : InclPty (lpty,rpty) -> lpty x -> rpty x
+0 projectIncl : InclPty (lspty,rspty) -> lspty x -> rspty x
 projectIncl f lprf = f lprf
 
 public export
-projectInclElem : InclPty (lpty, rpty) -> ProvenElem lpty -> ProvenElem rpty
+projectInclElem : InclPty (lspty, rspty) -> ProvenElem lspty -> ProvenElem rspty
 projectInclElem f lpe = projectElem f lpe
