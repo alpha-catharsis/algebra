@@ -25,10 +25,17 @@ public export
 0 FnInjective : Fn lpty rpty -> Type
 FnInjective f = {x : ProvenElem lpty} -> {x' : ProvenElem lpty} ->
                 f x = f x' -> x = x'
+----------------------
+-- Surjective function
+----------------------
 
 public export
 0 FnSurjective : Fn lpty rpty -> Type
 FnSurjective f = {y : ProvenElem rpty} -> (x : ProvenElem lpty ** f x = y)
+
+---------------------
+-- jective function
+---------------------
 
 public export
 0 FnBijective : Fn lpty rpty -> Type
