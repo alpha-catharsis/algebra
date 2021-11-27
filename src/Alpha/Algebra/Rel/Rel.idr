@@ -22,53 +22,48 @@ import Alpha.Algebra.Set.Set
 ----------------------
 
 public export
-0 RelPty : (SetPty a, SetPty b) -> Type
-RelPty (lspty, rspty) = (ProvenElem lspty, ProvenElem rspty) -> Type
+0 RelPty : (Type, Type) -> Type
+RelPty (a, b) = (a, b) -> Type
 
 public export
-0 Rel : RelPty (lspty, rspty) -> Type
-Rel rpty = (ppe : (ProvenElem lspty, ProvenElem rspty)) -> Dec (rpty ppe)
+0 Rel : RelPty (a, b) -> Type
+Rel pty = (p : (a, b)) -> Dec (pty p)
 
 public export
-areRelated : (lpe : ProvenElem lspty) -> (rpe : ProvenElem rspty) ->
-             {0 rpty : RelPty (lspty,rspty)} -> Rel rpty -> Dec (rpty (lpe,rpe))
-areRelated lpe rpe r = r (lpe,rpe)
+areRelated : (x : a) -> (y : b) -> {0 pty : RelPty (a,b)} -> Rel pty ->
+             Dec (pty (x,y))
+areRelated x y r = r (x,y)
 
 public export
-related : (lpe : ProvenElem lspty) -> (rpe : ProvenElem rspty) ->
-          {0 rpty : RelPty (lspty, rspty)} -> Rel rpty -> Bool
-related lpe rpe r = isYes (areRelated lpe rpe r)
+related : (x : a) -> (y : b) -> {0 pty : RelPty (a, b)} -> Rel pty -> Bool
+related x y  r = isYes (areRelated x y r)
 
 -----------------
 -- Proven related
 -----------------
 
 public export
-0 ProvenRelated : RelPty (lspty,rspty) -> Type
-ProvenRelated rpty = Subset (ProvenElem lspty, ProvenElem rspty) rpty
+0 ProvenRelated : RelPty (a,b) -> Type
+ProvenRelated pty = Subset (a, b) pty
 
 public export
-0 DisprovenRelated : RelPty (lspty, rspty) -> Type
-DisprovenRelated rpty = ProvenRelated (Not . rpty)
+0 DisprovenRelated : RelPty (a, b) -> Type
+DisprovenRelated pty = ProvenRelated (Not . pty)
 
 public export
-0 EitherRelated : RelPty (lspty, rspty) -> Type
-EitherRelated rpty = Either (DisprovenRelated rpty) (ProvenRelated rpty)
+0 EitherRelated : RelPty (a, b) -> Type
+EitherRelated pty = Either (DisprovenRelated pty) (ProvenRelated pty)
 
 public export
-provenRelated : {0 rpty : RelPty (lspty,rspty)} -> ProvenRelated rpty ->
-                (ProvenElem lspty, ProvenElem rspty)
+provenRelated : {0 pty : RelPty (a,b)} -> ProvenRelated pty -> (a, b)
 provenRelated = fst
 
 public export
-0 provenRelatedPrf : (pr : ProvenRelated rpty) -> rpty (provenRelated pr)
+0 provenRelatedPrf : (pr : ProvenRelated pty) -> pty (provenRelated pr)
 provenRelatedPrf = snd
 
 public export
-projectRelated : {0 rpty : RelPty (lspty,rspty)} ->
-                 {0 rpty' : RelPty (lspty,rspty)} ->
-                 (0 f : {ppe : (ProvenElem lspty, ProvenElem rspty)} ->
-                        rpty ppe -> rpty' ppe) ->
-                 ProvenRelated rpty -> ProvenRelated rpty'
+projectRelated : {0 pty : RelPty (a,b)} -> {0 pty' : RelPty (a,b)} ->
+                 (0 f : {p : (a, b)} -> pty p -> pty' p) ->
+                 ProvenRelated pty -> ProvenRelated pty'
 projectRelated f pr = Element (provenRelated pr) (f (provenRelatedPrf pr))
-

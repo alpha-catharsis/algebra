@@ -16,51 +16,47 @@ import Alpha.Algebra.Set.Set
 ---------------------
 
 public export
-0 RelRefl : RelPty (spty,spty) -> Type
-RelRefl rpty = {pe : ProvenElem spty} -> rpty (pe,pe)
+0 RelRefl : RelPty (a,a) -> Type
+RelRefl pty = {x : a} -> pty (x,x)
 
 -----------------------
 -- Irreflexive relation
 -----------------------
 
 public export
-0 RelIrrefl : RelPty (spty,spty) -> Type
-RelIrrefl rpty = {pe : ProvenElem spty} -> Not (rpty (pe,pe))
+0 RelIrrefl : RelPty (a,a) -> Type
+RelIrrefl pty = {x : a} -> Not (pty (x,x))
 
 ---------------------
 -- Symmetric relation
 ---------------------
 
 public export
-0 RelSymm : RelPty (spty,spty) -> Type
-RelSymm rpty = {lpe : ProvenElem spty} -> {rpe : ProvenElem spty} ->
-               rpty (lpe,rpe) -> rpty (rpe,lpe)
+0 RelSymm : RelPty (a,a) -> Type
+RelSymm pty = {x : a} -> {y : a} -> pty (x,y) -> pty (y,x)
 
 -------------------------
 -- Antisymmetric relation
 -------------------------
 
 public export
-0 RelAntiSymm : RelPty (spty,spty) -> RelPty (spty,spty) -> Type
-RelAntiSymm rpty eqpty = {lpe : ProvenElem spty} -> {rpe : ProvenElem spty} ->
-                         rpty (lpe,rpe) -> rpty (rpe,lpe) -> eqpty (lpe,rpe)
+0 RelAntiSymm : RelPty (a,a) -> RelPty (a,a) -> Type
+RelAntiSymm pty eqpty = {x : a} -> {y : a} -> pty (x,y) -> pty (y,x) ->
+                        eqpty (x,y)
 
 ---------------------
 -- Asymmetric relation
 ---------------------
 
 public export
-0 RelAsymm : RelPty (spty,spty) -> Type
-RelAsymm rpty = {lpe : ProvenElem spty} -> {rpe : ProvenElem spty} ->
-                rpty (lpe,rpe) -> Not (rpty (rpe,lpe))
-
+0 RelAsymm : RelPty (a,a) -> Type
+RelAsymm pty = {x : a} -> {y : a} -> pty (x,y) -> Not (pty (y,x))
 
 ----------------------
 -- Transitive relation
 ----------------------
 
 public export
-0 RelTrans : RelPty (spty,spty) -> Type
-RelTrans rpty = {lpe : ProvenElem spty} -> {mpe : ProvenElem spty} ->
-                {rpe : ProvenElem spty} -> rpty (lpe,mpe) -> rpty (mpe,rpe) ->
-                rpty (lpe,rpe)
+0 RelTrans : RelPty (a,a) -> Type
+RelTrans pty = {x : a} -> {y : a} -> {z : a} -> pty (x,y) -> pty (y,z) ->
+               pty (x,z)
