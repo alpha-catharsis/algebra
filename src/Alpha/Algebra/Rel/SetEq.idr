@@ -37,6 +37,6 @@ public export
 projectSetEq (f,_) prf = f prf
 
 public export
-projectSetEqElem : SetEqPty (lspty, rspty) -> ProvenElem lspty ->
+projectSetEqElem : (0 pty : SetEqPty (lspty, rspty)) -> ProvenElem lspty ->
                    ProvenElem rspty
 projectSetEqElem (f,_) lpe = projectElem f lpe
