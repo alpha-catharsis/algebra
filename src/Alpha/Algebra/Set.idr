@@ -16,5 +16,5 @@ import public Alpha.Algebra.Set.Prod
 import public Alpha.Algebra.Set.Prop
 import public Alpha.Algebra.Set.Rules
 import public Alpha.Algebra.Set.Set
-import public Alpha.Algebra.Set.Singleton
+import public Alpha.Algebra.Set.Singl
 import public Alpha.Algebra.Set.Vect

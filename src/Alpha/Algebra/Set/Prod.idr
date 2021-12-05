@@ -16,6 +16,7 @@ import Decidable.Equality
 -------------------
 
 import Alpha.Algebra.Set.Pointed
+import Alpha.Algebra.Set.Singl
 import Alpha.Algebra.Set.Set
 import Alpha.Decidable
 
@@ -24,41 +25,85 @@ import Alpha.Decidable
 --------------
 
 public export
-ProdPty : SetPty a -> SetPty b -> SetPty (a,b)
-ProdPty lpty rpty (x,y) = (lpty x, rpty y)
+data Prod : Type -> Type -> Type -> Type where
+  MkProd : Set lt a => Set rt b => lt -> rt -> Prod lt rt (a,b)
 
 public export
-prod : Set lpty -> Set rpty -> Set (ProdPty lpty rpty)
-prod ls rs (x,y) = decAnd (ls x) (rs y)
+prod : Set lt a => Set rt b => lt -> rt -> Prod lt rt (a,b)
+prod = MkProd
 
 public export
-prodProvenElem : ProvenElem lpty -> ProvenElem rpty ->
-                 ProvenElem (ProdPty lpty rpty)
-prodProvenElem px py = Element (provenElem px, provenElem py)
-                               (provenElemPrf px, provenElemPrf py)
+prodLeftSet : Prod lt rt (a,b) -> lt
+prodLeftSet (MkProd ls _) = ls
+
+public export
+prodRightSet : Prod lt rt (a,b) -> rt
+prodRightSet (MkProd _ rs) = rs
+
+public export
+0 ProdPrf : Set lt a => Set rt b => lt -> rt -> SetPrfTy (a,b)
+ProdPrf ls rs (x,y) = (SetPrf ls x, SetPrf rs y)
+
+public export
+Set lt a => Set rt b => Set (Prod lt rt (a,b)) (a,b) where
+  SetPrf ps = ProdPrf (prodLeftSet ps) (prodRightSet ps)
+
+public export
+DecSet lt a => DecSet rt b => DecSet (Prod lt rt (a,b)) (a,b) where
+  isElem (x,y) (MkProd ls rs) = decAnd (isElem x ls) (isElem y rs)
 
 ----------------
 -- Set coproduct
 ----------------
 
 public export
-CoprodPty : SetPty a -> SetPty b -> SetPty (Either a b)
-CoprodPty lpty rpty e = case e of
-                             Left x => lpty x
-                             Right y => rpty y
+data Coprod : Type -> Type -> Type -> Type where
+  MkCoprod : Set lt a => Set rt b => lt -> rt -> Coprod lt rt (Either a b)
 
-coprod : Set lpty -> Set rpty -> Set (CoprodPty lpty rpty)
-coprod ls rs e = case e of
-                      Left x => ls x
-                      Right y => rs y
+coprod : Set lt a => Set rt b => lt -> rt -> Coprod lt rt (Either a b)
+coprod = MkCoprod
 
+public export
+coprodLeftSet : Coprod lt rt (Either a b) -> lt
+coprodLeftSet (MkCoprod ls _) = ls
+
+public export
+coprodRightSet : Coprod lt rt (Either a b) -> rt
+coprodRightSet (MkCoprod _ rs) = rs
+
+public export
+0 CoprodPrf : Set lt a => Set rt b => lt -> rt -> SetPrfTy (Either a b)
+CoprodPrf ls rs e = case e of
+                      Left x => SetPrf ls x
+                      Right y => SetPrf rs y
+
+public export
+Set lt a => Set rt b => Set (Coprod lt rt (Either a b)) (Either a b) where
+  SetPrf cs = CoprodPrf (coprodLeftSet cs) (coprodRightSet cs)
+
+public export
+DecSet lt a => DecSet rt b =>
+DecSet (Coprod lt rt (Either a b)) (Either a b) where
+  isElem e (MkCoprod ls rs) = case e of
+                                Left x => isElem x ls
+                                Right y => isElem y rs
+
+------------------
+-- Element Product
+------------------
+
+public export
+prodProvenElem : Set lt a => Set rt b => {0 ls : lt} -> {0 rs : rt} ->
+                 SetProvenElem ls -> SetProvenElem rs ->
+                 ProvenElem (ProdPrf ls rs)
+prodProvenElem lpe rpe = MkProvenElem (provenElem lpe, provenElem rpe)
+                                      (elemPrf lpe, elemPrf rpe)
 
 ----------------------
 -- Set pointed product
 ----------------------
 
 public export
-pointedProd : Pointed lpty -> Pointed rpty -> Pointed (ProdPty lpty rpty)
-pointedProd lp rp = makePointed (prod (pointedSet lp) (pointedSet rp))
-                    (Element (basepoint lp, basepoint rp)
-                             (basepointPrf lp, basepointPrf rp))
+Pointed lt a => Pointed rt b => Pointed (Prod lt rt (a,b)) (a,b) where
+  basepointElem (MkProd ls rs) = MkProvenElem (basepoint ls, basepoint rs)
+                                              (basepointPrf ls, basepointPrf rs)

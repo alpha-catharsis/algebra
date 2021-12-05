@@ -23,9 +23,13 @@ import Alpha.Algebra.Set.Set
 -----------
 
 public export
-0 ListPty : List a -> SetPty a
-ListPty xs x = Elem x xs
+0 ListPrf : List a -> SetPrfTy a
+ListPrf xs x = Elem x xs
 
 public export
-list : DecEq a => (xs : List a) -> Set (ListPty xs)
-list xs x = isElem x xs
+Set (List a) a where
+  SetPrf = ListPrf
+
+public export
+DecEq a => DecSet (List a) a where
+  isElem = List.Elem.isElem

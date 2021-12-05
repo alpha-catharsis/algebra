@@ -22,9 +22,21 @@ import Alpha.Algebra.Set.Set
 ------------------
 
 public export
-PropPrf : (f : a -> Bool) -> SetPty a
+data Prop : Type -> Type where
+  MkProp : (a -> Bool) -> Prop a
+
+public export
+prop : (a -> Bool) -> Prop a
+prop = MkProp
+
+public export
+0 PropPrf : (a -> Bool) -> SetPrfTy a
 PropPrf f x = f x = True
 
 public export
-prop : (f : a -> Bool) -> Set (PropPrf f)
-prop f x = decEq (f x) True
+Set (Prop a) a where
+  SetPrf (MkProp f) = PropPrf f
+
+public export
+DecSet (Prop a) a where
+  isElem x (MkProp f) = decEq (f x) True

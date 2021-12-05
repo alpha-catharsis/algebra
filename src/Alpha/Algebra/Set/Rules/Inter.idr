@@ -16,48 +16,58 @@ import Alpha.Algebra.Set.Set
 ---------------------
 
 public export
-0 interRule : {lpty : SetPty a} -> {rpty : SetPty a} ->
-              lpty x -> rpty x -> InterPty lpty rpty x
+0 interRule : Set lt a => Set rt a => {ls : lt} -> {rs : rt} ->
+              SetPrf ls x -> SetPrf rs x -> InterPrf ls rs x
 interRule lprf rprf = (lprf, rprf)
 
 public export
-0 interNotLeftRule : {lpty : SetPty a} -> Not (lpty x) ->
-                     Not (InterPty lpty rpty x)
+0 interNotLeftRule : Set lt a => Set rt a => {ls : lt} -> {rs : rt} ->
+                     Not (SetPrf ls x) -> Not (InterPrf ls rs x)
 interNotLeftRule lcontra = lcontra . fst
 
-interNotLeftElem : DisprovenElem lpty -> DisprovenElem (InterPty lpty rpty)
-interNotLeftElem = projectElem (interNotLeftRule {lpty} {rpty})
+public export
+interNotLeftElem : Set lt a => Set rt a => {0 ls : lt} -> {0 rs : rt} ->
+                   DisprovenElem (SetPrf ls) -> DisprovenElem (InterPrf ls rs)
+interNotLeftElem = projectElem interNotLeftRule
 
 public export
-0 interNotRightRule : {rpty : SetPty a} -> Not (rpty x) ->
-                      Not (InterPty lpty rpty x)
+0 interNotRightRule : Set lt a => Set rt a => {ls : lt} -> {rs : rt} ->
+                      Not (SetPrf rs x) -> Not (InterPrf ls rs x)
 interNotRightRule rcontra = rcontra . snd
 
-interNotRightElem : DisprovenElem rpty -> DisprovenElem (InterPty lpty rpty)
-interNotRightElem = projectElem (interNotRightRule {lpty} {rpty})
+public export
+interNotRightElem : Set lt a => Set rt a => {0 ls : lt} -> {0 rs : rt} ->
+                    DisprovenElem (SetPrf rs) -> DisprovenElem (InterPrf ls rs)
+interNotRightElem = projectElem interNotRightRule
 
 public export
-0 invInterLeftRule : InterPty lpty rpty x -> lpty x
+0 invInterLeftRule : Set lt a => Set rt a => {ls : lt} -> {rs : rt} ->
+                     InterPrf ls rs x -> SetPrf ls x
 invInterLeftRule = fst
 
 public export
-invInterLeftElem : ProvenElem (InterPty lpty rpty) -> ProvenElem lpty
-invInterLeftElem = projectElem (invInterLeftRule {lpty} {rpty})
+invInterLeftElem : Set lt a => Set rt a => {0 ls : lt} -> {0 rs : rt} ->
+                   ProvenElem (InterPrf ls rs) -> ProvenElem (SetPrf ls)
+invInterLeftElem = projectElem invInterLeftRule
 
 public export
-0 invInterRightRule : InterPty lpty rpty x -> rpty x
+0 invInterRightRule : Set lt a => Set rt a => {ls : lt} -> {rs : rt} ->
+                      InterPrf ls rs x -> SetPrf rs x
 invInterRightRule = snd
 
 public export
-invInterRightElem : ProvenElem (InterPty lpty rpty) -> ProvenElem rpty
-invInterRightElem = projectElem (invInterRightRule {lpty} {rpty})
+invInterRightElem : Set lt a => Set rt a => {0 ls : lt} -> {0 rs : rt} ->
+                    ProvenElem (InterPrf ls rs) -> ProvenElem (SetPrf rs)
+invInterRightElem = projectElem invInterRightRule
 
 public export
-0 invInterNotLeftRule : Not (InterPty lpty rpty x) -> rpty x ->
-                        Not (lpty x)
+0 invInterNotLeftRule : Set lt a => Set rt a => {ls : lt} -> {rs : rt} ->
+                        Not (InterPrf ls rs x) -> SetPrf rs x ->
+                        Not (SetPrf ls x)
 invInterNotLeftRule pcontra rprf lprf = void (pcontra (lprf, rprf))
 
 public export
-0 invInterNotRightRule : Not (InterPty lpty rpty x) -> lpty x ->
-                         Not (rpty x)
+0 invInterNotRightRule : Set lt a => Set rt a => {ls : lt} -> {rs : rt} ->
+                         Not (InterPrf ls rs x) -> SetPrf ls x ->
+                         Not (SetPrf rs x)
 invInterNotRightRule pcontra lprf rprf = void (pcontra (lprf, rprf))
