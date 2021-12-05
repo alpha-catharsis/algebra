@@ -99,6 +99,20 @@ prodProvenElem : Set lt a => Set rt b => {0 ls : lt} -> {0 rs : rt} ->
 prodProvenElem lpe rpe = MkProvenElem (provenElem lpe, provenElem rpe)
                                       (elemPrf lpe, elemPrf rpe)
 
+--------------------
+-- Element Coproduct
+--------------------
+
+public export
+coprodLeftElem : Set lt a => Set rt b => {0 ls : lt} -> {0 rs : rt} ->
+                 SetProvenElem ls -> ProvenElem (CoprodPrf ls rs)
+coprodLeftElem pe = MkProvenElem (Left (provenElem pe)) (elemPrf pe)
+
+public export
+coprodRightElem : Set lt a => Set rt b => {0 ls : lt} -> {0 rs : rt} ->
+                  SetProvenElem rs -> ProvenElem (CoprodPrf ls rs)
+coprodRightElem pe = MkProvenElem (Right (provenElem pe)) (elemPrf pe)
+
 ----------------------
 -- Set pointed product
 ----------------------

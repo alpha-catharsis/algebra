@@ -35,7 +35,6 @@ unionRightElem : Set lt a => Set rt a => {0 ls : lt} -> {0 rs : rt} ->
                ProvenElem (SetPrf rs) -> ProvenElem (UnionPrf ls rs)
 unionRightElem = projectElem unionRightRule
 
-
 public export
 0 unionNotRule : Set lt a => Set rt a => {ls : lt} -> {rs : rt} ->
                  Not (SetPrf ls x) -> Not (SetPrf rs x) ->
