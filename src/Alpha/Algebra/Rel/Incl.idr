@@ -17,44 +17,44 @@ import Alpha.Algebra.Set.Set
 -------------------------
 
 public export
-data Incl : Type -> Type where
-  MkIncl : (0 a : Type) -> Incl a
+data Incl : Type -> Type -> Type -> Type where
+  MkIncl : (0 lt : Type) -> (0 rt : Type) -> (0 a : Type) -> Incl lt rt a
 
 public export
-incl : (0 a : Type) -> Incl a
-incl a = MkIncl a
+incl : (0 lt : Type) -> (0 rt : Type) -> (0 a : Type) -> Incl lt rt a
+incl = MkIncl
 
 public export
 0 InclPrf : Set lt a => Set rt a => RelPrfTy lt rt
-InclPrf (ls,rs) = (e : a) -> SetPrf ls e -> SetPrf rs e
+InclPrf (ls,rs) = {0 e : a} -> SetPrf ls e -> SetPrf rs e
 
 public export
-Set lt a => Set rt a => Rel (Incl a) lt rt where
-  RelPrf _ = InclPrf
+Set lt a => Set rt a => Rel (Incl lt rt a) lt rt where
+  RelPrf (MkIncl lt rt a) = InclPrf
 
 ---------------------------
 -- Set inclusion properties
 ---------------------------
 
 public export
-Set t a => RelRefl (Incl a) t where
-  relRefl _ _ lprf = lprf
+Set t a => RelRefl (Incl t t a) t where
+  relRefl (MkIncl t t a) = id
 
 public export
-Set t a => RelTrans (Incl a) t where
-  relTrans _ f g e lprf = g e (f e lprf)
+Set t a => RelTrans (Incl t t a) t where
+  relTrans (MkIncl t t a) f g = g . f
 
 ---------------------------
 -- Set inclusion projection
 ---------------------------
 
--- public export
--- 0 projectIncl : Set lt a => Set rt a => {ls : lt} -> {rs : rt} ->
---                 InclPrf (ls,rs) -> SetPrf ls x -> SetPrf rs x
--- projectIncl f lprf = f lprf
+public export
+0 projectIncl : Set lt a => Set rt a => {ls : lt} -> {rs : rt} ->
+                InclPrf (ls,rs) -> SetPrf ls x -> SetPrf rs x
+projectIncl f lprf = f lprf
 
--- public export
--- projectInclElem : Set lt a => Set rt a => {0 ls : lt} -> {0 rs : rt} ->
---                   (0 iprf : InclPrf (ls, rs)) -> SetProvenElem ls ->
---                   SetProvenElem rs
--- projectInclElem f lpe = projectElem f lpe
+public export
+projectInclElem : Set lt a => Set rt a => {0 ls : lt} -> {0 rs : rt} ->
+                  (0 iprf : InclPrf (ls, rs)) -> SetProvenElem ls ->
+                  SetProvenElem rs
+projectInclElem f pe = projectElem f pe

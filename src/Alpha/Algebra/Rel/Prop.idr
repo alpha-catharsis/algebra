@@ -56,12 +56,18 @@ interface Rel t a a => RelSymm t a | t where
 -- RelAntiSymm prfTy eqPrfTy = {x : a} -> {y : a} -> prfTy (x,y) -> prfTy (y,x) ->
 --                             eqPrfTy (x,y)
 
+-- public export
+-- interface Rel t a a => RelAntiSymm t a | t where
+--   0 RelEqType : (r : t) -> Type
+--   0 relEq : (r : t) -> Rel (RelEqType r) a a => RelEqType r
+--   0 relAntiSymm : (r : t) -> Rel (RelEqType r) a a => {x : a} -> {y : a} ->
+--                   RelPrf r (x,y) -> RelPrf r (y,x) -> RelPrf (relEq r) (x,y)
+
 public export
-interface Rel t a a => RelAntiSymm t a | t where
-  0 RelEqType : (r : t) -> Type
-  0 relEq : (r : t) -> Rel (RelEqType r) a a => RelEqType r
-  0 relAntiSymm : (r : t) -> Rel (RelEqType r) a a =>  {x : a} -> {y : a} ->
-                  RelPrf r (x,y) -> RelPrf r (y,x) -> RelPrf (relEq r) (x,y)
+interface Rel t a a => Rel teq a a => RelAntiSymm t teq a | t where
+  0 relAntiSymm : (r : t) -> (req : teq) -> {x : a} -> {y : a} ->
+                  RelPrf r (x,y) -> RelPrf r (y,x) -> RelPrf req (x,y)
+
 
 ---------------------
 -- Asymmetric relation
