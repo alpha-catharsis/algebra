@@ -16,27 +16,33 @@ import Alpha.Algebra.Set.Set
 -- Set equality relation
 ------------------------
 
-public export
-0 SetEqPty : RelPty (SetPty a, SetPty a)
-SetEqPty (lspty,rspty) = (InclPty (lspty,rspty), InclPty (rspty,lspty))
+-- public export
+-- data SetEq : Type where
+--   MkSetEq : SetEq
 
-public export
-0 setEqLeftIncl : SetEqPty (lspty,rspty) -> InclPty (lspty,rspty)
-setEqLeftIncl = fst
+-- public export
+-- setEq : SetEq
+-- setEq = MkSetEq
 
-public export
-0 setEqRightIncl : SetEqPty (lspty,rspty) -> InclPty (rspty,lspty)
-setEqRightIncl = snd
+-- public export
+-- 0 SetEqPrf : Set lt a => Set rt a => RelPrfTy lt rt
+-- SetEqPrf (ls,rs) = (InclPrf (ls,rs), InclPrf (rs,ls))
+
+-- public export
+-- Set lt a => Set rt a => Rel SetEq lt rt where
+--   RelPrf _ = SetEqPrf
 
 --------------------------
 -- Set equality projection
 --------------------------
 
-public export
-0 projectSetEq : SetEqPty (lspty,rspty) -> lspty x -> rspty x
-projectSetEq (f,_) prf = f prf
+-- public export
+-- 0 projectSetEq : Set lt a => Set rt a => {ls : lt} -> {rs : rt} ->
+--                  SetEqPrf (ls,rs) -> SetPrf ls x -> SetPrf rs x
+-- projectSetEq (f,_) prf = f prf
 
-public export
-projectSetEqElem : (0 pty : SetEqPty (lspty, rspty)) -> ProvenElem lspty ->
-                   ProvenElem rspty
-projectSetEqElem (f,_) lpe = projectElem f lpe
+-- public export
+-- projectSetEqElem : Set lt a => Set rt a => {ls : lt} -> {rs : rt} ->
+--                    (0 eprf : SetEqPrf (ls, rs)) -> SetProvenElem ls ->
+--                    SetProvenElem rs
+-- projectSetEqElem (f,_) lpe = projectElem f lpe

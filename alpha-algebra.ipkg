@@ -20,7 +20,7 @@ main = Main
 
 -- name of executable
 executable = "test"
--- opts =
+opts = "--total --Werror"
 sourcedir = "src"
 -- builddir =
 -- outputdir =

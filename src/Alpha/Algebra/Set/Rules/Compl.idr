@@ -36,9 +36,9 @@ dblComplElem = projectElem dblComplRule
 
 public export
 0 invDblComplRule : Set t a => {s : t} -> ComplPrf (compl s) x -> SetPrf s x
-invDblComplRule prf = void (prf f)
+invDblComplRule prf = assert_total (void (prf f))
   where f : Not (SetPrf s x)
-        f prf' = f prf'
+        f prf' = assert_total (f prf')
 
 invDblComplElem : Set t a => {0 s : t} -> ProvenElem (ComplPrf (compl s)) ->
                   ProvenElem (SetPrf s)
