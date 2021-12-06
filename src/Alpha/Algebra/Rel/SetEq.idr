@@ -51,8 +51,10 @@ Set t a => RelTrans (SetEq t t a) t where
                                               relTrans (MkIncl t t a) rg rf)
 
 public export
-Set t a => RelAntiSymm (Incl t t a) (SetEq t t a) t where
-  relAntiSymm (MkIncl t t a) (MkSetEq t t a) lprf rprf = (lprf,rprf)
+Set t a => RelAntiSymm (Incl t t a) t where
+  relAntiSymmEq _ = SetEqPrf
+  relAntiSymm (MkIncl t t a) lprf rprf = (lprf,rprf)
+
 
 --------------------------
 -- Set equality projection
