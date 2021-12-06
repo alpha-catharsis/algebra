@@ -19,14 +19,14 @@ import Alpha.Algebra.Set.Set
 -- Universe set inclusion
 -------------------------
 
--- public export
--- 0 inclUniv : Set lt a => {ls : lt} -> InclPrf (ls,MkUniv)
--- inclUniv _ _ = ()
+public export
+0 inclUniv : Set lt a => {ls : lt} -> InclPrf (ls,MkUniv)
+inclUniv _ = ()
 
 ----------------------
 -- Empty set inclusion
 ----------------------
 
--- public export
--- 0 inclEmpty : Set rt a => {rs : rt} -> InclPrf (MkEmpty,rs)
--- inclEmpty _ _ impossible
+public export
+0 inclEmpty : Set rt a => {rs : rt} -> InclPrf (MkEmpty,rs)
+inclEmpty _ impossible

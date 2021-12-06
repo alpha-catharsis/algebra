@@ -9,5 +9,4 @@ module Alpha.Algebra.Rel.Rules
 -----------------
 
 import public Alpha.Algebra.Rel.Rules.Incl
--- import public Alpha.Algebra.Rel.Rules.Prop
 -- import public Alpha.Algebra.Rel.Rules.SetEq
