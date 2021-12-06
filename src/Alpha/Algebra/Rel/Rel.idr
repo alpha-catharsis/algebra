@@ -21,7 +21,6 @@ import Alpha.Algebra.Set.Set
 -- Relation definition
 ----------------------
 
-
 public export
 0 RelPrfTy : Type -> Type -> Type
 RelPrfTy a b = (a,b) -> Type
@@ -59,13 +58,13 @@ projectRelated : {0 prfTy : RelPrfTy a b} -> {0 prfTy' : RelPrfTy a b} ->
 projectRelated f (MkProvenRelated (x,y) prf) = MkProvenRelated (x,y) (f prf)
 
 public export
-0 EitherReleated : RelPrfTy a b -> Type
-EitherReleated prfTy = Either (DisprovenRelated prfTy) (ProvenRelated prfTy)
+0 EitherRelated : RelPrfTy a b -> Type
+EitherRelated prfTy = Either (DisprovenRelated prfTy) (ProvenRelated prfTy)
 
 public export
-eitherReleated : DecRel t a b => (r : t) -> (x : a) -> (y : b) ->
-                 EitherReleated (RelPrf r)
-eitherReleated r x y = case areRelated r x y of
+eitherRelated : DecRel t a b => (r : t) -> (x : a) -> (y : b) ->
+                 EitherRelated (RelPrf r)
+eitherRelated r x y = case areRelated r x y of
   No contra => Left (MkProvenRelated (x,y) contra)
   Yes prf => Right (MkProvenRelated (x,y) prf)
 
