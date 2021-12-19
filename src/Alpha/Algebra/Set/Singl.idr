@@ -24,57 +24,45 @@ import Alpha.Algebra.Set.Set
 ----------------
 
 public export
-data Singl : Type -> Type where
-  MkSingl : (x : a) -> Singl a
+0 SinglSet : (x : a) -> Set a
+SinglSet x y = y = x
 
 public export
-singl : (x : a) -> Singl a
-singl = MkSingl
+singl : DecEq a => (x : a) -> DecSet (SinglSet x)
+singl x y = decEq y x
 
 public export
-0 SinglPrf : a -> SetPrfTy a
-SinglPrf v x = x = v
-
-public export
-Set (Singl a) a where
-  SetPrf (MkSingl v) = SinglPrf v
-
-public export
-DecEq a => DecSet (Singl a) a where
-  isElem x (MkSingl v) = decEq x v
-
-public export
-singlProvenElem : (v : a) -> SetProvenElem (singl v)
-singlProvenElem v = MkProvenElem v Refl
+singlProvenElem : (x : a) -> ProvenElem (SinglSet x)
+singlProvenElem x = MkProvenElem x Refl
 
 ------------
 -- Holed set
 ------------
 
 public export
-Holed : Type -> Type
-Holed a = Compl (Singl a) a
+0 HoledSet : (x : a) -> Set a
+HoledSet x = Compl (SinglSet x)
 
 public export
-holed : (x : a) -> Holed a
+holed : DecEq a => (x : a) -> DecSet (HoledSet x)
 holed x = compl (singl x)
 
 public export
-0 HoledPrf : a -> SetPrfTy a
-HoledPrf v = ComplPrf (singl v)
-
-public export
-Uninhabited (HoledPrf x x) where
+Uninhabited (HoledSet x x) where
   uninhabited f = f Refl
 
 public export
-holedDisprovenElem : (v : a) -> DisprovenElem (HoledPrf v)
-holedDisprovenElem v = MkProvenElem v absurd
+holedDisprovenElem : (x : a) -> DisprovenElem (HoledSet x)
+holedDisprovenElem x = MkProvenElem x absurd
 
 --------------------
 -- Pointed singleton
 --------------------
 
 public export
-DecEq a => Pointed (Singl a) a where
-  basepointElem (MkSingl v) = singlProvenElem v
+pointedSingl : (x : a) -> Pointed (SinglSet x)
+pointedSingl x = MkPointed (SinglSet x) x Refl
+
+public export
+decPointedSingl : DecEq a => (x : a) -> DecPointed (SinglSet x)
+decPointedSingl x = MkDecPointed (pointedSingl x) (singl x)

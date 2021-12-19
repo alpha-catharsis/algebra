@@ -16,60 +16,53 @@ import Decidable.Decidable
 -----------------
 
 public export
-0 SetPrfTy : Type -> Type
-SetPrfTy a = a -> Type
+0 Set : Type -> Type
+Set a = (x : a) -> Type
 
 public export
-interface Set t a | t where
-  0 SetPrf : t -> SetPrfTy a
+0 DecSet : Set a -> Type
+DecSet s = (x : a) -> Dec (s x)
 
 public export
-interface Set t a => DecSet t a | t where
-  isElem : (x : a) -> (s : t) -> Dec (SetPrf s x)
+isElem : (x : a) -> DecSet s -> Dec (s x)
+isElem x ds = ds x
 
 public export
-elem : DecSet t a => (x : a) -> (s : t) -> Bool
-elem x s = isYes (isElem x s)
+elem : (x : a) -> {0 s : Set a} -> DecSet s -> Bool
+elem x ds = isYes (isElem x ds)
 
 --------------------------------
 -- Proven and disproven elements
 --------------------------------
 
 public export
-record ProvenElem {0 a : Type} (0 prfTy : SetPrfTy a) where
-  constructor MkProvenElem
-  provenElem : a
-  0 elemPrf : prfTy provenElem
+data ProvenElem : Set a -> Type where
+  MkProvenElem : (x : a) -> (0 prf : s x) -> ProvenElem s
 
 public export
-0 DisprovenElem : SetPrfTy a -> Type
-DisprovenElem prfTy = ProvenElem (Not . prfTy)
+provenElem : {0 s : Set a} -> ProvenElem s -> a
+provenElem (MkProvenElem x _) = x
 
 public export
-projectElem : {0 prfTy : SetPrfTy a} -> {0 prfTy' : SetPrfTy a} ->
-              (0 f : {x : a} -> prfTy x -> prfTy' x) ->
-              ProvenElem prfTy -> ProvenElem prfTy'
+0 elemPrf : (pe : ProvenElem s) -> s (provenElem pe)
+elemPrf (MkProvenElem _ prf) = prf
+
+public export
+DisprovenElem : Set a -> Type
+DisprovenElem s = ProvenElem (Not . s)
+
+public export
+projectElem : {0 s : Set a} -> {0 s' : Set a} ->
+              (0 f : {x : a} -> s x -> s' x) ->
+              ProvenElem s -> ProvenElem s'
 projectElem f pe = MkProvenElem (provenElem pe) (f (elemPrf pe))
 
+public export
+EitherElem : Set a -> Type
+EitherElem s = Either (DisprovenElem s) (ProvenElem s)
 
 public export
-0 EitherElem : SetPrfTy a -> Type
-EitherElem prfTy = Either (DisprovenElem prfTy) (ProvenElem prfTy)
-
-public export
-eitherElem : DecSet t a => (x : a) -> (s : t) -> EitherElem (SetPrf s)
-eitherElem x s = case isElem x s of
+eitherElem : (x : a) -> {0 s : Set a} -> DecSet s -> EitherElem s
+eitherElem x ds = case isElem x ds of
   No contra => Left (MkProvenElem x contra)
   Yes prf => Right (MkProvenElem x prf)
-
-------------------------------------
--- Set proven and disproven elements
-------------------------------------
-
-public export
-0 SetProvenElem : Set t a => t -> Type
-SetProvenElem s = ProvenElem (SetPrf s)
-
-public export
-0 SetDisprovenElem : Set t a => t -> Type
-SetDisprovenElem s = DisprovenElem (SetPrf s)

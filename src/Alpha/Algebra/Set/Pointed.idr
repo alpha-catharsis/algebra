@@ -21,13 +21,9 @@ import Alpha.Algebra.Set.Set
 --------------
 
 public export
-interface Set t a => Pointed t a | t where
-  basepointElem : (s : t) -> SetProvenElem s
+data Pointed : Set a -> Type where
+  MkPointed : (0 s : Set a) -> (x : a) -> (0 prf : s x) -> Pointed s
 
 public export
-basepoint : Pointed t a => t -> a
-basepoint ps = provenElem (basepointElem ps)
-
-public export
-0 basepointPrf : Pointed t a => (ps : t) -> SetPrf ps (basepoint ps)
-basepointPrf ps = elemPrf (basepointElem ps)
+data DecPointed : Set a -> Type where
+  MkDecPointed : {0 s : Set a} -> (ps : Pointed s) -> (ds : DecSet s) -> DecPointed s

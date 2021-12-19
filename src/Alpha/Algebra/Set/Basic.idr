@@ -22,27 +22,15 @@ import public Alpha.Algebra.Set.Set
 ---------------
 
 public export
-data Univ : Type where
-  MkUniv : Univ
+UnivSet : Set a
+UnivSet _ = ()
 
 public export
-univ : Univ
-univ = MkUniv
+univ : DecSet UnivSet
+univ _ = Yes ()
 
 public export
-0 UnivPrf : SetPrfTy a
-UnivPrf _ = ()
-
-public export
-Set Univ a where
-  SetPrf _ = UnivPrf
-
-public export
-DecSet Univ a where
-  isElem _ _ = Yes ()
-
-public export
-univProvenElem : (x : a) -> ProvenElem {a} UnivPrf
+univProvenElem : (x : a) -> ProvenElem {a} UnivSet
 univProvenElem x = MkProvenElem x ()
 
 ------------
@@ -50,25 +38,17 @@ univProvenElem x = MkProvenElem x ()
 ------------
 
 public export
-data Empty : Type where
-  MkEmpty : Empty
+EmptySet : Set a
+EmptySet = Compl UnivSet
 
 public export
-empty : Empty
-empty = MkEmpty
+empty : DecSet EmptySet
+empty = compl univ
 
 public export
-0 EmptyPrf : SetPrfTy a
-EmptyPrf _ = Void
+Uninhabited (EmptySet x) where
+  uninhabited () impossible
 
 public export
-Set Empty a where
-  SetPrf _ = EmptyPrf
-
-public export
-DecSet Empty a where
-  isElem _ _ = No absurd
-
-public export
-emptyDisprovenElem : (x : a) -> DisprovenElem {a} EmptyPrf
+emptyDisprovenElem : (x : a) -> DisprovenElem {a} EmptySet
 emptyDisprovenElem x = MkProvenElem x absurd

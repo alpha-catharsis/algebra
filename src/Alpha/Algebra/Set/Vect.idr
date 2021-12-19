@@ -23,13 +23,9 @@ import Alpha.Algebra.Set.Set
 -----------
 
 public export
-0 VectPrf : Vect k a -> SetPrfTy a
-VectPrf xs x = Elem x xs
+0 VectSet : Vect k a -> Set a
+VectSet xs x = Vect.Elem.Elem x xs
 
 public export
-Set (Vect k a) a where
-  SetPrf = VectPrf
-
-public export
-DecEq a => DecSet (Vect k a) a where
-  isElem = Vect.Elem.isElem
+vect : DecEq a => (xs : Vect k a) -> DecSet (VectSet xs)
+vect xs x = Vect.Elem.isElem x xs

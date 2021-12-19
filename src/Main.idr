@@ -1,6 +1,7 @@
 module Main
 
-import Alpha.Algebra.Rel
+-- import Alpha.Algebra.Fn
+-- import Alpha.Algebra.Rel
 import Alpha.Algebra.Set
 
 main : IO ()
