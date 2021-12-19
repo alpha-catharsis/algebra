@@ -12,74 +12,63 @@ import Alpha.Algebra.Set.Ops
 import Alpha.Algebra.Set.Set
 
 --------------
--- Union rules
+-- Basic rules
 --------------
 
 public export
-0 unionLeftRule : Set lt a => Set rt a => {ls : lt} -> {rs : rt} ->
-                  SetPrf ls x -> UnionPrf ls rs x
-unionLeftRule = Left
+0 unionLeftRule : (ls : Set a) -> (rs : Set a) -> ls x -> Union ls rs x
+unionLeftRule _ _ = Left
 
 public export
-unionLeftElem : Set lt a => Set rt a => {0 ls : lt} -> {0 rs : rt} ->
-                ProvenElem (SetPrf ls) -> ProvenElem (UnionPrf ls rs)
-unionLeftElem = projectElem unionLeftRule
+0 unionRightRule : (ls : Set a) -> (rs : Set a) -> rs x -> Union ls rs x
+unionRightRule _ _ = Right
 
 public export
-0 unionRightRule : Set lt a => Set rt a => {ls : lt} -> {rs : rt} ->
-                   SetPrf rs x -> UnionPrf ls rs x
-unionRightRule = Right
-
-public export
-unionRightElem : Set lt a => Set rt a => {0 ls : lt} -> {0 rs : rt} ->
-               ProvenElem (SetPrf rs) -> ProvenElem (UnionPrf ls rs)
-unionRightElem = projectElem unionRightRule
-
-public export
-0 unionNotRule : Set lt a => Set rt a => {ls : lt} -> {rs : rt} ->
-                 Not (SetPrf ls x) -> Not (SetPrf rs x) ->
-                 Not (UnionPrf ls rs x)
-unionNotRule lcontra rcontra eprf = case eprf of
+0 unionNotRule : (ls : Set a) -> (rs : Set a) -> Not (ls x) -> Not (rs x) -> Not (Union ls rs x)
+unionNotRule _ _ lcontra rcontra eprf = case eprf of
   Left lprf => lcontra lprf
   Right rprf => rcontra rprf
 
 public export
-0 invUnionRule : Set lt a => Set rt a => {ls : lt} -> {rs : rt} ->
-                 UnionPrf ls rs x -> Either (SetPrf ls x) (SetPrf rs x)
-invUnionRule = id
+0 invUnionRule : (ls : Set a) -> (rs : Set a) -> Union ls rs x -> Either (ls x) (rs x)
+invUnionRule _ _ = id
 
 public export
-0 invUnionLeftRule : Set lt a => Set rt a => {ls : lt} -> {rs : rt} ->
-                     UnionPrf ls rs x -> Not (SetPrf rs x) -> SetPrf ls x
-invUnionLeftRule eprf rcontra = case eprf of
+0 invUnionLeftRule : (ls : Set a) -> (rs : Set a) -> Union ls rs x -> Not (rs x) -> ls x
+invUnionLeftRule _ _ eprf rcontra = case eprf of
   Left lprf => lprf
   Right rprf => void (rcontra rprf)
 
 public export
-0 invUnionRightRule : Set lt a => Set rt a => {ls : lt} -> {rs : rt} ->
-                      UnionPrf ls rs x -> Not (SetPrf ls x) -> SetPrf rs x
-invUnionRightRule eprf lcontra = case eprf of
+0 invUnionRightRule : (ls : Set a) -> (rs : Set a) -> Union ls rs x -> Not (ls x) -> rs x
+invUnionRightRule _ _ eprf lcontra = case eprf of
   Left lprf => void (lcontra lprf)
   Right rprf => rprf
 
 public export
-0 invUnionNotLeftRule : Set lt a => Set rt a => {ls : lt} -> {rs : rt} ->
-                        Not (UnionPrf ls rs x) -> Not (SetPrf ls x)
-invUnionNotLeftRule econtra prf = econtra (Left prf)
+0 invUnionNotLeftRule : (ls : Set a) -> (rs : Set a) -> Not (Union ls rs x) -> Not (ls x)
+invUnionNotLeftRule _ _ econtra prf = econtra (Left prf)
 
 public export
-invUnionNotLeftElem : Set lt a => Set rt a => {0 ls : lt} -> {0 rs : rt} ->
-                      DisprovenElem (UnionPrf ls rs) ->
-                      DisprovenElem (SetPrf ls)
-invUnionNotLeftElem = projectElem invUnionNotLeftRule
+0 invUnionNotRightRule : (ls : Set a) -> (rs : Set a) -> Not (Union ls rs x) -> Not (rs x)
+invUnionNotRightRule _ _ econtra prf = econtra (Right prf)
+
+----------------------
+-- Basic element rules
+----------------------
 
 public export
-0 invUnionNotRightRule : Set lt a => Set rt a => {ls : lt} -> {rs : rt} ->
-                         Not (UnionPrf ls rs x) -> Not (SetPrf rs x)
-invUnionNotRightRule econtra prf = econtra (Right prf)
+unionLeftElem : ProvenElem ls -> ProvenElem (Union ls rs)
+unionLeftElem = projectElem (unionLeftRule ls rs)
 
 public export
-invUnionNotRightElem : Set lt a => Set rt a => {0 ls : lt} -> {0 rs : rt} ->
-                       DisprovenElem (UnionPrf ls rs) ->
-                       DisprovenElem (SetPrf rs)
-invUnionNotRightElem = projectElem invUnionNotRightRule
+unionRightElem : ProvenElem rs -> ProvenElem (Union ls rs)
+unionRightElem = projectElem (unionRightRule ls rs)
+
+public export
+invUnionNotLeftElem : DisprovenElem (Union ls rs) -> DisprovenElem ls
+invUnionNotLeftElem = projectElem (invUnionNotLeftRule ls rs)
+
+public export
+invUnionNotRightElem : DisprovenElem (Union ls rs) -> DisprovenElem rs
+invUnionNotRightElem = projectElem (invUnionNotRightRule ls rs)

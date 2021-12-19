@@ -13,65 +13,54 @@ import Alpha.Algebra.Set.Rules.Inter
 import Alpha.Algebra.Set.Ops
 import Alpha.Algebra.Set.Set
 
--------------------
--- Difference rules
--------------------
+--------------
+-- Basic rules
+--------------
 
 public export
-0 diffRule : Set lt a => Set rt a => {ls : lt} -> {rs : rt} -> SetPrf ls x ->
-             Not (SetPrf rs x) -> DiffPrf ls rs x
-diffRule lprf rcontra = interRule {rs=compl rs} lprf rcontra
+0 diffRule : (ls : Set a) -> (rs : Set a) -> ls x -> Not (rs x) -> Diff ls rs x
+diffRule ls rs lprf rcontra = interRule ls (Compl rs) lprf rcontra
 
 public export
-0 diffNotLeftRule : Set lt a => Set rt a => {ls : lt} -> {rs : rt} ->
-                    Not (SetPrf ls x) -> Not (DiffPrf ls rs x)
-diffNotLeftRule lcontra = interNotLeftRule {rs=compl rs} lcontra
+0 diffNotLeftRule : (ls : Set a) -> (rs : Set a) -> Not (ls x) -> Not (Diff ls rs x)
+diffNotLeftRule ls rs lcontra = interNotLeftRule ls (Compl rs) lcontra
 
 public export
-diffNotLeftElem : Set lt a => Set rt a => {0 ls : lt} -> {0 rs : rt} ->
-                  DisprovenElem (SetPrf ls) -> DisprovenElem (DiffPrf ls rs)
-diffNotLeftElem = projectElem diffNotLeftRule
+0 diffNotRightRule : (ls : Set a) -> (rs : Set a) -> rs x -> Not (Diff ls rs x)
+diffNotRightRule ls rs rprf = interNotRightRule ls (Compl rs) (dblComplRule rs rprf)
 
 public export
-0 diffNotRightRule : Set lt a => Set rt a => {ls : lt} -> {rs : rt} ->
-                     SetPrf rs x -> Not (DiffPrf ls rs x)
-diffNotRightRule rprf = interNotRightRule {rs=compl rs} (dblComplRule {s=rs}
-                                                         rprf)
+0 invDiffLeftRule : (ls : Set a) -> (rs : Set a) -> Diff ls rs x -> ls x
+invDiffLeftRule ls rs pprf = invInterLeftRule ls (Compl rs) pprf
 
 public export
-diffNotRightElem : Set lt a => Set rt a => {0 ls : lt} -> {0 rs : rt} ->
-                   ProvenElem (SetPrf rs) -> DisprovenElem (DiffPrf ls rs)
-diffNotRightElem = projectElem diffNotRightRule
+0 invDiffRightRule : (ls : Set a) -> (rs : Set a) -> Not (Diff ls rs x) -> ls x -> rs x
+invDiffRightRule ls rs pcontra lprf = invDblComplRule rs (invInterNotRightRule ls (Compl rs) pcontra lprf)
 
 public export
-0 invDiffLeftRule : Set lt a => Set rt a => {ls : lt} -> {rs : rt} ->
-                    DiffPrf ls rs x -> SetPrf ls x
-invDiffLeftRule pprf = invInterLeftRule {rs=compl rs} pprf
+0 invDiffNotLeftRule : (ls : Set a) -> (rs : Set a) -> Not (Diff ls rs x) -> Not (rs x) -> Not (ls x)
+invDiffNotLeftRule ls rs pcontra rcontra = invInterNotLeftRule ls (Compl rs) pcontra rcontra
 
 public export
-invDiffLeftElem : Set lt a => Set rt a => {0 ls : lt} -> {0 rs : rt} ->
-                  ProvenElem (DiffPrf ls rs) -> ProvenElem (SetPrf ls)
-invDiffLeftElem = projectElem invDiffLeftRule
+0 invDiffNotRightRule : (ls : Set a) -> (rs : Set a) -> Diff ls rs x -> Not (rs x)
+invDiffNotRightRule ls rs pprf = invInterRightRule ls (Compl rs) pprf
+
+----------------------
+-- Basic element rules
+----------------------
 
 public export
-0 invDiffRightRule : Set lt a => Set rt a => {ls : lt} -> {rs : rt} ->
-                     Not (DiffPrf ls rs x) -> SetPrf ls x -> SetPrf rs x
-invDiffRightRule pcontra lprf = invDblComplRule (invInterNotRightRule
-                                                 {rs=compl rs} pcontra lprf)
+diffNotLeftElem : DisprovenElem ls -> DisprovenElem (Diff ls rs)
+diffNotLeftElem = projectElem (diffNotLeftRule ls rs)
 
 public export
-0 invDiffNotLeftRule : Set lt a => Set rt a => {ls : lt} -> {rs : rt} ->
-                       Not (DiffPrf ls rs x) -> Not (SetPrf rs x) ->
-                       Not (SetPrf ls x)
-invDiffNotLeftRule pcontra rcontra = invInterNotLeftRule {rs=compl rs}
-                                     pcontra rcontra
+diffNotRightElem : ProvenElem rs -> DisprovenElem (Diff ls rs)
+diffNotRightElem = projectElem (diffNotRightRule ls rs)
 
 public export
-0 invDiffNotRightRule : Set lt a => Set rt a => {ls : lt} -> {rs : rt} ->
-                        DiffPrf ls rs x -> Not (SetPrf rs x)
-invDiffNotRightRule pprf = invInterRightRule {rs=compl rs} pprf
+invDiffLeftElem : ProvenElem (Diff ls rs) -> ProvenElem ls
+invDiffLeftElem = projectElem (invDiffLeftRule ls rs)
 
 public export
-invDiffNotRightElem : Set lt a => Set rt a => {0 ls : lt} -> {0 rs : rt} ->
-                      ProvenElem (DiffPrf ls rs) -> DisprovenElem (SetPrf rs)
-invDiffNotRightElem = projectElem invDiffNotRightRule
+invDiffNotRightElem : ProvenElem (Diff ls rs) -> DisprovenElem rs
+invDiffNotRightElem = projectElem (invDiffNotRightRule ls rs)
