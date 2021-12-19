@@ -17,9 +17,9 @@ import Alpha.Algebra.Set.Prod
 ---------------------
 
 public export
-Set lt a => Set rt b => Rel (Prod lt rt (a,b)) a b where
-  RelPrf ps = ProdPrf (prodLeftSet ps) (prodRightSet ps)
+0 SetRel : Set (a,b) -> Rel a b
+SetRel = id
 
 public export
-DecSet lt a => DecSet rt b => DecRel (Prod lt rt (a,b)) a b where
-  areRelated ps x y = isElem (x,y) ps
+0 DecSetRel : {s : Set (a,b)} -> DecSet s -> DecRel (SetRel s)
+DecSetRel ds p = isElem p ds

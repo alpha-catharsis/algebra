@@ -22,60 +22,52 @@ import Alpha.Algebra.Set.Set
 ----------------------
 
 public export
-0 RelPrfTy : Type -> Type -> Type
-RelPrfTy a b = (a,b) -> Type
+0 Rel : Type -> Type -> Type
+Rel a b = (a,b) -> Type
 
 public export
-interface Rel t a b | t where
-  0 RelPrf : t -> RelPrfTy a b
+0 DecRel : Rel a b -> Type
+DecRel r = (p : (a,b)) -> Dec (r p)
 
 public export
-interface Rel t a b => DecRel t a b | t where
-  areRelated : (r : t) -> (x : a) -> (y : b) -> Dec (RelPrf r (x,y))
+areRelated : DecRel r -> (x : a) -> (y : b) -> Dec (r (x,y))
+areRelated dr x y = dr (x,y)
 
 public export
-related : DecRel t a b => (r : t) -> (x : a) -> (y : b) -> Bool
-related r x y = isYes (areRelated r x y)
+related : {0 r : Rel a b} -> DecRel r -> (x : a) -> (y : b) -> Bool
+related dr x y = isYes (areRelated dr x y)
 
 -------------------------------
 -- Proven and disproven related
 -------------------------------
 
 public export
-record ProvenRelated {0 a : Type} {0 b : Type } (0 prfTy : RelPrfTy a b) where
-  constructor MkProvenRelated
-  provenRelated : (a,b)
-  0 relatedPrf : prfTy provenRelated
+data ProvenRelated : Rel a b -> Type where
+  MkProvenRelated : (p : (a,b)) -> (0 prf : r p) -> ProvenRelated r
 
 public export
-0 DisprovenRelated : RelPrfTy a b -> Type
-DisprovenRelated prfTy = ProvenRelated (Not . prfTy)
+provenRelated : {0 r : Rel a b} -> ProvenRelated r -> (a,b)
+provenRelated (MkProvenRelated p _) = p
 
 public export
-projectRelated : {0 prfTy : RelPrfTy a b} -> {0 prfTy' : RelPrfTy a b} ->
-                 (0 f : {x : a} -> {y : b} -> prfTy (x,y) -> prfTy' (x,y)) ->
-                 ProvenRelated prfTy -> ProvenRelated prfTy'
-projectRelated f (MkProvenRelated (x,y) prf) = MkProvenRelated (x,y) (f prf)
+0 relatedPrf : (pr : ProvenRelated r) -> r (provenRelated pr)
+relatedPrf (MkProvenRelated _ prf) = prf
 
 public export
-0 EitherRelated : RelPrfTy a b -> Type
-EitherRelated prfTy = Either (DisprovenRelated prfTy) (ProvenRelated prfTy)
+DisprovenRelated : Rel a b -> Type
+DisprovenRelated r = ProvenRelated (Not . r)
 
 public export
-eitherRelated : DecRel t a b => (r : t) -> (x : a) -> (y : b) ->
-                 EitherRelated (RelPrf r)
-eitherRelated r x y = case areRelated r x y of
+projectRelated : {0 r : Rel a b} -> {0 r' : Rel a b} -> (0 f : {p : (a,b)} -> r p -> r' p) ->
+                 ProvenRelated r -> ProvenRelated r'
+projectRelated f pr = MkProvenRelated (provenRelated pr) (f (relatedPrf pr))
+
+public export
+EitherRelated : Rel a b -> Type
+EitherRelated r = Either (DisprovenRelated r) (ProvenRelated r)
+
+public export
+eitherRelated : {0 r : Rel a b} -> DecRel r -> (x : a) -> (y : b) -> EitherRelated r
+eitherRelated dr x y = case areRelated dr x y of
   No contra => Left (MkProvenRelated (x,y) contra)
   Yes prf => Right (MkProvenRelated (x,y) prf)
-
-----------------------------------------
--- Relation proven and disproven related
-----------------------------------------
-
-public export
-0 RelProvenRelated : Rel t a b => t -> Type
-RelProvenRelated r = ProvenRelated (RelPrf r)
-
-public export
-0 RelDisprovenRelated : Rel t a b => t -> Type
-RelDisprovenRelated r = DisprovenRelated (RelPrf r)

@@ -14,10 +14,10 @@ import Data.DPair
 -- Internal imports
 -------------------
 
--- import Alpha.Algebra.Rel.Rel
--- import Alpha.Algebra.Rel.Incl
--- import Alpha.Algebra.Rel.SetEq
--- import Alpha.Algebra.Set.Basic
+import Alpha.Algebra.Rel.Rel
+import Alpha.Algebra.Rel.Incl
+import Alpha.Algebra.Rel.SetEq
+import Alpha.Algebra.Set.Basic
 import Alpha.Algebra.Set.Ops
 import Alpha.Algebra.Set.Set
 
@@ -83,12 +83,10 @@ invDblComplElem = projectElem (invDblComplRule s)
 -- Complement equalities
 ------------------------
 
--- public export
--- 0 setEqUnivComplEmpty : {a : Type} -> SetEqPrf (MkUniv, compl MkEmpty)
--- setEqUnivComplEmpty = (\_ => id, \_ => ())
+public export
+0 setEqUnivComplEmpty : SetEqRel a (UnivSet, Compl EmptySet)
+setEqUnivComplEmpty = (\x,f => f x, \_ => ())
 
--- public export
--- projectUnivComplEmpty : {0 a : Type} -> ProvenElem {a} UnivPrf ->
---                         ProvenElem {a} (ComplPrf MkEmpty)
--- projectUnivComplEmpty = projectSetEqElem {ls=MkUniv} {rs=compl MkEmpty}
---                         setEqUnivComplEmpty
+public export
+0 setEqEmptyComplUniv : SetEqRel a (EmptySet, Compl UnivSet)
+setEqEmptyComplUniv = (id, id)

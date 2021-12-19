@@ -20,7 +20,7 @@ import Alpha.Algebra.Set.Set
 -------------------------
 
 public export
-0 inclUniv : Set lt a => {ls : lt} -> InclPrf (ls,MkUniv)
+0 inclUniv : InclRel a (ls,UnivSet)
 inclUniv _ = ()
 
 ----------------------
@@ -28,5 +28,5 @@ inclUniv _ = ()
 ----------------------
 
 public export
-0 inclEmpty : Set rt a => {rs : rt} -> InclPrf (MkEmpty,rs)
-inclEmpty _ impossible
+0 inclEmpty : InclRel a (EmptySet,rs)
+inclEmpty (_,_) impossible

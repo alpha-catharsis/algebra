@@ -23,38 +23,25 @@ import Alpha.Algebra.Rel.Rel
 ---------------
 
 public export
-data LTE : Type where
-  MkLTE : LTE
+0 LTERel : Rel Nat Nat
+LTERel (x,y) = LTE x y
 
 public export
-lte : LTE
-lte = MkLTE
-
-public export
-0 LTEPrf : RelPrfTy Nat Nat
-LTEPrf (x,y) = Nat.LTE x y
-
-public export
-Rel LTE Nat Nat where
-  RelPrf _ = LTEPrf
-
-public export
-DecRel LTE Nat Nat where
-  areRelated _ x y = isLTE x y
+lte : DecRel LTERel
+lte (x,y) = isLTE x y
 
 -----------------
 -- LTE properties
 -----------------
 
 public export
-RelRefl LTE Nat where
-  relRefl _ = reflexive {ty=Nat} {rel=LTE}
+0 LTERefl : relRefl LTERel
+LTERefl = reflexive {ty=Nat} {rel=LTE}
 
 public export
-RelAntiSymm LTE Nat where
-  relAntiSymmEq _ = EqlPrf
-  relAntiSymm _ = antisymmetric {rel=LTE} {x} {y}
+0 LTEAntiSymm : relAntiSymm LTERel (EqualRel Nat Nat)
+LTEAntiSymm = antisymmetric {rel=LTE} {x} {y}
 
 public export
-RelTrans LTE Nat where
-  relTrans _ = transitive {rel=LTE} {x} {y} {z}
+0 LTETrans : relTrans LTERel
+LTETrans = transitive {rel=LTE} {x} {y} {z}

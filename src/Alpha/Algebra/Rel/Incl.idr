@@ -17,44 +17,29 @@ import Alpha.Algebra.Set.Set
 -------------------------
 
 public export
-data Incl : Type -> Type -> Type -> Type where
-  MkIncl : (0 lt : Type) -> (0 rt : Type) -> (0 a : Type) -> Incl lt rt a
-
-public export
-incl : (0 lt : Type) -> (0 rt : Type) -> (0 a : Type) -> Incl lt rt a
-incl = MkIncl
-
-public export
-0 InclPrf : Set lt a => Set rt a => RelPrfTy lt rt
-InclPrf (ls,rs) = {0 e : a} -> SetPrf ls e -> SetPrf rs e
-
-public export
-Set lt a => Set rt a => Rel (Incl lt rt a) lt rt where
-  RelPrf (MkIncl lt rt a) = InclPrf
+0 InclRel : (a : Type) -> Rel (Set a) (Set a)
+InclRel a (ls,rs) = {0 e : a} -> ls e -> rs e
 
 ---------------------------
 -- Set inclusion properties
 ---------------------------
 
 public export
-Set t a => RelRefl (Incl t t a) t where
-  relRefl (MkIncl t t a) = id
+0 inclRefl : relRefl (InclRel a)
+inclRefl = id
 
 public export
-Set t a => RelTrans (Incl t t a) t where
-  relTrans (MkIncl t t a) f g = g . f
+0 inclTrans : relTrans (InclRel a)
+inclTrans f g = g . f
 
 ---------------------------
 -- Set inclusion projection
 ---------------------------
 
 public export
-0 projectIncl : Set lt a => Set rt a => {ls : lt} -> {rs : rt} ->
-                InclPrf (ls,rs) -> SetPrf ls x -> SetPrf rs x
+0 projectIncl : InclRel a (ls,rs) -> ls x -> rs x
 projectIncl f lprf = f lprf
 
 public export
-projectInclElem : Set lt a => Set rt a => {0 ls : lt} -> {0 rs : rt} ->
-                  (0 iprf : InclPrf (ls, rs)) -> SetProvenElem ls ->
-                  SetProvenElem rs
+projectInclElem : (0 iprf : InclRel a (ls,rs)) -> ProvenElem ls -> ProvenElem rs
 projectInclElem f pe = projectElem f pe

@@ -17,46 +17,30 @@ import Decidable.Equality
 import Alpha.Algebra.Rel.Prop
 import Alpha.Algebra.Rel.Rel
 
----------------
--- LTE relation
----------------
-
-public export
-data Eql : Type -> Type -> Type where
-  MkEql : (0 a : Type) -> (0 b : Type) -> Eql a b
-
-public export
-eql : (0 a : Type) -> (0 b : Type) -> Eql a b
-eql = MkEql
-
-public export
-homEql : (0 a : Type) -> Eql a a
-homEql a = MkEql a a
-
-public export
-0 EqlPrf : RelPrfTy a b
-EqlPrf (x,y) = x = y
-
-public export
-Rel (Eql a b) a b where
-  RelPrf (MkEql a b) = EqlPrf
-
-public export
-DecEq a => DecRel (Eql a a) a a where
-  areRelated (MkEql a a) x y = decEq x y
-
 -----------------
+-- Equal relation
+-----------------
+
+public export
+0 EqualRel : (a : Type) -> (b : Type) -> Rel a b
+EqualRel _ _ (x,y) = x = y
+
+public export
+equal : DecEq a => DecRel (EqualRel a a)
+equal (x,y) = decEq x y
+
+-------------------
 -- Equal properties
------------------
+-------------------
 
 public export
-RelRefl (Eql a a) a where
-  relRefl (MkEql a a) = Refl
+0 equalRefl : relRefl (EqualRel a a)
+equalRefl = Refl
 
 public export
-RelSymm (Eql a a) a where
-  relSymm (MkEql a a) prf = sym prf
+0 equalSymm : relSymm (EqualRel a a)
+equalSymm Refl = Refl
 
 public export
-RelTrans (Eql a a) a where
-  relTrans (MkEql a a) lprf rprf = rewrite lprf in rprf
+0 equalTrans : relTrans (EqualRel a a)
+equalTrans lprf rprf = rewrite lprf in rprf

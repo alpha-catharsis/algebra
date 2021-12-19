@@ -17,7 +17,7 @@ import Decidable.Decidable
 
 public export
 0 Set : Type -> Type
-Set a = (x : a) -> Type
+Set a = a -> Type
 
 public export
 0 DecSet : Set a -> Type
@@ -52,9 +52,7 @@ DisprovenElem : Set a -> Type
 DisprovenElem s = ProvenElem (Not . s)
 
 public export
-projectElem : {0 s : Set a} -> {0 s' : Set a} ->
-              (0 f : {x : a} -> s x -> s' x) ->
-              ProvenElem s -> ProvenElem s'
+projectElem : {0 s : Set a} -> {0 s' : Set a} -> (0 f : {x : a} -> s x -> s' x) -> ProvenElem s -> ProvenElem s'
 projectElem f pe = MkProvenElem (provenElem pe) (f (elemPrf pe))
 
 public export
