@@ -11,9 +11,10 @@ module Alpha.Algebra.Set.Rules.Compl
 import Alpha.Algebra.Rel.Rel
 import Alpha.Algebra.Rel.Incl
 import Alpha.Algebra.Rel.SetEq
-import Alpha.Algebra.Set.Basic
-import Alpha.Algebra.Set.Ops
+import Alpha.Algebra.Set.Empty
+import Alpha.Algebra.Set.Ops.Compl
 import Alpha.Algebra.Set.Set
+import Alpha.Algebra.Set.Univ
 
 --------------
 -- Basic rules

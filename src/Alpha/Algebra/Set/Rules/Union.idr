@@ -8,7 +8,7 @@ module Alpha.Algebra.Set.Rules.Union
 -- Internal imports
 -------------------
 
-import Alpha.Algebra.Set.Ops
+import Alpha.Algebra.Set.Ops.Union
 import Alpha.Algebra.Set.Set
 
 --------------

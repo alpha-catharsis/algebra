@@ -2,30 +2,15 @@
 -- Module declaration
 ---------------------
 
-module Alpha.Algebra.Set.Basic
+module Alpha.Algebra.Set.Empty
 
 -------------------
 -- Internal imports
 -------------------
 
-import public Alpha.Algebra.Set.Ops
+import public Alpha.Algebra.Set.Ops.Compl
 import public Alpha.Algebra.Set.Set
-
----------------
--- Universe set
----------------
-
-public export
-UnivSet : Set a
-UnivSet _ = ()
-
-public export
-univ : DecSet UnivSet
-univ _ = Yes ()
-
-public export
-univProvenElem : (x : a) -> ProvenElem {a} UnivSet
-univProvenElem x = MkProvenElem x ()
+import public Alpha.Algebra.Set.Univ
 
 ------------
 -- Empty set

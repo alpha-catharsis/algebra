@@ -8,8 +8,13 @@ module Alpha.Algebra.Set.Rules.Inter
 -- Internal imports
 -------------------
 
-import Alpha.Algebra.Set.Ops
+import Alpha.Algebra.Rel.Rel
+import Alpha.Algebra.Rel.Incl
+import Alpha.Algebra.Rel.SetEq
+import Alpha.Algebra.Set.Ops.Inter
 import Alpha.Algebra.Set.Set
+import Alpha.Algebra.Set.Empty
+import Alpha.Algebra.Set.Univ
 
 --------------
 -- Basic rules
@@ -62,3 +67,16 @@ invInterLeftElem = projectElem (invInterLeftRule ls rs)
 public export
 invInterRightElem : ProvenElem (Inter ls rs) -> ProvenElem rs
 invInterRightElem = projectElem (invInterRightRule ls rs)
+
+--------------------------
+-- Intersection equalities
+--------------------------
+
+0 setEqInterLeftEmpty : SetEqRel a (EmptySet, Inter EmptySet s)
+setEqInterLeftEmpty = (\prf => (prf,?d), \prf => fst prf)
+
+0 setEqInterLeftUniv : SetEqRel a (s, Inter UnivSet s)
+setEqInterLeftUniv = (\rprf => ((),rprf), \pprf => snd pprf)
+
+0 setEqInterRightUniv : SetEqRel a (s, Inter s UnivSet)
+setEqInterRightUniv = (\lprf => (lprf,()), \pprf => fst pprf)

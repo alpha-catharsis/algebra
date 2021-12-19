@@ -10,7 +10,9 @@ module Alpha.Algebra.Set.Rules.Diff
 
 import Alpha.Algebra.Set.Rules.Compl
 import Alpha.Algebra.Set.Rules.Inter
-import Alpha.Algebra.Set.Ops
+import Alpha.Algebra.Set.Ops.Compl
+import Alpha.Algebra.Set.Ops.Diff
+import Alpha.Algebra.Set.Ops.Inter
 import Alpha.Algebra.Set.Set
 
 --------------

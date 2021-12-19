@@ -10,8 +10,8 @@ module Alpha.Algebra.Set.Rules.Univ
 
 import Alpha.Algebra.Rel.Incl
 import Alpha.Algebra.Rel.Rel
-import Alpha.Algebra.Set.Basic
 import Alpha.Algebra.Set.Set
+import Alpha.Algebra.Set.Univ
 
 -------------------------
 -- Universe set inclusion

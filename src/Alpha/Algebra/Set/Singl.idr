@@ -14,7 +14,7 @@ import Decidable.Equality
 -- Internal imports
 -------------------
 
-import Alpha.Algebra.Set.Ops
+import Alpha.Algebra.Set.Ops.Compl
 import Alpha.Algebra.Set.Pointed
 import Alpha.Algebra.Set.Set
 

@@ -10,7 +10,11 @@ module Alpha.Algebra.Set.Rules.SymmDiff
 
 import Alpha.Algebra.Set.Rules.Diff
 import Alpha.Algebra.Set.Rules.Union
-import Alpha.Algebra.Set.Ops
+import Alpha.Algebra.Set.Ops.Compl
+import Alpha.Algebra.Set.Ops.Diff
+import Alpha.Algebra.Set.Ops.Inter
+import Alpha.Algebra.Set.Ops.SymmDiff
+import Alpha.Algebra.Set.Ops.Union
 import Alpha.Algebra.Set.Set
 
 --------------
