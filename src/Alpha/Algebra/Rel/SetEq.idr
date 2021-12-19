@@ -9,7 +9,6 @@ module Alpha.Algebra.Rel.SetEq
 -------------------
 
 import Alpha.Algebra.Rel.Incl
-import Alpha.Algebra.Rel.Prop
 import Alpha.Algebra.Rel.Rel
 import Alpha.Algebra.Set.Set
 
@@ -20,26 +19,6 @@ import Alpha.Algebra.Set.Set
 public export
 0 SetEqRel : (a : Type) -> Rel (Set a) (Set a)
 SetEqRel a (ls,rs) = (InclRel a (ls,rs), InclRel a (rs,ls))
-
---------------------------
--- Set equality properties
---------------------------
-
-public export
-0 setEqRefl : relRefl (SetEqRel a)
-setEqRefl = (inclRefl {x}, inclRefl {x})
-
-public export
-0 setEqSymm : relSymm (SetEqRel a)
-setEqSymm (lprf,rprf) = (rprf,lprf)
-
-public export
-0 setEqTrans : relTrans (SetEqRel a)
-setEqTrans (llprf, lrprf) (rlprf, rrprf) = (inclTrans {x} {y} {z} llprf rlprf, inclTrans {x=z} {y} {z=x} rrprf lrprf)
-
-public export
-0 inclAntiSymm : relAntiSymm (InclRel a) (SetEqRel a)
-inclAntiSymm lprf rprf = (lprf,rprf)
 
 --------------------------
 -- Set equality projection

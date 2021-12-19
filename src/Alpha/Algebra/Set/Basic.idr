@@ -5,12 +5,6 @@
 module Alpha.Algebra.Set.Basic
 
 -------------------
--- External imports
--------------------
-
-import Data.DPair
-
--------------------
 -- Internal imports
 -------------------
 

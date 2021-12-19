@@ -8,7 +8,6 @@ module Alpha.Algebra.Rel.Rel
 -- External imports
 -------------------
 
-import Data.DPair
 import Decidable.Decidable
 
 -------------------

@@ -8,7 +8,6 @@ module Alpha.Algebra.Set.List
 -- External imports
 -------------------
 
-import Data.DPair
 import Data.List.Elem
 import Decidable.Equality
 

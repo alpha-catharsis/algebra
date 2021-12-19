@@ -5,12 +5,6 @@
 module Alpha.Algebra.Set.Rules.Compl
 
 -------------------
--- External imports
--------------------
-
-import Data.DPair
-
--------------------
 -- Internal imports
 -------------------
 

@@ -5,12 +5,6 @@
 module Alpha.Algebra.Set.Pointed
 
 -------------------
--- External imports
--------------------
-
-import Data.DPair
-
--------------------
 -- Internal imports
 -------------------
 
