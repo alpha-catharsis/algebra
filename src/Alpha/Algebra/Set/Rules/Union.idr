@@ -8,8 +8,14 @@ module Alpha.Algebra.Set.Rules.Union
 -- Internal imports
 -------------------
 
+import Alpha.Algebra.Rel.Rel
+import Alpha.Algebra.Rel.Incl
+import Alpha.Algebra.Rel.SetEq
+import Alpha.Algebra.Set.Ops.Compl
 import Alpha.Algebra.Set.Ops.Union
 import Alpha.Algebra.Set.Set
+import Alpha.Algebra.Set.Empty
+import Alpha.Algebra.Set.Univ
 
 --------------
 -- Basic rules
@@ -72,3 +78,32 @@ invUnionNotLeftElem = projectElem (invUnionNotLeftRule ls rs)
 public export
 invUnionNotRightElem : DisprovenElem (Union ls rs) -> DisprovenElem rs
 invUnionNotRightElem = projectElem (invUnionNotRightRule ls rs)
+
+-------------------
+-- Union equalities
+-------------------
+
+0 setEqUnionLeftUniv : SetEqRel a (UnivSet, Union UnivSet rs)
+setEqUnionLeftUniv = (Left, \eprf => case eprf of
+  Left lprf => lprf
+  Right _ => ())
+
+0 setEqUnionRightUnion : SetEqRel a (UnivSet, Union ls UnivSet)
+setEqUnionRightUnion = (Right, \eprf => case eprf of
+  Left _ => ()
+  Right rprf => rprf)
+
+0 setEqUnionLeftEmpty : SetEqRel a (rs, Union EmptySet rs)
+setEqUnionLeftEmpty = (Right, \eprf => case eprf of
+  Left lprf => absurd lprf
+  Right rprf => rprf)
+
+0 setEqUnionRightEmpty : SetEqRel a (ls, Union ls EmptySet)
+setEqUnionRightEmpty = (Left, \eprf => case eprf of
+  Left lprf => lprf
+  Right rprf => absurd rprf)
+
+0 setEqUnionSelf : SetEqRel a (s, Union s s)
+setEqUnionSelf = (Left, \eprf => case eprf of
+  Left lprf => lprf
+  Right rprf => rprf)

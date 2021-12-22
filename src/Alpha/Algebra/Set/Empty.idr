@@ -25,7 +25,7 @@ empty : DecSet EmptySet
 empty = compl univ
 
 public export
-Uninhabited (EmptySet x) where
+Uninhabited (() -> Void) where
   uninhabited () impossible
 
 public export

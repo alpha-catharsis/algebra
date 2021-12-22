@@ -14,6 +14,7 @@ import Decidable.Equality
 -- Internal imports
 -------------------
 
+import Alpha.Algebra.Set.Ops.Compl
 import Alpha.Algebra.Set.Set
 import Alpha.Algebra.Set.Empty
 import Alpha.Decidable
@@ -31,9 +32,9 @@ inter : DecSet ls -> DecSet rs -> DecSet (Inter ls rs)
 inter ls rs x = decAnd (isElem x ls) (isElem x rs)
 
 public export
-Uninhabited (Inter EmptySet rs x) where
-  uninhabited (lprf,_) = lprf ()
+Uninhabited (t, t -> Void) where
+  uninhabited (prf,contra) = contra prf
 
 public export
-Uninhabited (Inter ls EmptySet x) where
-  uninhabited (_,rprf) = rprf ()
+Uninhabited (t -> Void, t) where
+  uninhabited (contra, prf) = contra prf

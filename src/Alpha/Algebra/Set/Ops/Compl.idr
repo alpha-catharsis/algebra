@@ -15,6 +15,7 @@ import Decidable.Equality
 -------------------
 
 import Alpha.Algebra.Set.Set
+import Alpha.Algebra.Set.Univ
 import Alpha.Decidable
 
 -------------
@@ -28,3 +29,4 @@ Compl s = Not . s
 public export
 compl : DecSet s -> DecSet (Compl s)
 compl s x = decNot (isElem x s)
+

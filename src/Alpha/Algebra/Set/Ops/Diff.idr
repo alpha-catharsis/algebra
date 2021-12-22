@@ -16,7 +16,9 @@ import Decidable.Equality
 
 import Alpha.Algebra.Set.Ops.Compl
 import Alpha.Algebra.Set.Ops.Inter
+import Alpha.Algebra.Set.Empty
 import Alpha.Algebra.Set.Set
+import Alpha.Algebra.Set.Univ
 import Alpha.Decidable
 
 -------------

@@ -11,6 +11,7 @@ module Alpha.Algebra.Set.Rules.Inter
 import Alpha.Algebra.Rel.Rel
 import Alpha.Algebra.Rel.Incl
 import Alpha.Algebra.Rel.SetEq
+import Alpha.Algebra.Set.Ops.Compl
 import Alpha.Algebra.Set.Ops.Inter
 import Alpha.Algebra.Set.Set
 import Alpha.Algebra.Set.Empty
@@ -72,11 +73,20 @@ invInterRightElem = projectElem (invInterRightRule ls rs)
 -- Intersection equalities
 --------------------------
 
-0 setEqInterLeftEmpty : SetEqRel a (EmptySet, Inter EmptySet s)
-setEqInterLeftEmpty = (\prf => (prf,?d), \prf => fst prf)
+0 setEqInterLeftEmpty : SetEqRel a (EmptySet, Inter EmptySet rs)
+setEqInterLeftEmpty = (\prf => absurd prf, \prf => fst prf)
 
-0 setEqInterLeftUniv : SetEqRel a (s, Inter UnivSet s)
+0 setEqInterRightEmpty : SetEqRel a (EmptySet, Inter ls EmptySet)
+setEqInterRightEmpty = (\prf => absurd prf, \prf => snd prf)
+
+0 setEqInterLeftUniv : SetEqRel a (rs, Inter UnivSet rs)
 setEqInterLeftUniv = (\rprf => ((),rprf), \pprf => snd pprf)
 
-0 setEqInterRightUniv : SetEqRel a (s, Inter s UnivSet)
+0 setEqInterRightUniv : SetEqRel a (ls, Inter ls UnivSet)
 setEqInterRightUniv = (\lprf => (lprf,()), \pprf => fst pprf)
+
+0 setEqInterSelf : SetEqRel a (s, Inter s s)
+setEqInterSelf = (\x => (x, x), \x => fst x)
+
+0 setEqInterComplSelf : SetEqRel a (EmptySet, Inter s (Compl s))
+setEqInterComplSelf = (\prf => absurd prf, \x, y => snd x (fst x))

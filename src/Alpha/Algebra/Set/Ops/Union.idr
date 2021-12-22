@@ -15,6 +15,7 @@ import Decidable.Equality
 -------------------
 
 import Alpha.Algebra.Set.Set
+import Alpha.Algebra.Set.Empty
 import Alpha.Decidable
 
 --------
